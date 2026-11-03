@@ -4,11 +4,23 @@ import  sys
 import time
 import threading
 
+from enum import Enum
+import chess
+
+
 #VARIÁVEIS GLOBAIS:
 MULTICAST_IP = '224.3.29.71'
 MULTICAST_PORT = 10000
 MULTICAST_ADDRESS = (MULTICAST_IP, MULTICAST_PORT)
 servidores_vivos = {}
+
+# Estados do xadrez:
+board = chess.Board()
+seq = 0
+acks = set()
+cond = threading.Condition()
+escrita = threading.Lock()
+TIMEOUT_ACK = 1.0
 
 #lgc para pegar o uid do servidor passado no argumento:
 if len(sys.argv) < 2:
@@ -77,7 +89,129 @@ def foreground():
 
 			print(f"[ESTADO] Vivos atuais: {servidores_vivos}", file=sys.stderr)
 
-		#TRATAR AQUI DPS SE É UM ALIVE, UM SYNC de xadrez ou sla.
+				#mensagens do xadrez:
+		else:
+			try:
+				partes = mensagem.split("|")
+				tipo, campos = Msg(partes[0]), partes[1:]   #Msg(...) dá ValueError se o tipo não existir
+				sou_lider = elege_lider() == MEU_ID
+
+				if tipo == Msg.READ and sou_lider:
+					trata_read(address)
+				elif tipo == Msg.MOVE and sou_lider:
+					threading.Thread(target=trata_move, args=(campos[0], address), daemon=True).start()
+				elif tipo == Msg.SYNC:
+					trata_sync(campos)
+				elif tipo == Msg.ACK:
+					trata_ack(campos)
+			except Exception as e:
+				#mensagem ruim não pode matar a thread que escuta a rede
+				print(f"[ERRO] Mensagem inválida de {address}: {mensagem!r} ({e})", file=sys.stderr)
+
+#----------------------------------------------------------------------------------------------------------#
+#PROTOCOLO DO XADREZ: mensagens no formato TIPO|campo1|campo2...
+#(usa "|" como separador porque o FEN tem espaços)
+class Msg(str, Enum):
+	READ  = "READ"    #cliente -> grupo:   READ
+	MOVE  = "MOVE"    #cliente -> grupo:   MOVE|e2e4
+	SYNC  = "SYNC"    #líder   -> grupo:   SYNC|seq|uid_lider|fen
+	ACK   = "ACK"     #réplica -> grupo:   ACK|seq|uid
+	STATE = "STATE"   #líder   -> cliente: STATE|fen|situacao
+	OK    = "OK"      #líder   -> cliente: OK|fen|situacao
+	ERRO  = "ERRO"    #líder   -> cliente: ERRO|motivo
+
+#transforma um tipo de mensagem e seus campos nos bytes que vão pela rede
+def monta(tipo, *campos):
+	return "|".join([tipo.value, *map(str, campos)]).encode()
+
+#textinho da situação do jogo:
+def situacao(b):
+	if b.is_checkmate():
+		vencedor = "Pretas" if b.turn == chess.WHITE else "Brancas"
+		return f"Xeque-mate! {vencedor} venceram"
+	if b.is_stalemate():
+		return "Empate por afogamento (stalemate)"
+	if b.is_insufficient_material():
+		return "Empate por material insuficiente"
+	if b.is_game_over():
+		return f"Fim de jogo: {b.result()}"
+	vez = "brancas" if b.turn == chess.WHITE else "pretas"
+	if b.is_check():
+		return f"Xeque! Vez das {vez}"
+	return f"Vez das {vez}"
+
+#por enquanto o cliente controla os dois lados; depois é aqui que entra o Stockfish ou o movimento válido aleatório
+def lance_adversario(b):
+	return None
+
+#líder responde tabuleiro atual direto ao cliente
+def trata_read(address):
+	with cond:
+		resposta = monta(Msg.STATE, board.fen(), situacao(board))
+	sock.sendto(resposta, address)
+
+#roda numa thread própria: os ACKs chegam pela thread foreground,
+#então se ela ficasse esperando aqui nunca receberia os ACKs (deadlock)
+def trata_move(lance_uci, address):
+	global seq
+	with escrita:
+		with cond:
+			try:
+				move = chess.Move.from_uci(lance_uci)
+			except ValueError:
+				move = None
+			if move is None or move not in board.legal_moves:
+				sock.sendto(monta(Msg.ERRO, f"Lance inválido: {lance_uci}"),address)
+				return
+			board.push(move)
+			resposta = lance_adversario(board)
+			if resposta is not None:
+				board.push(resposta)
+			seq += 1
+			meu_seq, fen = seq,board.fen()
+			replicas =set(servidores_vivos) - {MEU_ID}
+			acks.clear()
+		
+		print(f"[MOVE] {lance_uci} aplicado, seq={meu_seq}, esperando ACK de {sorted(replicas)}", file=sys.stderr)
+		sock.sendto(monta(Msg.SYNC, meu_seq, MEU_ID,fen), MULTICAST_ADDRESS)
+
+		#espera todas as réplicas confirmarem, com timeout (réplica pode morrer no meio)
+		limite = time.time() + TIMEOUT_ACK
+		with cond:
+			while not replicas <= acks:
+				restante = limite - time.time()
+				if restante <= 0:
+					break
+				cond.wait(restante)
+			faltaram = replicas - acks
+			txt = situacao(board)
+
+		if faltaram:
+			print(f"[AVISO] Sem ACK de {sorted(faltaram)} no seq {meu_seq}", file=sys.stderr)
+		sock.sendto(monta(Msg.OK, fen, txt), address)
+
+#réplica aplica o tabuleiro que veio do líder e confirma:
+def trata_sync(campos):
+	global seq
+	s, uid_lider, fen = int(campos[0]), int(campos[1]), campos[2]
+	if uid_lider == MEU_ID:     #é o meu próprio SYNC voltando pelo loopback
+		return
+	with cond:
+		board.set_fen(fen)
+		seq = s
+	print(f"[SYNC] Tabuleiro atualizado pelo líder {uid_lider}, seq={s}", file=sys.stderr)
+	#ACK vai por multicast: em localhost todos os servidores usam a porta 10000,
+	#então um unicast para (ip, 10000) poderia cair no servidor errado
+	sock.sendto(monta(Msg.ACK, s, MEU_ID), MULTICAST_ADDRESS)
+
+#líder anota quem confirmou o SYNC atual:
+def trata_ack(campos):
+	s, uid = int(campos[0]), int(campos[1])
+	with cond:
+		if s == seq:
+			acks.add(uid)
+			cond.notify_all()
+
 
 
 #----------------------------------------------------------------------------------------------------------#
