@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diário de Desenvolvimento</title>
+<meta name="description" content="Diário de desenvolvimento do trabalho de Redes 2, com as decisões de cada dia.">
+<meta name="author" content="Antonio da Ressurreição Filho e Nathan Endo">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<a class="pular" href="#principal">Pular para o conteúdo</a>
+<header>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html">Visão geral</a></li>
+				<li><a href="relatorio.html">Relatório</a></li>
+				<li><a href="diario.html" aria-current="page">Diário</a></li>
+				<li><a href="logs.html">Logs</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+<main id="principal" class="conteudo">
+	<h1>Diário de desenvolvimento</h1>
+	<p>Aqui fica o registro de como o trabalho foi andando: o que decidimos, o que mudou e por quê.</p>
+	<noscript><p>Sem JavaScript, é só usar os links para abrir cada arquivo.</p></noscript>
+
+	<h2 id="documento">Documento</h2>
+	<!-- GERADO:diario-arquivos:INICIO -->
+<p>O PDF e o LaTeX do diário ainda não foram adicionados.</p>
+	<!-- GERADO:diario-arquivos:FIM -->
+
+	<h2 id="notas">Notas de cada dia</h2>
+	<p>Estas são as notas que fomos escrevendo no README, do jeito que estão lá.</p>
+	<h3 id="dia-1">Dia 1</h3>
+	<ul>
+		<li>Usar o serviço de chess do python: pythonchess
+		</li>
+		<li>UID do servidor dado no argumento do comando run do servidor.
+		</li>
+		<li>Pré computar a divisão de grupos e colocar os membros de cada grupo nas tabelas individuais de cada servidor.
+		</li>
+		<li>Interessante: várias formas de divisão de grupos.
+		<ul>
+			<li>Primeira divisão: mod alternado.
+			</li>
+			<li>Segunda divisão: bloco.
+			</li>
+			<li>Terceira divisão: random*
+		</li></ul>
+		</li>
+		<li>Como atualizar tabuleiro dos outros grupos?
+		<ul>
+			<li>O líder faz multicast para todas as máquinas fora do próprio grupo
+			</li>
+			<li>Cada grupo é um serviço?
+		</li></ul>
+		</li>
+		<li>Como randomizar os grupos?
+		<ul>
+			<li>Mesma seed?
+			</li>
+			<li>Mock de uma randomização pré-feita
+		</li></ul>
+	</li></ul>
+	<h3 id="dia-2">Dia 2 - Redefinição de Arquitetura e Escopo</h3>
+	<ul>
+		<li>Arquitetura de grupo único
+		<ul>
+			<li>Decisão: A especificação exige um único grupo de servidores que trabalham em conjunto para manter a mesma aplicação no ar
+			</li>
+			<li>Motivo: O objetivo não é criar um lobby de xadrez, mas sim a tolerância de falhas com heartbeat
+		</li></ul>
+		</li>
+		<li>Comunicação e Sockets
+		<ul>
+			<li>Uso exclusivo de Sockets <code>UDP</code> com multicast IP/Ethernet (ex IP: 224.0.0.1)
+			</li>
+			<li>Infraestrutura: Os testes finais para geração de Logs serão feitos nas máquinas do dinf/c3sl ? -&gt; Isso é uma pergunta Toninho, atualize ai se sim.
+		</li></ul>
+		</li>
+		<li>Tolerância de Falhas
+		<ul>
+			<li>Heartbeat: Cada servidor tem uma thread separada enviando uma mensagem <code>ALIVE &lt;UID&gt;</code> via multicast a cada X segundos
+			</li>
+			<li>Detecção de Falhas: Se um servidor parar de mandar o heartbeat, os outros dão <code>timeout</code> e o <code>removem</code> da lista interna de ativos.
+			</li>
+			<li>Eleição: O servidor vivo com o <code>menor UID</code> se reconhece automaticamente como o líder
+		</li></ul>
+		</li>
+		<li>O serviço de xadrez
+		<ul>
+			<li>Só leitura (consulta): O cliente envia <code>READ</code> no multicast. O líder responde diretamente o cliente com o tabuleiro atual.
+			</li>
+			<li>Escrita (movimento):
+			<ul>
+				<li>Cliente manda o movimento via multicast (ex: <code>MOVE</code> e2e4)
+				</li>
+				<li>Líder aplica o movimento no python-chess + faz movimento de resposta da máquina (ou podemos também fazer de controlar os dois lados do tabuleiro).
+				</li>
+				<li>Líder gera string <code>FEN</code> e envia <code>SYNC &lt;FEN&gt;</code> (multicast).
+				</li>
+				<li>Réplicas atualizam o estado local e mandam <code>ACK</code> manual para o líder (unicast)
+				</li>
+				<li>Líder recebe as confirmações e devolve OK para o cliente
+			</li></ul>
+		</li></ul>
+		</li>
+		<li>Fluxo
+		<ul>
+			<li>Cliente primeiramente consulta (Inicia tabuleira)
+			</li>
+			<li>Cliente manda movimento
+			</li>
+			<li>Servidor manda OK
+			</li>
+			<li>Após o Cliente receber o OK, consulta o tabuleiro
+			</li>
+			<li>OBS: precisamps mandar "textinhos" sobre a situação se houve checkmate, stalemate e etc.
+		</li></ul>
+		</li>
+		<li>Observações
+		<ul>
+			<li>FEN é o jeito oficial do python-chess exportar o tabuleiro (serializa tudo em uma string com menos de 100 caracteres).
+			</li>
+			<li>Tamanho do Payload: Como o FEN é muito menor que o MTU da rede (~1500 bytes), não corremos nenhum risco de fragmentação de pacotes no UDP durante o SYNC.
+			</li>
+			<li>O UDP não garante entrega: Por isso, o mecanismo de ACK na operação de escrita tem que ser feito manualmente na nossa camada de aplicação (Two-Phase Commit simplificado).
+			</li>
+			<li>Prevenção de Deadlocks: Ao aguardar os ACKs das réplicas, o líder precisa obrigatoriamente usar um <code>timeout</code>. Se uma réplica morrer uma fração de segundo após receber o SYNC, o líder não pode ficar travado em um loop infinito esperando ela confirmar.
+			</li>
+			<li>Multicast vs Broadcast (C3SL): Usar Multicast (Classe D) ativa o IGMP Snooping nos switches do laboratório. O tráfego só vai para as portas dos nossos nós, evitando o "broadcast storm" que aconteceria se usássemos IPs com final .255.
+			</li>
+			<li>Testes Locais (Localhost): Para conseguir rodar mais de um servidor na mesma máquina durante o desenvolvimento, é obrigatório setar as flags <code>SO_REUSEADDR</code> (e possivelmente <code>SO_REUSEPORT</code>) na criação do socket, senão o SO bloqueia a porta.
+			</li>
+			<li>Esses dois pontos de cima eu perguntei pro gemini, é bom a gnt dar uma estudada nisso, o resto eu folheei a documentação do python-chess e os tipos de mensagem a gnt faz um ENUM só.
+		</li></ul>
+	</li></ul>
+	<h3 id="dia-3">Dia 3 - Heartbeat e eleição de líder</h3>
+	<ul>
+		<li><code>servidor.py</code>:
+		<ul>
+			<li>UID passado como argumento (<code>python3 servidor.py &lt;UID&gt;</code>)
+			</li>
+			<li>Socket UDP entrando no grupo multicast <code>224.3.29.71:10000</code> (<code>IP_ADD_MEMBERSHIP</code>), com <code>SO_REUSEADDR</code> para rodar vários servidores na mesma máquina
+			</li>
+			<li>Duas threads:
+			<ul>
+				<li><code>background</code>: a cada 1s manda o heartbeat <code>Estou vivo e sou &lt;UID&gt;</code> por multicast, remove quem está há mais de 3s sem dar sinal e recalcula o líder
+				</li>
+				<li><code>foreground</code>: escuta a rede e atualiza o dicionário <code>servidores_vivos</code> (uid → hora do último heartbeat)
+			</li></ul>
+			</li>
+			<li>Eleição: o menor UID vivo é o líder (cada servidor calcula sozinho, a partir da sua lista de vivos)
+		</li></ul>
+		</li>
+		<li><code>cliente.py</code>: cliente de teste que manda uma mensagem para o grupo e espera respostas até dar timeout
+	</li></ul>
+	<h3 id="dia-4">Dia 4 - Xadrez replicado funcionando</h3>
+	<ul>
+		<li>Cliente controla os dois lados por enquanto (depois: lance aleatório ou Stockfish em <code>lance_adversario()</code>)
+		</li>
+		<li>Mensagens no formato <code>TIPO|campo1|campo2</code> (<code>|</code> porque o FEN tem espaços):
+	</li></ul>
+	<div class="tabela">
+		<table>
+			<thead><tr><th>Mensagem</th><th>Quem → Quem</th><th>Formato</th></tr></thead>
+			<tbody>
+				<tr><td>READ</td><td>cliente → grupo</td><td><code>READ</code></td></tr>
+				<tr><td>MOVE</td><td>cliente → grupo</td><td><code>MOVE|e2e4</code></td></tr>
+				<tr><td>SYNC</td><td>líder → grupo</td><td><code>SYNC|seq|uid_lider|fen</code></td></tr>
+				<tr><td>ACK</td><td>réplica → grupo</td><td><code>ACK|seq|uid</code></td></tr>
+				<tr><td>STATE</td><td>líder → cliente</td><td><code>STATE|fen|situacao</code></td></tr>
+				<tr><td>OK</td><td>líder → cliente</td><td><code>OK|fen|situacao</code></td></tr>
+				<tr><td>ERRO</td><td>líder → cliente</td><td><code>ERRO|motivo</code></td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Mudanças em relação ao Dia 2:
+		<ul>
+			<li>MOVE roda numa thread separada, senão o líder travava esperando ACKs que chegam pela própria thread que escuta a rede
+			</li>
+			<li>ACK por multicast (decisão provisória):
+			<ul>
+				<li>Deixei o ACK indo por multicast para conseguir testar em localhost: na mesma máquina todos os servidores usam (IP, 10000), então um unicast podia cair no servidor errado
+				</li>
+				<li>Nas máquinas do lab (um servidor por máquina) o unicast funciona. A diferença é só tráfego: no multicast todo servidor recebe todos os ACKs, no unicast só o líder recebe
+				</li>
+				<li>Toninho, se quiser trocar para unicast: no <code>foreground</code> passar <code>address</code> para <code>trata_sync(campos, address)</code> e no fim do <code>trata_sync</code> mandar o ACK para <code>address</code> em vez de <code>MULTICAST_ADDRESS</code> (o <code>address</code> do SYNC já é o IP do líder)
+			</li></ul>
+		</li></ul>
+	</li></ul>
+</main>
+<footer>
+	<div class="conteudo">Desenvolvido por Antonio da Ressurreição Filho e Nathan Endo para a disciplina de Redes 2.</div>
+</footer>
+<script src="assets/visualizador.js"></script>
+</body>
+</html>

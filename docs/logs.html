@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Logs e Diário</title>
-<meta name="description" content="Logs de execução por cenário e diário de desenvolvimento do trabalho de Redes 2.">
+<title>Logs de Execução</title>
+<meta name="description" content="Logs de execução do trabalho de Redes 2, organizados por cenário.">
 <meta name="author" content="Antonio da Ressurreição Filho e Nathan Endo">
 <link rel="stylesheet" href="assets/estilo.css">
 </head>
@@ -17,28 +17,21 @@
 			<ul>
 				<li><a href="index.html">Visão geral</a></li>
 				<li><a href="relatorio.html">Relatório</a></li>
-				<li><a href="logs.html" aria-current="page">Logs e diário</a></li>
+				<li><a href="diario.html">Diário</a></li>
+				<li><a href="logs.html" aria-current="page">Logs</a></li>
 				<li><a href="codigo.html">Código</a></li>
 			</ul>
 		</nav>
 	</div>
 </header>
 <main id="principal" class="conteudo">
-	<h1>Logs e diário</h1>
+	<h1>Logs de execução</h1>
 	<noscript><p>Sem JavaScript, é só usar os links para abrir cada arquivo.</p></noscript>
 
-	<section>
-		<h2 id="diario">Diário de desenvolvimento</h2>
-		<!-- GERADO:diario-arquivos:INICIO -->
-<p>Diário ainda não disponível.</p>
-		<!-- GERADO:diario-arquivos:FIM -->
-	</section>
-
-	<h2 id="logs">Logs de execução</h2>
-	<p>Separamos os logs por cenário. Em cada um dizemos o que ele mostra e quais mensagens procurar.</p>
+		<p>Separamos os logs por cenário. Em cada um dizemos o que ele mostra e quais mensagens procurar.</p>
 
 	<section>
-		<h3 id="heartbeat-eleicao">Heartbeat e eleição</h3>
+		<h2 id="heartbeat-eleicao">Heartbeat e eleição</h2>
 		<p>
 			Três servidores sobem juntos. O log mostra a troca de heartbeats e o menor UID virando líder.
 			Procure por <code>Estou vivo e sou</code>, <code>[ESTADO] Vivos atuais</code> e <code>[ELEIÇÃO] Líder atual do grupo</code>.
@@ -49,7 +42,7 @@
 	</section>
 
 	<section>
-		<h3 id="xadrez-replicacao">Lances e replicação</h3>
+		<h2 id="xadrez-replicacao">Lances e replicação</h2>
 		<p>
 			O cliente consulta o tabuleiro e manda lances válidos. O log mostra o fluxo READ, MOVE, SYNC, ACK e OK.
 			Procure por <code>[MOVE]</code> no líder e <code>[SYNC] Tabuleiro atualizado</code> nas réplicas.
@@ -60,7 +53,7 @@
 	</section>
 
 	<section>
-		<h3 id="lance-invalido">Lance inválido</h3>
+		<h2 id="lance-invalido">Lance inválido</h2>
 		<p>
 			O cliente manda um lance ilegal ou malformado. O líder responde com erro e o tabuleiro não muda.
 			Procure por <code>Lance inválido</code> na saída do cliente.
@@ -71,7 +64,7 @@
 	</section>
 
 	<section>
-		<h3 id="falha-lider">Queda do líder</h3>
+		<h2 id="falha-lider">Queda do líder</h2>
 		<p>
 			O líder recebe um Ctrl+C no meio da partida. O log mostra a detecção por timeout, o próximo menor UID assumindo e a partida seguindo com o mesmo tabuleiro.
 			Procure por <code>[ALERTA] Servidor ... morreu por timeout!</code> e pela mudança em <code>[ELEIÇÃO]</code>.
@@ -82,7 +75,7 @@
 	</section>
 
 	<section>
-		<h3 id="falha-replica">Queda de uma réplica</h3>
+		<h2 id="falha-replica">Queda de uma réplica</h2>
 		<p>
 			Uma réplica cai pouco antes de um lance, ainda dentro dos 3 segundos de detecção. O log mostra o timeout do ACK e o OK saindo mesmo assim.
 			Procure por <code>[AVISO] Sem ACK de</code> no líder.

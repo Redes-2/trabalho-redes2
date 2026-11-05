@@ -13,7 +13,7 @@ export LC_ALL=C
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$RAIZ"
 
-PAGINAS=(docs/index.html docs/relatorio.html docs/logs.html docs/codigo.html)
+PAGINAS=(docs/index.html docs/relatorio.html docs/diario.html docs/logs.html docs/codigo.html)
 for pagina in "${PAGINAS[@]}"; do
 	[ -f "$pagina" ] || { echo "Erro: $pagina não encontrada" >&2; exit 1; }
 done
@@ -190,7 +190,7 @@ if [ -s "$lista_diario" ]; then
 		printf '</ul>\n'
 	} > "$TMP/diario-arquivos"
 else
-	printf '<p>Diário ainda não disponível.</p>\n' > "$TMP/diario-arquivos"
+	printf '<p>O PDF e o LaTeX do diário ainda não foram adicionados.</p>\n' > "$TMP/diario-arquivos"
 fi
 
 #----------------------------------------------------------------------------------------------------------#
