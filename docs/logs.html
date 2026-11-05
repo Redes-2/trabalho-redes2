@@ -28,60 +28,91 @@
 	<h1>Logs de execução</h1>
 	<noscript><p>Sem JavaScript, é só usar os links para abrir cada arquivo.</p></noscript>
 
-		<p>Separamos os logs por cenário. Em cada um dizemos o que ele mostra e quais mensagens procurar.</p>
+		<p>
+		Rodamos estes cenários em três computadores da mesma rede local: desktop (UID 1), servidor (UID 2) e notebook (UID 3).
+		O cliente rodou no notebook. Usamos um roteiro automatizado que disparava os programas por SSH, mandava os lances e enviava o mesmo sinal do Ctrl+C.
+	</p>
+	<p>
+		Como os lances não foram digitados, eles não aparecem depois do prompt do cliente. Para vê-los, procure a linha <code>Enviando "MOVE|..."</code>.
+		Os IPs <code>192.168.100.x</code> são da nossa rede local.
+	</p>
 
 	<section>
 		<h2 id="heartbeat-eleicao">Heartbeat e eleição</h2>
 		<p>
-			Três servidores sobem juntos. O log mostra a troca de heartbeats e o menor UID virando líder.
+			Três servidores subiram juntos. Cada um recebeu os heartbeats dos três e todos elegeram o UID 1 como líder.
 			Procure por <code>Estou vivo e sou</code>, <code>[ESTADO] Vivos atuais</code> e <code>[ELEIÇÃO] Líder atual do grupo</code>.
 		</p>
 		<!-- GERADO:log-heartbeat-eleicao:INICIO -->
-<p>Log ainda não disponível.</p>
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/heartbeat-eleicao/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(164 linhas)</span></li>
+<li><a href="logs/heartbeat-eleicao/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(156 linhas)</span></li>
+<li><a href="logs/heartbeat-eleicao/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(161 linhas)</span></li>
+</ul>
 		<!-- GERADO:log-heartbeat-eleicao:FIM -->
 	</section>
 
 	<section>
 		<h2 id="xadrez-replicacao">Lances e replicação</h2>
 		<p>
-			O cliente consulta o tabuleiro e manda lances válidos. O log mostra o fluxo READ, MOVE, SYNC, ACK e OK.
+			O cliente jogou <code>e2e4</code>, <code>e7e5</code> e <code>g1f3</code>. O líder aplicou cada lance e as duas réplicas receberam o tabuleiro, de seq 1 a 3.
 			Procure por <code>[MOVE]</code> no líder e <code>[SYNC] Tabuleiro atualizado</code> nas réplicas.
 		</p>
 		<!-- GERADO:log-xadrez-replicacao:INICIO -->
-<p>Log ainda não disponível.</p>
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/xadrez-replicacao/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(127 linhas)</span></li>
+<li><a href="logs/xadrez-replicacao/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(51 linhas)</span></li>
+<li><a href="logs/xadrez-replicacao/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(121 linhas)</span></li>
+<li><a href="logs/xadrez-replicacao/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(124 linhas)</span></li>
+</ul>
 		<!-- GERADO:log-xadrez-replicacao:FIM -->
 	</section>
 
 	<section>
 		<h2 id="lance-invalido">Lance inválido</h2>
 		<p>
-			O cliente manda um lance ilegal ou malformado. O líder responde com erro e o tabuleiro não muda.
+			O cliente mandou <code>e2e5</code> (ilegal) e <code>abc</code> (malformado). O líder recusou os dois e o tabuleiro não mudou. Depois, <code>e2e4</code> foi aceito normalmente.
 			Procure por <code>Lance inválido</code> na saída do cliente.
 		</p>
 		<!-- GERADO:log-lance-invalido:INICIO -->
-<p>Log ainda não disponível.</p>
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/lance-invalido/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(119 linhas)</span></li>
+<li><a href="logs/lance-invalido/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(53 linhas)</span></li>
+<li><a href="logs/lance-invalido/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(113 linhas)</span></li>
+<li><a href="logs/lance-invalido/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(118 linhas)</span></li>
+</ul>
 		<!-- GERADO:log-lance-invalido:FIM -->
 	</section>
 
 	<section>
 		<h2 id="falha-lider">Queda do líder</h2>
 		<p>
-			O líder recebe um Ctrl+C no meio da partida. O log mostra a detecção por timeout, o próximo menor UID assumindo e a partida seguindo com o mesmo tabuleiro.
-			Procure por <code>[ALERTA] Servidor ... morreu por timeout!</code> e pela mudança em <code>[ELEIÇÃO]</code>.
+			Depois de <code>e2e4</code> e <code>e7e5</code>, derrubamos o líder no desktop. O servidor e o notebook detectaram a queda, o UID 2 assumiu, respondeu ao cliente e aceitou <code>g1f3</code> no mesmo tabuleiro.
+			Procure por <code>[ALERTA] Servidor 1 morreu por timeout!</code>, pela mudança em <code>[ELEIÇÃO]</code> e pelo IP de resposta no log do cliente.
 		</p>
 		<!-- GERADO:log-falha-lider:INICIO -->
-<p>Log ainda não disponível.</p>
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/falha-lider/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(90 linhas)</span></li>
+<li><a href="logs/falha-lider/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(51 linhas)</span></li>
+<li><a href="logs/falha-lider/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(153 linhas)</span></li>
+<li><a href="logs/falha-lider/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(156 linhas)</span></li>
+</ul>
 		<!-- GERADO:log-falha-lider:FIM -->
 	</section>
 
 	<section>
 		<h2 id="falha-replica">Queda de uma réplica</h2>
 		<p>
-			Uma réplica cai pouco antes de um lance, ainda dentro dos 3 segundos de detecção. O log mostra o timeout do ACK e o OK saindo mesmo assim.
-			Procure por <code>[AVISO] Sem ACK de</code> no líder.
+			Depois de <code>e2e4</code>, derrubamos a réplica UID 2 e logo mandamos <code>e7e5</code>. O líder esperou o ACK, registrou o aviso e respondeu OK mesmo assim. Só depois a réplica foi removida por timeout.
+			Procure por <code>[AVISO] Sem ACK de [2]</code> e <code>[ALERTA] Servidor 2 morreu por timeout!</code> no líder.
 		</p>
 		<!-- GERADO:log-falha-replica:INICIO -->
-<p>Log ainda não disponível.</p>
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/falha-replica/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(112 linhas)</span></li>
+<li><a href="logs/falha-replica/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(38 linhas)</span></li>
+<li><a href="logs/falha-replica/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(108 linhas)</span></li>
+<li><a href="logs/falha-replica/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(74 linhas)</span></li>
+</ul>
 		<!-- GERADO:log-falha-replica:FIM -->
 	</section>
 </main>

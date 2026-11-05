@@ -1,0 +1,112 @@
+﻿Servidor UID 1 iniciado e aguardando...
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920911.1635888}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920911.1635888, 2: 1793920911.393924}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920911.1635888, 2: 1793920911.393924, 3: 1793920911.6912966}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920912.1641078, 2: 1793920911.393924, 3: 1793920911.6912966}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920912.1641078, 2: 1793920912.3943899, 3: 1793920911.6912966}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920912.1641078, 2: 1793920912.3943899, 3: 1793920912.6920798}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920913.164592, 2: 1793920912.3943899, 3: 1793920912.6920798}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920913.164592, 2: 1793920913.3948524, 3: 1793920912.6920798}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920913.164592, 2: 1793920913.3948524, 3: 1793920913.6926975}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920914.1652167, 2: 1793920913.3948524, 3: 1793920913.6926975}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920914.1652167, 2: 1793920914.3952622, 3: 1793920913.6926975}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920914.1652167, 2: 1793920914.3952622, 3: 1793920914.6932964}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920915.1656399, 2: 1793920914.3952622, 3: 1793920914.6932964}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920915.1656399, 2: 1793920915.395729, 3: 1793920914.6932964}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920915.1656399, 2: 1793920915.395729, 3: 1793920915.6938524}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920916.1662352, 2: 1793920915.395729, 3: 1793920915.6938524}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920916.1662352, 2: 1793920916.395915, 3: 1793920915.6938524}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920916.1662352, 2: 1793920916.395915, 3: 1793920916.694407}
+Recebido de ('192.168.100.61', 56346): READ
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920917.166607, 2: 1793920916.395915, 3: 1793920916.694407}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920917.166607, 2: 1793920917.396213, 3: 1793920916.694407}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920917.166607, 2: 1793920917.396213, 3: 1793920917.6949692}
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ELEIÇÃO] Líder atual do grupo: 1
+[ESTADO] Vivos atuais: {1: 1793920918.1670268, 2: 1793920917.396213, 3: 1793920917.6949692}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920918.1670268, 2: 1793920918.3964818, 3: 1793920917.6949692}
+Recebido de ('192.168.100.61', 56346): MOVE|e2e4
+[MOVE] e2e4 aplicado, seq=1, esperando ACK de [2, 3]
+Recebido de ('192.168.100.11', 10000): SYNC|1|1|rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1
+Recebido de ('192.168.100.201', 10000): ACK|1|2
+Recebido de ('192.168.100.61', 10000): ACK|1|3
+Recebido de ('192.168.100.61', 56346): READ
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920918.1670268, 2: 1793920918.3964818, 3: 1793920918.6955054}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920919.1676774, 2: 1793920918.3964818, 3: 1793920918.6955054}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793920919.1676774, 2: 1793920919.3968983, 3: 1793920918.6955054}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920919.1676774, 2: 1793920919.3968983, 3: 1793920919.696092}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920920.1680703, 2: 1793920919.3968983, 3: 1793920919.696092}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920920.1680703, 2: 1793920919.3968983, 3: 1793920920.696659}
+Recebido de ('192.168.100.61', 56346): MOVE|e7e5
+[MOVE] e7e5 aplicado, seq=2, esperando ACK de [2, 3]
+Recebido de ('192.168.100.11', 10000): SYNC|2|1|rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2
+Recebido de ('192.168.100.61', 10000): ACK|2|3
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920921.1684759, 2: 1793920919.3968983, 3: 1793920920.696659}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920921.1684759, 2: 1793920919.3968983, 3: 1793920921.697269}
+[AVISO] Sem ACK de [2] no seq 2
+Recebido de ('192.168.100.61', 56346): READ
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920922.168671, 2: 1793920919.3968983, 3: 1793920921.697269}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920922.168671, 2: 1793920919.3968983, 3: 1793920922.6978037}
+[ALERTA] Servidor 2 morreu por timeout!
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920923.1691716, 3: 1793920922.6978037}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920923.1691716, 3: 1793920923.6983237}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920924.1694922, 3: 1793920923.6983237}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920924.1694922, 3: 1793920924.698611}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920925.1701097, 3: 1793920924.698611}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793920925.1701097, 3: 1793920925.6992648}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793920926.1703863, 3: 1793920925.6992648}
+Encerrando servidor...

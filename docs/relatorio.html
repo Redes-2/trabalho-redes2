@@ -29,7 +29,7 @@
 	<p>
 		Aqui explicamos o que implementamos em <a href="codigo/servidor.py.txt"><code>servidor.py</code></a>
 		e <a href="codigo/cliente.py.txt"><code>cliente.py</code></a>.
-		Os registros de execução que temos ficam na <a href="logs.html">página de logs</a>.
+		Os logs das nossas execuções ficam na <a href="logs.html">página de logs</a>.
 	</p>
 
 	<nav aria-label="Índice do relatório">
@@ -157,7 +157,7 @@
 		</table>
 	</div>
 	<h3>O que ainda não resolvemos</h3>
-	<p>Sabemos destas limitações pelo código, mas não medimos nenhuma delas em execução:</p>
+	<p>Sabemos destas limitações pelo código. Só a falta de quórum apareceu nos testes:</p>
 	<ul>
 		<li><strong>Sem transferência de estado:</strong> um servidor que entra ou reinicia começa com o tabuleiro inicial até receber um SYNC. Se ele tiver o menor UID, vira líder com esse tabuleiro e a partida em andamento se perde.</li>
 		<li><strong>Sem quórum:</strong> o OK sai mesmo sem todos os ACKs, e o SYNC não é reenviado. Como ele leva o FEN completo, uma réplica atrasada só se atualiza no próximo lance.</li>
@@ -203,8 +203,34 @@
 
 	<h2 id="testes">8. Testes</h2>
 	<p>
-		Um de nós testou em uma só máquina (WSL, localhost), com 3 servidores e o cliente, inclusive derrubando o líder no meio da partida,
-		e funcionou. Esse teste não gerou registro no repositório.
+		Rodamos os testes em três computadores da mesma rede local: um desktop (UID 1), um servidor (UID 2) e um notebook (UID 3), com o cliente no notebook.
+		Usamos um roteiro automatizado que disparava os programas por SSH, mandava os lances e enviava o mesmo sinal do Ctrl+C.
+		O SSH servia só para controlar as máquinas: o tráfego do trabalho passava pela rede local.
+	</p>
+	<div class="tabela">
+		<table>
+			<thead>
+				<tr><th>Cenário</th><th>O que aconteceu</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><a href="logs.html#heartbeat-eleicao">Heartbeat e eleição</a></td><td>Os três servidores se enxergaram e elegeram o UID 1.</td></tr>
+				<tr><td><a href="logs.html#xadrez-replicacao">Lances e replicação</a></td><td>Os três lances foram aplicados pelo líder e chegaram às duas réplicas.</td></tr>
+				<tr><td><a href="logs.html#lance-invalido">Lance inválido</a></td><td>Os dois lances errados foram recusados sem mudar o tabuleiro.</td></tr>
+				<tr><td><a href="logs.html#falha-lider">Queda do líder</a></td><td>O UID 2 assumiu e a partida seguiu com o mesmo tabuleiro.</td></tr>
+				<tr><td><a href="logs.html#falha-replica">Queda de uma réplica</a></td><td>O líder avisou que faltou o ACK da réplica e respondeu OK ao cliente.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<p>
+		Nos primeiros testes, o firewall atrapalhou: o notebook ficou sem receber as mensagens dos outros e o desktop enviava os heartbeats, mas não recebia nada.
+		O desktop ainda parecia certo, porque se declarava líder sozinho com o menor UID, e só percebemos olhando as mensagens recebidas no log. No desktop, resolvemos liberando o UDP vindo da rede local.
+	</p>
+	<p>
+		Publicamos uma execução de cada cenário, então os logs mostram o comportamento, mas não servem como medida de tempo ou desempenho.
+		As limitações da <a href="#falhas">seção 5</a> não foram testadas, com exceção do OK enviado sem todos os ACKs, que aparece na queda da réplica.
+	</p>
+	<p>
+		Antes disso, um de nós já tinha testado em uma só máquina (WSL, localhost), com 3 servidores e o cliente, inclusive derrubando o líder no meio da partida. Esse teste não gerou registro no repositório.
 	</p>
 </main>
 <footer>
