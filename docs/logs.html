@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logs de Execução</title>
+<meta name="description" content="Logs de execução do trabalho de Redes 2, organizados por cenário.">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<a class="pular" href="#principal">Pular para o conteúdo</a>
+<header>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html">Visão geral</a></li>
+				<li><a href="relatorio.html">Relatório</a></li>
+				<li><a href="logs.html" aria-current="page">Logs</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+<main id="principal" class="conteudo">
+	<h1>Logs de execução</h1>
+	<p>
+		Cada cenário abaixo diz o que o log deve demonstrar e quais mensagens do código procurar nele.
+		Só aparecem aqui arquivos de execuções reais, copiados de <code>logs/&lt;cenario&gt;/</code> por <code>scripts/gerar_site.sh</code>.
+	</p>
+	<!-- GERADO:status-logs:INICIO -->
+<p class="todo">TODO: faltam logs de 5 dos 5 cenários. Veja a <a href="logs.html">página de logs</a>.</p>
+	<!-- GERADO:status-logs:FIM -->
+	<noscript><p>Sem JavaScript, use os links de cada arquivo para abri-lo diretamente.</p></noscript>
+
+	<section>
+		<h2 id="heartbeat-eleicao">Heartbeat e eleição</h2>
+		<p>
+			Três servidores iniciados juntos. Demonstra a troca de heartbeats e a escolha do menor UID como líder.
+			Mensagens: <code>Estou vivo e sou</code>, <code>[ESTADO] Vivos atuais</code> e <code>[ELEIÇÃO] Líder atual do grupo</code>.
+		</p>
+		<!-- GERADO:log-heartbeat-eleicao:INICIO -->
+<p class="todo">TODO: log ainda não coletado. Salve os arquivos em <code>logs/heartbeat-eleicao/</code> e execute <code>scripts/gerar_site.sh</code>.</p>
+		<!-- GERADO:log-heartbeat-eleicao:FIM -->
+	</section>
+
+	<section>
+		<h2 id="xadrez-replicacao">Lances e replicação</h2>
+		<p>
+			Cliente consultando o tabuleiro e enviando lances válidos. Demonstra o fluxo READ, MOVE, SYNC, ACK e OK.
+			Mensagens: <code>[MOVE]</code> no líder e <code>[SYNC] Tabuleiro atualizado</code> nas réplicas.
+		</p>
+		<!-- GERADO:log-xadrez-replicacao:INICIO -->
+<p class="todo">TODO: log ainda não coletado. Salve os arquivos em <code>logs/xadrez-replicacao/</code> e execute <code>scripts/gerar_site.sh</code>.</p>
+		<!-- GERADO:log-xadrez-replicacao:FIM -->
+	</section>
+
+	<section>
+		<h2 id="lance-invalido">Lance inválido</h2>
+		<p>
+			Cliente enviando um lance ilegal ou malformado. Demonstra a resposta de erro sem alteração do tabuleiro.
+			Mensagem: <code>Lance inválido</code> na saída do cliente.
+		</p>
+		<!-- GERADO:log-lance-invalido:INICIO -->
+<p class="todo">TODO: log ainda não coletado. Salve os arquivos em <code>logs/lance-invalido/</code> e execute <code>scripts/gerar_site.sh</code>.</p>
+		<!-- GERADO:log-lance-invalido:FIM -->
+	</section>
+
+	<section>
+		<h2 id="falha-lider">Queda do líder</h2>
+		<p>
+			Ctrl+C no líder durante a partida. Demonstra a detecção por timeout, a eleição do próximo menor UID e a continuação da partida com o mesmo tabuleiro.
+			Mensagens: <code>[ALERTA] Servidor ... morreu por timeout!</code> e a mudança em <code>[ELEIÇÃO]</code>.
+		</p>
+		<!-- GERADO:log-falha-lider:INICIO -->
+<p class="todo">TODO: log ainda não coletado. Salve os arquivos em <code>logs/falha-lider/</code> e execute <code>scripts/gerar_site.sh</code>.</p>
+		<!-- GERADO:log-falha-lider:FIM -->
+	</section>
+
+	<section>
+		<h2 id="falha-replica">Queda de uma réplica</h2>
+		<p>
+			Réplica encerrada pouco antes de um lance, ainda dentro dos 3 segundos de detecção. Demonstra o timeout de ACK e o OK enviado mesmo assim.
+			Mensagem: <code>[AVISO] Sem ACK de</code> no líder.
+		</p>
+		<!-- GERADO:log-falha-replica:INICIO -->
+<p class="todo">TODO: log ainda não coletado. Salve os arquivos em <code>logs/falha-replica/</code> e execute <code>scripts/gerar_site.sh</code>.</p>
+		<!-- GERADO:log-falha-replica:FIM -->
+	</section>
+</main>
+<footer>
+	<div class="conteudo">Trabalho acadêmico da disciplina de Redes 2.</div>
+</footer>
+<script src="assets/visualizador.js"></script>
+</body>
+</html>

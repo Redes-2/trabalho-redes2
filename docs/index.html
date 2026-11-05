@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trabalho de Redes 2</title>
+<meta name="description" content="Grupo de servidores com heartbeat multicast UDP, eleição pelo menor UID e serviço de xadrez replicado.">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<a class="pular" href="#principal">Pular para o conteúdo</a>
+<header>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html" aria-current="page">Visão geral</a></li>
+				<li><a href="relatorio.html">Relatório</a></li>
+				<li><a href="logs.html">Logs</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+<main id="principal" class="conteudo">
+	<h1>Grupo de servidores tolerante a falhas com serviço de xadrez</h1>
+	<p>
+		Um grupo de servidores mantém uma mesma partida de xadrez no ar usando sockets UDP e multicast IP.
+		Cada servidor anuncia que está vivo por heartbeat, o servidor vivo de menor UID atua como líder,
+		e as demais réplicas recebem o tabuleiro a cada lance. Se o líder cair, o próximo menor UID assume.
+	</p>
+
+	<p class="todo">TODO: informar integrantes do grupo, professor, turma e data de entrega. Esses dados não constam no repositório.</p>
+	<p class="todo">TODO: incluir o enunciado do trabalho. Ele não está no repositório, então os requisitos de entrega não foram conferidos.</p>
+	<!-- GERADO:status-logs:INICIO -->
+<p class="todo">TODO: faltam logs de 5 dos 5 cenários. Veja a <a href="logs.html">página de logs</a>.</p>
+	<!-- GERADO:status-logs:FIM -->
+
+	<h2>Seções</h2>
+	<ul>
+		<li><a href="relatorio.html">Relatório</a>: arquitetura, protocolo, heartbeat, eleição, tratamento de falhas e serviço de xadrez.</li>
+		<li><a href="logs.html">Logs</a>: registros de execução organizados por cenário.</li>
+		<li><a href="codigo.html">Código</a>: arquivos-fonte para ler no navegador ou abrir como <code>.txt</code>.</li>
+	</ul>
+
+	<h2>Componentes</h2>
+	<div class="tabela">
+		<table>
+			<thead>
+				<tr><th>Arquivo</th><th>Papel</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><a href="codigo/servidor.py.txt"><code>servidor.py</code></a></td><td>Servidor do grupo: heartbeat, detecção de falhas, eleição e xadrez replicado.</td></tr>
+				<tr><td><a href="codigo/cliente.py.txt"><code>cliente.py</code></a></td><td>Cliente interativo: consulta o tabuleiro e envia lances no formato UCI.</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2>Como executar</h2>
+	<p>É necessário Python 3 e a biblioteca de xadrez. Primeiro, crie o ambiente virtual e instale a dependência:</p>
+<pre><code>python3 -m venv .venv
+source .venv/bin/activate
+pip install chess</code></pre>
+	<p class="todo">TODO: o README manda usar <code>pip install -r requirements.txt</code>, mas esse arquivo não existe no repositório. O comando acima usa o pacote citado no próprio README. A versão da biblioteca não está fixada.</p>
+
+	<p>Depois, em terminais separados e com o ambiente ativado, inicie os servidores e o cliente:</p>
+<pre><code>python3 servidor.py 1
+python3 servidor.py 2
+python3 servidor.py 3
+python3 cliente.py</code></pre>
+	<p>
+		O argumento do servidor é o seu UID. Os lances usam o formato UCI, como <code>e2e4</code> ou <code>g1f3</code>,
+		e <code>sair</code> encerra o cliente.
+	</p>
+	<p>
+		Para testar a tolerância a falhas, pressione Ctrl+C no líder (o servidor de menor UID) no meio da partida e
+		espere cerca de 4 segundos para que os outros servidores detectem a saída dele.
+	</p>
+	<p class="todo">TODO: as notas do grupo deixam em aberto se os testes finais devem ser feitos nas máquinas do laboratório. Confirmar e documentar aqui o ambiente usado.</p>
+</main>
+<footer>
+	<div class="conteudo">Trabalho acadêmico da disciplina de Redes 2.</div>
+</footer>
+</body>
+</html>
