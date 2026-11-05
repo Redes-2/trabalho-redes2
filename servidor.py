@@ -22,6 +22,10 @@ cond = threading.Condition()
 escrita = threading.Lock()
 TIMEOUT_ACK = 1.0
 
+#Estado de quem entra no grupo: só pode agir como líder depois de pedir o tabuleiro aos outros
+sincronizado = threading.Event()
+ESPERA_SYNC = 3.0
+
 #lgc para pegar o uid do servidor passado no argumento:
 if len(sys.argv) < 2:
     print(f"Uso correto: python3 {sys.argv[0]} <MEU_ID>", file=sys.stderr)
@@ -30,10 +34,11 @@ MEU_ID = int(sys.argv[1])
 
 #----------------------------------------------------------------------------------------------------------#
 #FUNÇÃO DE ELEGE O LÍDER:
-def elege_lider():
+#(ignorar: tira um uid da conta, usado para saber quem era o líder sem contar quem está entrando)
+def elege_lider(ignorar=None):
 	menor = 100000
 	for uid, ultimo_tempo in list(servidores_vivos.items()):
-		if (uid < menor):
+		if (uid != ignorar and uid < menor):
 			menor = uid
 
 	if menor==100000:
@@ -61,7 +66,16 @@ def confere_timeouts(limite=3.0):
 #----------------------------------------------------------------------------------------------------------#
 #thread responsável pelo heartbeat:
 def background():
+	inicio = time.time()
 	while True:
+		#enquanto não sincronizou, pede o tabuleiro; se ninguém responder, é porque não tem partida em andamento
+		if not sincronizado.is_set():
+			if time.time() - inicio >= ESPERA_SYNC:
+				print("[JOIN] Ninguém respondeu, começando com o tabuleiro inicial", file=sys.stderr)
+				sincronizado.set()
+			else:
+				sock.sendto(monta(Msg.JOIN, MEU_ID), MULTICAST_ADDRESS)
+
 		time.sleep(1) #envia a cada 1 segundo
 
 		atualiza_visto(MEU_ID)
@@ -94,7 +108,7 @@ def foreground():
 			try:
 				partes = mensagem.split("|")
 				tipo, campos = Msg(partes[0]), partes[1:]   #Msg(...) dá ValueError se o tipo não existir
-				sou_lider = elege_lider() == MEU_ID
+				sou_lider = elege_lider() == MEU_ID and sincronizado.is_set()
 
 				if tipo == Msg.READ and sou_lider:
 					trata_read(address)
@@ -104,6 +118,8 @@ def foreground():
 					trata_sync(campos)
 				elif tipo == Msg.ACK:
 					trata_ack(campos)
+				elif tipo == Msg.JOIN:
+					trata_join(campos)
 			except Exception as e:
 				#mensagem ruim não pode matar a thread que escuta a rede
 				print(f"[ERRO] Mensagem inválida de {address}: {mensagem!r} ({e})", file=sys.stderr)
@@ -119,6 +135,7 @@ class Msg(str, Enum):
 	STATE = "STATE"   #líder   -> cliente: STATE|fen|situacao
 	OK    = "OK"      #líder   -> cliente: OK|fen|situacao
 	ERRO  = "ERRO"    #líder   -> cliente: ERRO|motivo
+	JOIN  = "JOIN"    #servidor que entrou -> grupo: JOIN|uid
 
 #transforma um tipo de mensagem e seus campos nos bytes que vão pela rede
 def monta(tipo, *campos):
@@ -199,10 +216,23 @@ def trata_sync(campos):
 	with cond:
 		board.set_fen(fen)
 		seq = s
+	sincronizado.set()
 	print(f"[SYNC] Tabuleiro atualizado pelo líder {uid_lider}, seq={s}", file=sys.stderr)
 	#ACK vai por multicast: em localhost todos os servidores usam a porta 10000,
 	#então um unicast para (ip, 10000) poderia cair no servidor errado
 	sock.sendto(monta(Msg.ACK, s, MEU_ID), MULTICAST_ADDRESS)
+
+#quem entrou pediu o tabuleiro: responde quem é o líder sem contar com ele
+#(SYNC por multicast pelo mesmo motivo do ACK: em localhost todos usam a porta 10000)
+def trata_join(campos):
+	uid = int(campos[0])
+	if uid == MEU_ID or not sincronizado.is_set() or elege_lider(ignorar=uid) != MEU_ID:
+		return
+	with cond:
+		resposta = monta(Msg.SYNC, seq, MEU_ID, board.fen())
+		meu_seq = seq
+	print(f"[JOIN] Servidor {uid} entrou, enviando tabuleiro seq={meu_seq}", file=sys.stderr)
+	sock.sendto(resposta, MULTICAST_ADDRESS)
 
 #líder anota quem confirmou o SYNC atual:
 def trata_ack(campos):

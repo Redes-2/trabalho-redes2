@@ -1,5 +1,7 @@
 # trabalho-redes2
 
+Trabalho de Redes 2 desenvolvido por Antonio da Ressurreição Filho e Nathan Endo: um grupo de servidores com heartbeat por multicast UDP, eleição pelo menor UID e um serviço de xadrez replicado.
+
 ## Dia 1
 
 - Usar o serviço de chess do python: pythonchess
@@ -88,6 +90,29 @@
 		- Deixei o ACK indo por multicast para conseguir testar em localhost: na mesma máquina todos os servidores usam (IP, 10000), então um unicast podia cair no servidor errado
 		- Nas máquinas do lab (um servidor por máquina) o unicast funciona. A diferença é só tráfego: no multicast todo servidor recebe todos os ACKs, no unicast só o líder recebe
 		- Toninho, se quiser trocar para unicast: no `foreground` passar `address` para `trata_sync(campos, address)` e no fim do `trata_sync` mandar o ACK para `address` em vez de `MULTICAST_ADDRESS` (o `address` do SYNC já é o IP do líder)
+
+## Dia 5 - Servidor que voltava zerava a partida
+
+- Erro que apareceu nos testes em três máquinas (desktop, servidor e notebook):
+	- Derrubamos o líder (UID 1) no meio da partida, o 2 assumiu e estava tudo certo
+	- Quando o 1 voltou, virou líder de novo por ter o menor UID, só que com o tabuleiro inicial
+	- O cliente mandou `b8c6`, levou `Lance inválido` e o tabuleiro voltou para o começo. A partida inteira se perdeu
+	- O motivo: todo servidor sobe com o tabuleiro zerado, e ninguém mandava o estado atual para quem chegava
+- Primeira ideia: mandar um SYNC quando o líder muda sem o antigo ter morrido
+	- Só que até esse SYNC chegar o servidor que voltou já se acha líder, então ele ainda podia responder o cliente com o tabuleiro zerado
+- O que fizemos: quem sobe pede o estado antes de poder ser líder
+	- Mensagem nova: `JOIN|uid`, mandada por multicast logo que o servidor sobe e repetida a cada 1s
+	- Quem responde é o líder sem contar com quem está entrando (`elege_lider(ignorar=uid)`), mandando um SYNC normal com o tabuleiro e o `seq`
+	- Enquanto não sincroniza, o servidor não responde READ nem MOVE, mesmo com o menor UID
+	- Se ninguém responder em 3s (`ESPERA_SYNC`), é porque não tem partida em andamento, e ele começa com o tabuleiro inicial
+	- Como o JOIN sai antes do primeiro heartbeat, o estado costuma chegar antes de os outros saberem que ele voltou
+	- Isso resolve também a réplica que reinicia
+- O que mudou na prática: subindo todos juntos, o grupo leva 3s para começar a responder
+- Rodamos o teste de novo: o 1 voltou, recebeu `seq=3` do líder 2, assumiu e aceitou `b8c6` no tabuleiro certo
+- O que continua sem resolver:
+	- Se todos caírem ao mesmo tempo a partida se perde, porque nada é salvo em disco
+	- Se os três JOIN se perderem, o servidor começa com o tabuleiro inicial
+	- O FEN não guarda o histórico de repetições: o líder avisa do empate por repetição (`Fim de jogo: 1/2-1/2`), mas o cliente continua pedindo lance, e uma réplica que vira líder perde essa contagem
 
 ## Como rodar
 
