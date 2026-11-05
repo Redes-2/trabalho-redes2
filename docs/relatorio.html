@@ -10,17 +10,19 @@
 <body>
 <a class="pular" href="#principal">Pular para o conteúdo</a>
 <header>
-	<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
-	<nav aria-label="Seções">
-		<ul>
-			<li><a href="index.html">Visão geral</a></li>
-			<li><a href="relatorio.html" aria-current="page">Relatório</a></li>
-			<li><a href="logs.html">Logs e diário</a></li>
-			<li><a href="codigo.html">Código</a></li>
-		</ul>
-	</nav>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html">Visão geral</a></li>
+				<li><a href="relatorio.html" aria-current="page">Relatório</a></li>
+				<li><a href="logs.html">Logs e diário</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
 </header>
-<main id="principal">
+<main id="principal" class="conteudo">
 	<h1>Relatório</h1>
 	<p>
 		Este relatório descreve o que está implementado em <a href="codigo/servidor.py.txt"><code>servidor.py</code></a>
@@ -200,5 +202,8 @@
 		e dizem que funcionou. Não há registro de execução desse teste no repositório.
 	</p>
 </main>
+<footer>
+	<div class="conteudo">Trabalho acadêmico da disciplina de Redes 2.</div>
+</footer>
 </body>
 </html>

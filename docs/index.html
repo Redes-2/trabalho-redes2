@@ -10,17 +10,19 @@
 <body>
 <a class="pular" href="#principal">Pular para o conteúdo</a>
 <header>
-	<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
-	<nav aria-label="Seções">
-		<ul>
-			<li><a href="index.html" aria-current="page">Visão geral</a></li>
-			<li><a href="relatorio.html">Relatório</a></li>
-			<li><a href="logs.html">Logs e diário</a></li>
-			<li><a href="codigo.html">Código</a></li>
-		</ul>
-	</nav>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html" aria-current="page">Visão geral</a></li>
+				<li><a href="relatorio.html">Relatório</a></li>
+				<li><a href="logs.html">Logs e diário</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
 </header>
-<main id="principal">
+<main id="principal" class="conteudo">
 	<h1>Grupo de servidores tolerante a falhas com serviço de xadrez</h1>
 	<p>
 		Um grupo de servidores mantém uma mesma partida de xadrez no ar usando sockets UDP e multicast IP.
@@ -69,5 +71,8 @@ python3 cliente.py</code></pre>
 		espere cerca de 4 segundos para que os outros servidores detectem a saída dele.
 	</p>
 </main>
+<footer>
+	<div class="conteudo">Trabalho acadêmico da disciplina de Redes 2.</div>
+</footer>
 </body>
 </html>
