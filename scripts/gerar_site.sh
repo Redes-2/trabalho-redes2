@@ -2,18 +2,20 @@
 # Atualiza os arquivos gerados do site em docs/:
 #   - docs/codigo/  cópia .txt do código-fonte (*.py e requirements*.txt)
 #   - docs/logs/    cópia dos logs de logs/<cenario>/ (*.log e *.txt)
+#   - docs/partidas/  cópia das saídas de partidas/<partida>/ (*.log e *.txt)
 #   - docs/diario/  cópia do diário de diario/ (*.pdf, e *.tex como .tex.txt)
 #   - listas das páginas HTML, entre os marcadores <!-- GERADO:nome:INICIO/FIM -->
 #
 # As duas pastas são recriadas do zero a cada execução. Os cenários são os
-# marcadores GERADO:log-<cenario> de docs/logs.html; arquivos fora deles não são publicados.
+# marcadores GERADO:log-<cenario> de docs/logs.html e GERADO:partida-<partida> de docs/partidas.html;
+# arquivos fora deles não são publicados.
 set -euo pipefail
 export LC_ALL=C
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$RAIZ"
 
-PAGINAS=(docs/index.html docs/relatorio.html docs/diario.html docs/logs.html docs/codigo.html)
+PAGINAS=(docs/index.html docs/relatorio.html docs/diario.html docs/partidas.html docs/logs.html docs/codigo.html)
 for pagina in "${PAGINAS[@]}"; do
 	[ -f "$pagina" ] || { echo "Erro: $pagina não encontrada" >&2; exit 1; }
 done
@@ -49,7 +51,7 @@ conta_linhas() {
 	awk 'END { print NR }' "$1"
 }
 
-rm -rf docs/codigo docs/logs docs/diario
+rm -rf docs/codigo docs/logs docs/partidas docs/diario
 mkdir -p docs/codigo docs/logs
 : > docs/logs/.gitkeep
 
@@ -85,65 +87,73 @@ if [ "$total_codigo" -eq 0 ]; then
 fi
 
 #----------------------------------------------------------------------------------------------------------#
-# Logs: um fragmento por cenário declarado em docs/logs.html
-cenarios=()
-while IFS= read -r cenario; do
-	cenarios+=("$cenario")
-done < <(grep -o 'GERADO:log-[a-z0-9-]*:INICIO' docs/logs.html | sed -e 's/^GERADO:log-//' -e 's/:INICIO$//')
+# Logs e partidas: um fragmento por item declarado na página
+processa_itens() { # pagina prefixo origem texto_vazio
+	local pagina="$1" prefixo="$2" origem="$3" vazio="$4"
+	local itens=() item frag lista total caminho arquivo relativo conhecido
+	while IFS= read -r item; do
+		itens+=("$item")
+	done < <(grep -o "GERADO:$prefixo-[a-z0-9-]*:INICIO" "$pagina" | sed -e "s/^GERADO:$prefixo-//" -e 's/:INICIO$//')
+
+	for item in "${itens[@]}"; do
+		frag="$TMP/$prefixo-$item"
+		lista="$TMP/lista-$prefixo-$item"
+		: > "$lista"
+		total=0
+
+		if [ -d "$origem/$item" ]; then
+			while IFS= read -r -d '' caminho; do
+				arquivo="${caminho#"$origem"/"$item"/}"
+				if ! nome_seguro "$arquivo"; then
+					aviso "ignorado (nome com caracteres não aceitos): $caminho"
+					continue
+				fi
+				case "$arquivo" in
+					*.log|*.txt) ;;
+					*) aviso "ignorado (extensão diferente de .log/.txt): $caminho"; continue ;;
+				esac
+				if ! eh_texto "$caminho"; then
+					aviso "ignorado (vazio ou binário): $caminho"
+					continue
+				fi
+				mkdir -p "docs/$origem/$item/$(dirname "$arquivo")"
+				copia_utf8 "$caminho" "docs/$origem/$item/$arquivo"
+				printf '<li><a href="%s/%s/%s" data-visualizar>%s</a> <span class="meta">(%s linhas)</span></li>\n' \
+					"$origem" "$item" "$arquivo" "$arquivo" "$(conta_linhas "$caminho")" >> "$lista"
+				total=$((total + 1))
+			done < <(find "$origem/$item" -type f -print0 | sort -z)
+		fi
+
+		if [ "$total" -eq 0 ]; then
+			printf '<p>%s</p>\n' "$vazio" > "$frag"
+			faltando=$((faltando + 1))
+		else
+			{
+				printf '<ul class="arquivos" data-visualizador>\n'
+				cat "$lista"
+				printf '</ul>\n'
+			} > "$frag"
+		fi
+	done
+	total_itens=$((total_itens + ${#itens[@]}))
+
+	# Tudo na origem que não pertence a um item declarado fica de fora e gera aviso
+	if [ -d "$origem" ]; then
+		while IFS= read -r -d '' caminho; do
+			relativo="${caminho#"$origem"/}"
+			conhecido=0
+			for item in "${itens[@]}"; do
+				case "$relativo" in "$item"/*) conhecido=1 ;; esac
+			done
+			[ "$conhecido" -eq 1 ] || aviso "fora de um item declarado, não publicado: $caminho"
+		done < <(find "$origem" -type f -print0 | sort -z)
+	fi
+}
 
 faltando=0
-for cenario in "${cenarios[@]}"; do
-	frag="$TMP/log-$cenario"
-	lista="$TMP/lista-$cenario"
-	: > "$lista"
-	total=0
-
-	if [ -d "logs/$cenario" ]; then
-		while IFS= read -r -d '' caminho; do
-			arquivo="${caminho#logs/"$cenario"/}"
-			if ! nome_seguro "$arquivo"; then
-				aviso "log ignorado (nome com caracteres não aceitos): $caminho"
-				continue
-			fi
-			case "$arquivo" in
-				*.log|*.txt) ;;
-				*) aviso "log ignorado (extensão diferente de .log/.txt): $caminho"; continue ;;
-			esac
-			if ! eh_texto "$caminho"; then
-				aviso "log ignorado (vazio ou binário): $caminho"
-				continue
-			fi
-			mkdir -p "docs/logs/$cenario/$(dirname "$arquivo")"
-			copia_utf8 "$caminho" "docs/logs/$cenario/$arquivo"
-			printf '<li><a href="logs/%s/%s" data-visualizar>%s</a> <span class="meta">(%s linhas)</span></li>\n' \
-				"$cenario" "$arquivo" "$arquivo" "$(conta_linhas "$caminho")" >> "$lista"
-			total=$((total + 1))
-		done < <(find "logs/$cenario" -type f -print0 | sort -z)
-	fi
-
-	if [ "$total" -eq 0 ]; then
-		printf '<p>Log ainda não disponível.</p>\n' > "$frag"
-		faltando=$((faltando + 1))
-	else
-		{
-			printf '<ul class="arquivos" data-visualizador>\n'
-			cat "$lista"
-			printf '</ul>\n'
-		} > "$frag"
-	fi
-done
-
-# Tudo em logs/ que não pertence a um cenário declarado fica de fora e gera aviso
-if [ -d logs ]; then
-	while IFS= read -r -d '' caminho; do
-		relativo="${caminho#logs/}"
-		conhecido=0
-		for cenario in "${cenarios[@]}"; do
-			case "$relativo" in "$cenario"/*) conhecido=1 ;; esac
-		done
-		[ "$conhecido" -eq 1 ] || aviso "fora de um cenário declarado, não publicado: $caminho"
-	done < <(find logs -type f -print0 | sort -z)
-fi
+total_itens=0
+processa_itens docs/logs.html log logs "Log ainda não disponível."
+processa_itens docs/partidas.html partida partidas "Saída ainda não disponível."
 
 #----------------------------------------------------------------------------------------------------------#
 # Diário: só o PDF e o fonte LaTeX; os arquivos auxiliares da compilação ficam de fora
@@ -228,6 +238,6 @@ for pagina in "${PAGINAS[@]}"; do
 done
 
 echo "Código: $total_codigo arquivo(s) em docs/codigo/"
-echo "Logs: $((${#cenarios[@]} - faltando)) de ${#cenarios[@]} cenário(s) com arquivos em docs/logs/"
+echo "Logs e partidas: $((total_itens - faltando)) de $total_itens com arquivos em docs/logs/ e docs/partidas/"
 echo "Diário: $total_diario arquivo(s) em docs/diario/"
 [ "$avisos" -eq 0 ] || echo "Avisos: $avisos" >&2

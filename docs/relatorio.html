@@ -18,6 +18,7 @@
 				<li><a href="index.html">Visão geral</a></li>
 				<li><a href="relatorio.html" aria-current="page">Relatório</a></li>
 				<li><a href="diario.html">Diário</a></li>
+				<li><a href="partidas.html">Partidas</a></li>
 				<li><a href="logs.html">Logs</a></li>
 				<li><a href="codigo.html">Código</a></li>
 			</ul>
@@ -86,6 +87,7 @@
 				<tr><td>MOVE</td><td>cliente → grupo</td><td>multicast</td><td><code>MOVE|e2e4</code></td></tr>
 				<tr><td>SYNC</td><td>líder → grupo</td><td>multicast</td><td><code>SYNC|seq|uid_lider|fen</code></td></tr>
 				<tr><td>ACK</td><td>réplica → grupo</td><td>multicast</td><td><code>ACK|seq|uid</code></td></tr>
+				<tr><td>JOIN</td><td>servidor que entrou → grupo</td><td>multicast</td><td><code>JOIN|uid</code></td></tr>
 				<tr><td>STATE</td><td>líder → cliente</td><td>unicast</td><td><code>STATE|fen|situacao</code></td></tr>
 				<tr><td>OK</td><td>líder → cliente</td><td>unicast</td><td><code>OK|fen|situacao</code></td></tr>
 				<tr><td>ERRO</td><td>líder → cliente</td><td>unicast</td><td><code>ERRO|motivo</code></td></tr>
@@ -136,7 +138,7 @@
 	<p>Isso tem algumas consequências:</p>
 	<ul>
 		<li>Na inicialização ou durante uma falha, as listas podem estar diferentes e os servidores discordarem por alguns instantes. Um servidor que acabou de subir, por exemplo, pode se achar líder até ouvir os outros.</li>
-		<li>Um servidor de UID menor que volta para o grupo reassume a liderança assim que é visto de novo.</li>
+		<li>Um servidor de UID menor que volta para o grupo reassume a liderança assim que é visto de novo, mas só depois de receber o tabuleiro (veja a <a href="#falhas">seção 5</a>).</li>
 		<li>Usamos <code>100000</code> como limite na busca, então UIDs a partir desse valor não são eleitos.</li>
 	</ul>
 
@@ -148,6 +150,7 @@
 			</thead>
 			<tbody>
 				<tr><td>O líder para de responder</td><td>Os outros o removem por timeout e o próximo menor UID assume, com o tabuleiro do último SYNC.</td></tr>
+				<tr><td>Um servidor entra ou volta</td><td>Ele manda <code>JOIN</code> e não responde READ nem MOVE até receber o tabuleiro em um SYNC. Se ninguém responder em 3 s (<code>ESPERA_SYNC</code>), começa com o tabuleiro inicial.</td></tr>
 				<tr><td>Uma réplica não confirma o SYNC</td><td>O líder espera até 1 s (<code>TIMEOUT_ACK</code>), registra <code>[AVISO] Sem ACK</code> e responde OK para o cliente mesmo assim.</td></tr>
 				<tr><td>Ninguém responde o READ</td><td>O cliente espera 2 s, avisa do timeout e pergunta se quer tentar de novo.</td></tr>
 				<tr><td>Ninguém responde o MOVE</td><td>O cliente espera 2 s, avisa do timeout e volta a consultar o tabuleiro. O lance não é reenviado sozinho.</td></tr>
@@ -156,10 +159,20 @@
 			</tbody>
 		</table>
 	</div>
+	<h3>Quando o líder volta</h3>
+	<p>
+		Nos testes, um líder que voltava virava líder de novo com o tabuleiro inicial, e a partida se perdia (<a href="logs.html#reentrada-lider-antes">log</a>).
+		Pensamos em mandar um SYNC quando o líder mudasse, mas até ele chegar o servidor já se acharia líder e poderia responder com o tabuleiro zerado.
+	</p>
+	<p>
+		Então fizemos o contrário: quem sobe pede o estado antes de poder ser líder. O <code>JOIN</code> sai antes do primeiro heartbeat e é repetido a cada 1 s. Responde quem é o líder sem contar com quem está entrando, com um SYNC normal.
+		Com isso, o servidor volta com o tabuleiro certo (<a href="logs.html#reentrada-lider-depois">log</a>). O custo é que, subindo todos juntos, o grupo leva 3 s para começar a responder.
+	</p>
 	<h3>O que ainda não resolvemos</h3>
-	<p>Sabemos destas limitações pelo código. Só a falta de quórum apareceu nos testes:</p>
+	<p>Sabemos destas limitações pelo código. A falta de quórum e a repetição também apareceram nos testes:</p>
 	<ul>
-		<li><strong>Sem transferência de estado:</strong> um servidor que entra ou reinicia começa com o tabuleiro inicial até receber um SYNC. Se ele tiver o menor UID, vira líder com esse tabuleiro e a partida em andamento se perde.</li>
+		<li><strong>Sem persistência:</strong> nada é salvo em disco, então a partida se perde se todos os servidores caírem. Se os três JOIN de um servidor se perderem, ele também começa com o tabuleiro inicial.</li>
+		<li><strong>Repetição fora do FEN:</strong> o FEN não guarda o histórico de repetições. O líder anuncia o empate, mas o cliente continua pedindo lance (<a href="partidas.html#repeticao">partida</a>), e uma réplica que vira líder perde essa contagem.</li>
 		<li><strong>Sem quórum:</strong> o OK sai mesmo sem todos os ACKs, e o SYNC não é reenviado. Como ele leva o FEN completo, uma réplica atrasada só se atualiza no próximo lance.</li>
 		<li><strong>Tempo sem resposta:</strong> até a falha ser detectada, os outros servidores ainda acham que o líder antigo está vivo e não respondem o cliente.</li>
 		<li><strong>Datagramas fora do formato:</strong> a decodificação do texto e a leitura do UID do heartbeat ficaram fora do <code>try</code>. Um datagrama que falhe nesses pontos derruba a <code>foreground</code> daquele servidor.</li>
@@ -218,6 +231,7 @@
 				<tr><td><a href="logs.html#lance-invalido">Lance inválido</a></td><td>Os dois lances errados foram recusados sem mudar o tabuleiro.</td></tr>
 				<tr><td><a href="logs.html#falha-lider">Queda do líder</a></td><td>O UID 2 assumiu e a partida seguiu com o mesmo tabuleiro.</td></tr>
 				<tr><td><a href="logs.html#falha-replica">Queda de uma réplica</a></td><td>O líder avisou que faltou o ACK da réplica e respondeu OK ao cliente.</td></tr>
+				<tr><td><a href="logs.html#reentrada-lider-depois">Líder que volta</a></td><td>Antes da correção, a partida se perdia. Depois, o servidor recebeu o tabuleiro e assumiu com a partida intacta.</td></tr>
 			</tbody>
 		</table>
 	</div>
@@ -227,7 +241,8 @@
 	</p>
 	<p>
 		Publicamos uma execução de cada cenário, então os logs mostram o comportamento, mas não servem como medida de tempo ou desempenho.
-		As limitações da <a href="#falhas">seção 5</a> não foram testadas, com exceção do OK enviado sem todos os ACKs, que aparece na queda da réplica.
+		Das limitações da <a href="#falhas">seção 5</a>, só o OK enviado sem todos os ACKs e a repetição apareceram nos testes.
+		Só o cenário "antes da correção" rodou com a versão anterior do código; os outros rodaram com a versão atual.
 	</p>
 	<p>
 		Antes disso, um de nós já tinha testado em uma só máquina (WSL, localhost), com 3 servidores e o cliente, inclusive derrubando o líder no meio da partida. Esse teste não gerou registro no repositório.

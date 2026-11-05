@@ -18,6 +18,7 @@
 				<li><a href="index.html">Visão geral</a></li>
 				<li><a href="relatorio.html">Relatório</a></li>
 				<li><a href="diario.html" aria-current="page">Diário</a></li>
+				<li><a href="partidas.html">Partidas</a></li>
 				<li><a href="logs.html">Logs</a></li>
 				<li><a href="codigo.html">Código</a></li>
 			</ul>
@@ -195,6 +196,43 @@
 			</li></ul>
 		</li></ul>
 	</li></ul>
+	<h3 id="dia-5">Dia 5 - Servidor que voltava zerava a partida</h3>
+	<ul>
+		<li>Erro que apareceu nos testes em três máquinas (desktop, servidor e notebook):
+			<ul>
+				<li>Derrubamos o líder (UID 1) no meio da partida, o 2 assumiu e estava tudo certo</li>
+				<li>Quando o 1 voltou, virou líder de novo por ter o menor UID, só que com o tabuleiro inicial</li>
+				<li>O cliente mandou <code>b8c6</code>, levou <code>Lance inválido</code> e o tabuleiro voltou para o começo. A partida inteira se perdeu</li>
+				<li>O motivo: todo servidor sobe com o tabuleiro zerado, e ninguém mandava o estado atual para quem chegava</li>
+			</ul>
+		</li>
+		<li>Primeira ideia: mandar um SYNC quando o líder muda sem o antigo ter morrido
+			<ul>
+				<li>Só que até esse SYNC chegar o servidor que voltou já se acha líder, então ele ainda podia responder o cliente com o tabuleiro zerado</li>
+			</ul>
+		</li>
+		<li>O que fizemos: quem sobe pede o estado antes de poder ser líder
+			<ul>
+				<li>Mensagem nova: <code>JOIN|uid</code>, mandada por multicast logo que o servidor sobe e repetida a cada 1s</li>
+				<li>Quem responde é o líder sem contar com quem está entrando (<code>elege_lider(ignorar=uid)</code>), mandando um SYNC normal com o tabuleiro e o <code>seq</code></li>
+				<li>Enquanto não sincroniza, o servidor não responde READ nem MOVE, mesmo com o menor UID</li>
+				<li>Se ninguém responder em 3s (<code>ESPERA_SYNC</code>), é porque não tem partida em andamento, e ele começa com o tabuleiro inicial</li>
+				<li>Como o JOIN sai antes do primeiro heartbeat, o estado costuma chegar antes de os outros saberem que ele voltou</li>
+				<li>Isso resolve também a réplica que reinicia</li>
+			</ul>
+		</li>
+		<li>O que mudou na prática: subindo todos juntos, o grupo leva 3s para começar a responder
+		</li>
+		<li>Rodamos o teste de novo: o 1 voltou, recebeu <code>seq=3</code> do líder 2, assumiu e aceitou <code>b8c6</code> no tabuleiro certo
+		</li>
+		<li>O que continua sem resolver:
+			<ul>
+				<li>Se todos caírem ao mesmo tempo a partida se perde, porque nada é salvo em disco</li>
+				<li>Se os três JOIN se perderem, o servidor começa com o tabuleiro inicial</li>
+				<li>O FEN não guarda o histórico de repetições: o líder avisa do empate por repetição (<code>Fim de jogo: 1/2-1/2</code>), mas o cliente continua pedindo lance, e uma réplica que vira líder perde essa contagem</li>
+			</ul>
+		</li>
+	</ul>
 </main>
 <footer>
 	<div class="conteudo">Desenvolvido por Antonio da Ressurreição Filho e Nathan Endo para a disciplina de Redes 2.</div>

@@ -18,6 +18,7 @@
 				<li><a href="index.html" aria-current="page">Visão geral</a></li>
 				<li><a href="relatorio.html">Relatório</a></li>
 				<li><a href="diario.html">Diário</a></li>
+				<li><a href="partidas.html">Partidas</a></li>
 				<li><a href="logs.html">Logs</a></li>
 				<li><a href="codigo.html">Código</a></li>
 			</ul>
@@ -32,13 +33,14 @@
 	<p>
 		A ideia é manter uma partida de xadrez no ar mesmo se um servidor cair. Para isso, montamos um grupo de servidores que conversa
 		por UDP e multicast IP. Cada servidor avisa que está vivo com um heartbeat, o de menor UID vira o líder e os outros
-		recebem o tabuleiro a cada lance. Se o líder cair, o próximo menor UID assume.
+		recebem o tabuleiro a cada lance. Se o líder cair, o próximo menor UID assume. Quando um servidor volta, ele recebe o tabuleiro atual antes de poder ser líder de novo.
 	</p>
 
 	<h2>Seções</h2>
 	<ul>
 		<li><a href="relatorio.html">Relatório</a>: como fizemos a arquitetura, o protocolo, o heartbeat, a eleição, o tratamento de falhas e o xadrez.</li>
 		<li><a href="diario.html">Diário</a>: o nosso diário de desenvolvimento, com as decisões de cada dia.</li>
+		<li><a href="partidas.html">Partidas</a>: saídas de partidas jogadas no sistema, como xeque-mate e afogamento.</li>
 		<li><a href="logs.html">Logs</a>: os logs de execução, separados por cenário.</li>
 		<li><a href="codigo.html">Código</a>: os arquivos do projeto, para ler aqui mesmo ou abrir como <code>.txt</code>.</li>
 	</ul>
@@ -69,7 +71,7 @@ python3 servidor.py 3
 python3 cliente.py</code></pre>
 	<p>
 		O número passado ao servidor é o UID dele. Os lances vão no formato UCI, tipo <code>e2e4</code> ou <code>g1f3</code>,
-		e <code>sair</code> fecha o cliente.
+		e <code>sair</code> fecha o cliente. Ao subir, cada servidor pede o tabuleiro aos outros e espera até 3 segundos, então o grupo leva esse tempo para começar a responder.
 	</p>
 	<p>
 		Para testar a tolerância a falhas, é só dar Ctrl+C no líder (o servidor de menor UID) no meio da partida e
