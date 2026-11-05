@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Logs e Diário</title>
 <meta name="description" content="Logs de execução por cenário e diário de desenvolvimento do trabalho de Redes 2.">
+<meta name="author" content="Antonio da Ressurreição Filho e Nathan Endo">
 <link rel="stylesheet" href="assets/estilo.css">
 </head>
 <body>
@@ -24,7 +25,7 @@
 </header>
 <main id="principal" class="conteudo">
 	<h1>Logs e diário</h1>
-	<noscript><p>Sem JavaScript, use os links de cada arquivo para abri-lo diretamente.</p></noscript>
+	<noscript><p>Sem JavaScript, é só usar os links para abrir cada arquivo.</p></noscript>
 
 	<section>
 		<h2 id="diario">Diário de desenvolvimento</h2>
@@ -34,13 +35,13 @@
 	</section>
 
 	<h2 id="logs">Logs de execução</h2>
-	<p>Cada cenário diz o que o log demonstra e quais mensagens do código procurar nele.</p>
+	<p>Separamos os logs por cenário. Em cada um dizemos o que ele mostra e quais mensagens procurar.</p>
 
 	<section>
 		<h3 id="heartbeat-eleicao">Heartbeat e eleição</h3>
 		<p>
-			Três servidores iniciados juntos. Demonstra a troca de heartbeats e a escolha do menor UID como líder.
-			Mensagens: <code>Estou vivo e sou</code>, <code>[ESTADO] Vivos atuais</code> e <code>[ELEIÇÃO] Líder atual do grupo</code>.
+			Três servidores sobem juntos. O log mostra a troca de heartbeats e o menor UID virando líder.
+			Procure por <code>Estou vivo e sou</code>, <code>[ESTADO] Vivos atuais</code> e <code>[ELEIÇÃO] Líder atual do grupo</code>.
 		</p>
 		<!-- GERADO:log-heartbeat-eleicao:INICIO -->
 <p>Log ainda não disponível.</p>
@@ -50,8 +51,8 @@
 	<section>
 		<h3 id="xadrez-replicacao">Lances e replicação</h3>
 		<p>
-			Cliente consultando o tabuleiro e enviando lances válidos. Demonstra o fluxo READ, MOVE, SYNC, ACK e OK.
-			Mensagens: <code>[MOVE]</code> no líder e <code>[SYNC] Tabuleiro atualizado</code> nas réplicas.
+			O cliente consulta o tabuleiro e manda lances válidos. O log mostra o fluxo READ, MOVE, SYNC, ACK e OK.
+			Procure por <code>[MOVE]</code> no líder e <code>[SYNC] Tabuleiro atualizado</code> nas réplicas.
 		</p>
 		<!-- GERADO:log-xadrez-replicacao:INICIO -->
 <p>Log ainda não disponível.</p>
@@ -61,8 +62,8 @@
 	<section>
 		<h3 id="lance-invalido">Lance inválido</h3>
 		<p>
-			Cliente enviando um lance ilegal ou malformado. Demonstra a resposta de erro sem alteração do tabuleiro.
-			Mensagem: <code>Lance inválido</code> na saída do cliente.
+			O cliente manda um lance ilegal ou malformado. O líder responde com erro e o tabuleiro não muda.
+			Procure por <code>Lance inválido</code> na saída do cliente.
 		</p>
 		<!-- GERADO:log-lance-invalido:INICIO -->
 <p>Log ainda não disponível.</p>
@@ -72,8 +73,8 @@
 	<section>
 		<h3 id="falha-lider">Queda do líder</h3>
 		<p>
-			Ctrl+C no líder durante a partida. Demonstra a detecção por timeout, a eleição do próximo menor UID e a continuação da partida com o mesmo tabuleiro.
-			Mensagens: <code>[ALERTA] Servidor ... morreu por timeout!</code> e a mudança em <code>[ELEIÇÃO]</code>.
+			O líder recebe um Ctrl+C no meio da partida. O log mostra a detecção por timeout, o próximo menor UID assumindo e a partida seguindo com o mesmo tabuleiro.
+			Procure por <code>[ALERTA] Servidor ... morreu por timeout!</code> e pela mudança em <code>[ELEIÇÃO]</code>.
 		</p>
 		<!-- GERADO:log-falha-lider:INICIO -->
 <p>Log ainda não disponível.</p>
@@ -83,8 +84,8 @@
 	<section>
 		<h3 id="falha-replica">Queda de uma réplica</h3>
 		<p>
-			Réplica encerrada pouco antes de um lance, ainda dentro dos 3 segundos de detecção. Demonstra o timeout de ACK e o OK enviado mesmo assim.
-			Mensagem: <code>[AVISO] Sem ACK de</code> no líder.
+			Uma réplica cai pouco antes de um lance, ainda dentro dos 3 segundos de detecção. O log mostra o timeout do ACK e o OK saindo mesmo assim.
+			Procure por <code>[AVISO] Sem ACK de</code> no líder.
 		</p>
 		<!-- GERADO:log-falha-replica:INICIO -->
 <p>Log ainda não disponível.</p>
@@ -92,7 +93,7 @@
 	</section>
 </main>
 <footer>
-	<div class="conteudo">Trabalho acadêmico da disciplina de Redes 2.</div>
+	<div class="conteudo">Desenvolvido por Antonio da Ressurreição Filho e Nathan Endo para a disciplina de Redes 2.</div>
 </footer>
 <script src="assets/visualizador.js"></script>
 </body>
