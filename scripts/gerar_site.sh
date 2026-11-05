@@ -2,6 +2,7 @@
 # Atualiza os arquivos gerados do site em docs/:
 #   - docs/codigo/  cópia .txt do código-fonte (*.py e requirements*.txt)
 #   - docs/logs/    cópia dos logs de logs/<cenario>/ (*.log e *.txt)
+#   - docs/diario/  cópia do diário de diario/ (*.pdf, e *.tex como .tex.txt)
 #   - listas das páginas HTML, entre os marcadores <!-- GERADO:nome:INICIO/FIM -->
 #
 # As duas pastas são recriadas do zero a cada execução. Os cenários são os
@@ -48,7 +49,7 @@ conta_linhas() {
 	awk 'END { print NR }' "$1"
 }
 
-rm -rf docs/codigo docs/logs
+rm -rf docs/codigo docs/logs docs/diario
 mkdir -p docs/codigo docs/logs
 : > docs/logs/.gitkeep
 
@@ -79,7 +80,7 @@ while IFS= read -r -d '' arquivo; do
 done < <(git ls-files --cached --others --exclude-standard -z -- '*.py' 'requirements*.txt' | sort -z)
 
 if [ "$total_codigo" -eq 0 ]; then
-	printf '<li class="todo">TODO: nenhum arquivo de código encontrado.</li>\n' > "$frag_codigo"
+	printf '<li>Nenhum arquivo de código encontrado.</li>\n' > "$frag_codigo"
 	aviso "nenhum arquivo de código encontrado"
 fi
 
@@ -121,8 +122,7 @@ for cenario in "${cenarios[@]}"; do
 	fi
 
 	if [ "$total" -eq 0 ]; then
-		printf '<p class="todo">TODO: log ainda não coletado. Salve os arquivos em <code>logs/%s/</code> e execute <code>scripts/gerar_site.sh</code>.</p>\n' \
-			"$cenario" > "$frag"
+		printf '<p>Log ainda não disponível.</p>\n' > "$frag"
 		faltando=$((faltando + 1))
 	else
 		{
@@ -145,12 +145,52 @@ if [ -d logs ]; then
 	done < <(find logs -type f -print0 | sort -z)
 fi
 
-if [ "$faltando" -eq 0 ]; then
-	printf '<p>Há logs nos %s cenários. Veja a <a href="logs.html">página de logs</a>.</p>\n' \
-		"${#cenarios[@]}" > "$TMP/status-logs"
+#----------------------------------------------------------------------------------------------------------#
+# Diário: só o PDF e o fonte LaTeX; os arquivos auxiliares da compilação ficam de fora
+lista_diario="$TMP/lista-diario"
+: > "$lista_diario"
+total_diario=0
+
+if [ -d diario ]; then
+	while IFS= read -r -d '' caminho; do
+		arquivo="${caminho#diario/}"
+		if ! nome_seguro "$arquivo"; then
+			aviso "diário ignorado (nome com caracteres não aceitos): $caminho"
+			continue
+		fi
+		case "$arquivo" in
+			*.pdf)
+				if [ "$(head -c 4 "$caminho")" != "%PDF" ]; then
+					aviso "diário ignorado (não é um PDF válido): $caminho"
+					continue
+				fi
+				mkdir -p "docs/diario/$(dirname "$arquivo")"
+				cp "$caminho" "docs/diario/$arquivo"
+				printf '<li><a href="diario/%s">%s</a></li>\n' "$arquivo" "$arquivo" >> "$lista_diario"
+				;;
+			*.tex)
+				if ! eh_texto "$caminho"; then
+					aviso "diário ignorado (vazio ou binário): $caminho"
+					continue
+				fi
+				mkdir -p "docs/diario/$(dirname "$arquivo")"
+				copia_utf8 "$caminho" "docs/diario/$arquivo.txt"
+				printf '<li><a href="diario/%s.txt" data-visualizar>%s</a> <span class="meta">(%s linhas)</span></li>\n' \
+					"$arquivo" "$arquivo" "$(conta_linhas "$caminho")" >> "$lista_diario"
+				;;
+		esac
+		total_diario=$((total_diario + 1))
+	done < <(find diario -type f \( -name '*.pdf' -o -name '*.tex' \) -print0 | sort -z)
+fi
+
+if [ -s "$lista_diario" ]; then
+	{
+		printf '<ul class="arquivos" data-visualizador>\n'
+		cat "$lista_diario"
+		printf '</ul>\n'
+	} > "$TMP/diario-arquivos"
 else
-	printf '<p class="todo">TODO: faltam logs de %s dos %s cenários. Veja a <a href="logs.html">página de logs</a>.</p>\n' \
-		"$faltando" "${#cenarios[@]}" > "$TMP/status-logs"
+	printf '<p>Diário ainda não disponível.</p>\n' > "$TMP/diario-arquivos"
 fi
 
 #----------------------------------------------------------------------------------------------------------#
@@ -189,4 +229,5 @@ done
 
 echo "Código: $total_codigo arquivo(s) em docs/codigo/"
 echo "Logs: $((${#cenarios[@]} - faltando)) de ${#cenarios[@]} cenário(s) com arquivos em docs/logs/"
+echo "Diário: $total_diario arquivo(s) em docs/diario/"
 [ "$avisos" -eq 0 ] || echo "Avisos: $avisos" >&2
