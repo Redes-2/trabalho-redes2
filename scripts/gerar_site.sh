@@ -3,7 +3,7 @@
 #   - docs/codigo/  cópia .txt do código-fonte (*.py e requirements*.txt)
 #   - docs/logs/    cópia dos logs de logs/<cenario>/ (*.log e *.txt)
 #   - docs/partidas/  cópia das saídas de partidas/<partida>/ (*.log e *.txt)
-#   - docs/diario/  cópia do diário de diario/ (*.pdf, e *.tex como .tex.txt)
+#   - docs/diario/  cópia do diário de diario/ (*.pdf, *.zip e *.tex como .tex.txt)
 #   - listas das páginas HTML, entre os marcadores <!-- GERADO:nome:INICIO/FIM -->
 #
 # As duas pastas são recriadas do zero a cada execução. Os cenários são os
@@ -156,7 +156,7 @@ processa_itens docs/logs.html log logs "Log ainda não disponível."
 processa_itens docs/partidas.html partida partidas "Saída ainda não disponível."
 
 #----------------------------------------------------------------------------------------------------------#
-# Diário: só o PDF e o fonte LaTeX; os arquivos auxiliares da compilação ficam de fora
+# Diário: só o PDF, o zip e o fonte LaTeX; os arquivos auxiliares da compilação ficam de fora
 lista_diario="$TMP/lista-diario"
 : > "$lista_diario"
 total_diario=0
@@ -178,6 +178,15 @@ if [ -d diario ]; then
 				cp "$caminho" "docs/diario/$arquivo"
 				printf '<li><a href="diario/%s">%s</a></li>\n' "$arquivo" "$arquivo" >> "$lista_diario"
 				;;
+			*.zip)
+				if [ "$(head -c 2 "$caminho")" != "PK" ]; then
+					aviso "diário ignorado (não é um zip válido): $caminho"
+					continue
+				fi
+				mkdir -p "docs/diario/$(dirname "$arquivo")"
+				cp "$caminho" "docs/diario/$arquivo"
+				printf '<li><a href="diario/%s">%s</a></li>\n' "$arquivo" "$arquivo" >> "$lista_diario"
+				;;
 			*.tex)
 				if ! eh_texto "$caminho"; then
 					aviso "diário ignorado (vazio ou binário): $caminho"
@@ -190,7 +199,18 @@ if [ -d diario ]; then
 				;;
 		esac
 		total_diario=$((total_diario + 1))
-	done < <(find diario -type f \( -name '*.pdf' -o -name '*.tex' \) -print0 | sort -z)
+	done < <(find diario -type f \( -name '*.pdf' -o -name '*.zip' -o -name '*.tex' \) -print0 | sort -z)
+fi
+
+if [ -f docs/diario/diario.pdf ]; then
+	cat > "$TMP/diario-render" <<'HTML'
+<p><a href="diario/diario.pdf">Abrir o diário em outra aba</a></p>
+<object class="pdf" data="diario/diario.pdf#navpanes=0&view=FitH" type="application/pdf" aria-label="Diário de desenvolvimento em PDF">
+<p>Este navegador não mostra o PDF na página. <a href="diario/diario.pdf">Abra o diário por este link.</a></p>
+</object>
+HTML
+else
+	printf '<!-- diario/diario.pdf ainda não existe -->\n' > "$TMP/diario-render"
 fi
 
 if [ -s "$lista_diario" ]; then

@@ -1,0 +1,61 @@
+﻿\phantomsection
+\addcontentsline{toc}{section}{Dia 4 -- 3 de novembro de 2026}
+\section*{Dia 4 -- 3 de novembro de 2026}
+\label{dia:4}
+
+Neste quarto encontro, finalmente tiramos o xadrez do papel. Partimos do código que já tínhamos do encontro anterior (heartbeat e eleição de líder funcionando) e implementamos o fluxo de leitura e escrita que tínhamos desenhado no \hyperref[dia:2]{Dia~2}. No fim do dia, já conseguíamos jogar uma partida inteira e derrubar o líder no meio dela sem o jogo parar.
+
+% =====================================================
+\subsection*{Quem joga do outro lado?}
+% =====================================================
+Antes de codar, precisávamos decidir quem faria o lance de resposta. Consideramos três opções: o cliente controlar os dois lados, sortear um lance legal ou chamar o Stockfish. O Stockfish é fácil de chamar pelo \texttt{python-chess}, mas exige o binário instalado em toda máquina que pode virar líder, o que pode dar dor de cabeça nas máquinas do laboratório.
+
+Como o foco do trabalho é a tolerância a falhas e não a inteligência do adversário, decidimos começar pelo mais simples: o cliente controla as brancas e as pretas. Deixamos o ponto de troca isolado na função \texttt{lance\_adversario()}, que por enquanto não faz nada. Como as réplicas só recebem o FEN pronto, trocar isso depois não mexe em nada da replicação.
+
+% =====================================================
+\subsection*{O que implementamos}
+% =====================================================
+No servidor, a regra foi não mexer no que já funcionava: o heartbeat e a eleição ficaram como estavam, e todo o xadrez entrou como acréscimo.
+\begin{itemize}
+    \item \textbf{Protocolo:} criamos o \texttt{Enum} com os tipos de mensagem (\texttt{READ}, \texttt{MOVE}, \texttt{SYNC}, \texttt{ACK}, \texttt{STATE}, \texttt{OK} e \texttt{ERRO}) e uma função que monta as mensagens no formato \texttt{TIPO|campo1|campo2}.
+
+    \item \textbf{Leitura e escrita:} implementamos o fluxo do Dia~2. O líder responde o \texttt{READ} com o tabuleiro; no \texttt{MOVE}, valida o lance, aplica, manda o \texttt{SYNC} e espera os \texttt{ACK} por até 1 segundo antes de responder \texttt{OK}. As réplicas atualizam o tabuleiro e confirmam. Um detalhe que apareceu na prática: o líder também recebe o próprio \texttt{SYNC} de volta pelo \textit{loopback}, então ele precisa ignorar essa mensagem.
+
+    \item \textbf{Textinhos da partida:} o líder manda junto com o tabuleiro de quem é a vez e se houve xeque, xeque-mate, afogamento ou empate por falta de material.
+
+    \item \textbf{Blindagem da \textit{thread} que escuta a rede:} colocamos o tratamento das mensagens de xadrez dentro de um \texttt{try/except}. Sem isso, uma mensagem malformada (um \texttt{MOVE} sem lance, por exemplo) derrubaria a \textit{thread}, e o servidor continuaria mandando heartbeat, parecendo vivo, mas sem ouvir mais nada.
+\end{itemize}
+
+O cliente, que antes só mandava uma mensagem de teste, virou interativo: consulta o tabuleiro, mostra na tela, pede o lance e manda, repetindo até o fim da partida. Tivemos que ajustar duas coisas nele. O \textit{buffer} de recepção era de 16 \textit{bytes}, e o FEN não cabe nisso, então subimos para 1024. E o \textit{timeout} de 0,2 segundo era menor que o tempo que o líder pode passar esperando os ACKs; se o cliente desistisse antes, a resposta atrasada ficaria no \textit{buffer} e bagunçaria a requisição seguinte. Subimos para 2 segundos.
+
+% =====================================================
+\subsection*{Testando}
+% =====================================================
+Testamos tudo em uma máquina só, com três servidores e o cliente rodando em terminais separados. Jogamos um mate do pastor e, depois do terceiro lance, matamos o servidor 1, que era o líder. Uns 3 segundos depois, os outros dois perceberam a falha pelo heartbeat e o servidor 2 assumiu. A partida continuou exatamente de onde estava, e o cliente nem percebeu a troca: só recebeu, no fim, o ``Xeque-mate! Brancas venceram''. Também conferimos que lances inválidos são recusados com \texttt{ERRO}.
+
+Como comentamos no Dia~2, esses testes serviram para verificar se o código está certo, e não para gerar os logs oficiais. Esses ficam para um dia de testes em máquinas diferentes.
+
+% =====================================================
+\subsection*{Perrengues de ambiente}
+% =====================================================
+\begin{itemize}
+    \item \textbf{Instalação do \texttt{python-chess}:} o \texttt{pip install chess} foi bloqueado pelo sistema (erro \textit{externally-managed-environment}, coisa do Debian/Ubuntu) e o pacote não existia no \texttt{apt}. A saída foi usar um ambiente virtual (\texttt{venv}), que de quebra não precisa de \texttt{sudo} e deve funcionar nas máquinas do laboratório. Também criamos um \texttt{requirements.txt} para facilitar a instalação.
+
+\end{itemize}
+
+% =====================================================
+\subsection*{O que ficou para depois}
+% =====================================================
+\begin{itemize}
+    \item Se um servidor com UID menor entra no meio da partida, ele vira líder com o tabuleiro zerado, porque ainda não existe transferência de estado na entrada.
+    \item Se o líder cair bem entre aplicar o lance e as réplicas receberem o \texttt{SYNC}, o lance se perde.
+    \item Avaliar a troca do ACK para \textit{unicast} nos testes com máquinas diferentes.
+    \item Colocar um adversário de verdade (lance aleatório ou Stockfish).
+\end{itemize}
+
+Todo o código do dia e a atualização do README foram versionados no repositório.
+
+    \vspace{0.8cm}
+    \includegraphics[width=0.9\textwidth]{commit-dia4.png}\par
+    \vspace{0.8cm}
+

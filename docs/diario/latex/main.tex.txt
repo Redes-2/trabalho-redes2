@@ -1,0 +1,76 @@
+﻿\documentclass[12pt,a4paper,oneside]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage[brazilian]{babel}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, left=30mm, right=20mm}
+\usepackage{float}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{lmodern}
+\usepackage{titlesec} % Pacote para estilizar a fonte dos títulos (seções/subseções)
+
+% PACOTE ADICIONADO: hyperref para tornar o sumário clicável
+% Deve vir após a maioria dos pacotes, mas antes das redefinições de nomes
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+
+% Estilização das fontes dos títulos (sans-serif negrito elegante)
+\titleformat{\section}{\normalfont\Large\bfseries\sffamily}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\sffamily}{\thesubsection}{1em}{}
+
+% Redefinição para trocar "Sumário" por "Dias"
+\addto\captionsbrazilian{
+    \renewcommand{\contentsname}{Dias}
+    \renewcommand{\bibname}{REFERÊNCIAS}
+    \renewcommand{\refname}{REFERÊNCIAS}
+}
+
+\begin{document}
+
+% =====================================================
+% CAPA PERSONALIZADA 
+% =====================================================
+\begin{titlepage}
+    \centering
+    {\large \textbf{Universidade Federal do Paraná (UFPR)}\par}
+    {\large Setor de Ciências Exatas -- Curso de Ciência da Computação\par}
+    \vspace{8cm}
+    
+    {\Large \textbf{Trabalho Prático de Redes de Computadores II -- Turma 2026/2}\par}
+    \vspace{2cm}
+    
+    {\large \textbf{Antonio da Ressurreição Filho e Nathan Endo}\par}
+    \vspace{1.5cm}
+    
+    \vfill
+    
+    \vspace{1.5cm}
+    
+    {\large \textbf{Professor:} Prof. Dr. Elias Procópio Duarte Jr.\par}
+    \vspace{2cm}
+    
+    {\large Curitiba \\ 2026}\par
+\end{titlepage}
+
+\newpage
+
+% =====================================================
+% CONTEÚDOS (SUMÁRIO)
+% =====================================================
+\tableofcontents
+\newpage
+
+% =====================================================
+% CORPO DO DOCUMENTO
+% =====================================================
+
+\input{dia1}
+\input{dia2}
+\input{dia3}
+\input{dia4}
+\input{dia5}
+
+\end{document}

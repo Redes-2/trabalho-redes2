@@ -1,0 +1,62 @@
+﻿\phantomsection
+\addcontentsline{toc}{section}{Dia 2 -- 28 de outubro de 2026}
+\section*{Dia 2 -- 28 de outubro de 2026}
+\label{dia:2}
+
+Neste segundo encontro, com a cabeça um pouco mais fria e o caminho mais claro, sentamos para "bater o martelo" e estruturar de vez a arquitetura do nosso projeto. A ideia foi transformar as discussões do primeiro dia em decisões concretas para podermos colocar a mão na massa no próximo encontro.
+
+% =====================================================
+\subsection*{O entendimento do Projeto}
+% =====================================================
+Entendemos que o sistema seria composto por um único grupo de servidores trabalhando em equipe para manter a mesma aplicação viva (a nossa partida de xadrez). O nosso objetivo aqui não é criar um servidor robusto para hospedar várias partidas simultâneas, mas sim focar na tolerância a falhas: se um servidor cair, o jogo não pode parar de jeito nenhum.
+
+Para organizar a casa, entre os servidores vivos, um vai assumir o papel de líder (o primário). É ele quem vai processar as requisições dos clientes. Os outros servidores vão atuar apenas como réplicas (\textit{backups}), acompanhando a partida de camarote e mantendo uma cópia atualizada do estado do tabuleiro.
+
+
+% =====================================================
+\subsection*{Comunicação}
+% =====================================================
+Para a comunicação, optamos por usar \textit{sockets} UDP, pois é o protocolo necessário para multicast. Iremos configurar os servidores e clientes para trocarem mensagens pelo grupo \textit{multicast}. A única exceção que abrimos foram as respostas diretas do líder para o cliente, que decidimos mandar em \textit{unicast}.
+
+Definimos um padrão próprio para o formato das mensagens: \texttt{TIPO|campo1|campo2|...}. Escolhemos o caractere \texttt{|} como separador por um motivo simples: a nossa representação do tabuleiro (FEN) já vem cheia de espaços, então usar um espaço como delimitador ia dar muita dor de cabeça no \textit{parsing}. Todos os tipos de mensagem serão amarrados em uma enumeração (\texttt{Enum}) no código para manter tudo organizado.
+
+
+% =====================================================
+\subsection*{A Lógica do Xadrez}
+% =====================================================
+Para a lógica do jogo, a biblioteca \texttt{python-chess} caiu como uma luva. Ela serializa o estado do tabuleiro no formato FEN (\textit{Forsyth–Edwards Notation}), o que é maravilhoso porque resume a partida inteira em uma \textit{string} curtinha, de menos de 100 caracteres.
+
+Definimos o fluxo de interação assim:
+\begin{itemize}
+    \item \textbf{Leitura:} Quando o cliente quer ver o jogo, ele manda um \texttt{READ} pro grupo. O líder pega essa requisição e responde direto para ele com um \texttt{STATE}, mandando o FEN e como está a situação do tabuleiro.
+    
+    \item \textbf{Escrita:} Para jogar, o cliente manda um \texttt{MOVE} com o lance em notação UCI (tipo \texttt{e2e4}). O líder atua como juiz e valida o lance; se for uma jogada ilegal, ele devolve um \texttt{ERRO}. Se for válida, ele aplica o lance, incrementa o nosso contador (número de sequência) e "grita" um \texttt{SYNC} para o grupo com o novo FEN. As réplicas ouvem, atualizam seus tabuleiros e nos respondem com um \texttt{ACK}. Só depois de receber essas confirmações é que o líder manda um \texttt{OK} pro cliente.
+\end{itemize}
+
+Para deixar a interface do cliente mais rica, faremos o líder enviar também um texto descrevendo o que está rolando na partida: de quem é a vez, se está em xeque, xeque-mate, ou se deu empate (seja por afogamento ou falta de material).
+
+a biblioteca \texttt{python-chess}\footnote{\url{https://python-chess.readthedocs.io}}
+
+% =====================================================
+\subsection*{Nossas Decisões de Projeto }
+% =====================================================
+\begin{itemize}
+    \item \textbf{Tamanho do \textit{payload}:} Como o nosso FEN é minúsculo comparado ao MTU padrão da rede (que gira em torno de 1500 \textit{bytes}), demos sorte: as mensagens de \texttt{SYNC} cabem tranquilamente em um único datagrama, sem precisarmos nos preocupar com fragmentação de pacotes.
+    
+    \item \textbf{Confirmação "na mão":} Como sabemos bem das aulas teóricas, o UDP não garante a entrega. Então, teremos que implementar a confirmação (\texttt{ACK}) por conta própria, direto na camada de aplicação. Usaremos o número de sequência do \texttt{SYNC} para não nos perdermos sobre qual pacote estaria sendo confirmado.
+    
+    \item \textbf{Não esperar para sempre (\textit{Timeout}):} Colocaremos o líder para esperar os ACKs por, no máximo, 1 segundo. Vai que uma réplica morre logo depois de receber o \texttt{SYNC}? Se não tiver esse limite, o líder ficaria travado ali indefinidamente esperando uma resposta que nunca ia chegar.
+    
+    \item \textbf{Uma \textit{Thread} por escrita:} Decidimos que cada \texttt{MOVE} será processado em uma \textit{thread} própria. Se deixássemos a mesma \textit{thread} que escuta a rede responsável por isso, ela ficaria presa esperando os ACKs e pararia de receber requisições novas (um clássico \textit{deadlock}). Para não virar bagunça e as requisições se atropelarem, usaremos um \textit{lock} para garantir que os lances sejam processados um de cada vez.
+
+    
+    \item \textbf{ACK no \textit{multicast}:} Durante os nossos testes locais do dia 4, rodamos todos os servidores na mesma máquina, ou seja, todo mundo dividindo a mesma porta.  Se a gente mandasse o ACK em \textit{unicast}, corria o risco de ele ser entregue ao processo errado. A saída foi mandar o ACK para o grupo todo, e o líder que se vire para filtrar quem respondeu pelo número de sequência. O intuito era ser mais fácil análisar a corretude do código então não geramos logs, iremos tirar um dia especial para testar o código em máquinas diferentes e gerar os logs válidos para o projeto. \textbf{(Informações vindas do futuro)}
+    
+
+\end{itemize}
+
+Todas as informações da nossa segunda reunião foram versionadas no repositório, não começamos a codar de fato no segundo dia, então foi só o README mesmo.
+
+    \vspace{0.8cm}
+    \includegraphics[width=0.9\textwidth]{commit-dia2.png}\par
+    \vspace{0.8cm}
