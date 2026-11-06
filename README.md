@@ -91,28 +91,47 @@ Trabalho de Redes 2 desenvolvido por Antonio da Ressurreição Filho e Nathan En
 		- Nas máquinas do lab (um servidor por máquina) o unicast funciona. A diferença é só tráfego: no multicast todo servidor recebe todos os ACKs, no unicast só o líder recebe
 		- Toninho, se quiser trocar para unicast: no `foreground` passar `address` para `trata_sync(campos, address)` e no fim do `trata_sync` mandar o ACK para `address` em vez de `MULTICAST_ADDRESS` (o `address` do SYNC já é o IP do líder)
 
-## Dia 5 - Servidor que voltava zerava a partida
+## Dia 5 - Testes em três máquinas
 
-- Erro que apareceu nos testes em três máquinas (desktop, servidor e notebook):
-	- Derrubamos o líder (UID 1) no meio da partida, o 2 assumiu e estava tudo certo
-	- Quando o 1 voltou, virou líder de novo por ter o menor UID, só que com o tabuleiro inicial
-	- O cliente mandou `b8c6`, levou `Lance inválido` e o tabuleiro voltou para o começo. A partida inteira se perdeu
-	- O motivo: todo servidor sobe com o tabuleiro zerado, e ninguém mandava o estado atual para quem chegava
-- Primeira ideia: mandar um SYNC quando o líder muda sem o antigo ter morrido
-	- Só que até esse SYNC chegar o servidor que voltou já se acha líder, então ele ainda podia responder o cliente com o tabuleiro zerado
-- O que fizemos: quem sobe pede o estado antes de poder ser líder
-	- Mensagem nova: `JOIN|uid`, mandada por multicast logo que o servidor sobe e repetida a cada 1s
-	- Quem responde é o líder sem contar com quem está entrando (`elege_lider(ignorar=uid)`), mandando um SYNC normal com o tabuleiro e o `seq`
-	- Enquanto não sincroniza, o servidor não responde READ nem MOVE, mesmo com o menor UID
-	- Se ninguém responder em 3s (`ESPERA_SYNC`), é porque não tem partida em andamento, e ele começa com o tabuleiro inicial
-	- Como o JOIN sai antes do primeiro heartbeat, o estado costuma chegar antes de os outros saberem que ele voltou
-	- Isso resolve também a réplica que reinicia
-- O que mudou na prática: subindo todos juntos, o grupo leva 3s para começar a responder
-- Rodamos o teste de novo: o 1 voltou, recebeu `seq=3` do líder 2, assumiu e aceitou `b8c6` no tabuleiro certo
-- O que continua sem resolver:
-	- Se todos caírem ao mesmo tempo a partida se perde, porque nada é salvo em disco
-	- Se os três JOIN se perderem, o servidor começa com o tabuleiro inicial
-	- O FEN não guarda o histórico de repetições: o líder avisa do empate por repetição (`Fim de jogo: 1/2-1/2`), mas o cliente continua pedindo lance, e uma réplica que vira líder perde essa contagem
+- Até aqui só tínhamos testado em localhost. Agora rodamos o grupo em três computadores da mesma rede local:
+	- Desktop com o UID 1, servidor com o UID 2 e notebook com o UID 3
+	- Cliente rodando no notebook
+	- Logs em `logs/`, separados por cenário, e partidas em `partidas/`
+- Primeiro problema: as máquinas não se enxergavam direito
+	- O notebook não recebia ninguém e se elegia líder sozinho, com UID 3
+	- O desktop parecia certo, mas só porque tem o menor UID: ele também estava sozinho. Só vimos isso olhando que não aparecia nenhum `Recebido de` no log dele
+	- No desktop o bloqueio era o firewall, e liberar o UDP da rede local resolveu
+	- Lição: não dá para olhar só o líder, tem que conferir o `[ESTADO] Vivos atuais` em cada máquina
+- Cenários que testamos:
+
+| Cenário | O que fizemos | Resultado |
+|---|---|---|
+| Heartbeat e eleição | Subimos os três servidores | Todos receberam os três heartbeats e elegeram o UID 1 |
+| Lances e replicação | Jogamos `e2e4`, `e7e5` e `g1f3` | O líder aplicou e as duas réplicas receberam, de seq 1 a 3 |
+| Lance inválido | Mandamos `e2e5` e `abc` | Os dois recusados, sem mudar o tabuleiro |
+| Queda do líder | Derrubamos o desktop no meio da partida | O UID 2 assumiu e aceitou `g1f3` no mesmo tabuleiro |
+| Queda de réplica | Derrubamos o UID 2 e logo mandamos `e7e5` | O líder avisou `Sem ACK de [2]` e respondeu OK mesmo assim |
+| Líder que volta | O desktop caiu e voltou no meio da partida | Primeiro falhou, depois da correção funcionou |
+
+- Erro que os testes mostraram: o líder que voltava zerava a partida
+	- Quando o UID 1 voltou, virou líder de novo por ter o menor UID, só que com o tabuleiro inicial
+	- O cliente mandou `b8c6`, levou `Lance inválido` e o tabuleiro voltou para o começo
+	- A primeira ideia foi mandar um SYNC quando o líder mudasse, mas até ele chegar o servidor já se acharia líder
+	- O que fizemos: quem sobe manda `JOIN|uid` e só pode ser líder depois de receber o tabuleiro. Responde quem é o líder sem contar com ele (`elege_lider(ignorar=uid)`). Se ninguém responder em 3s, é porque não tem partida em andamento
+	- Testamos de novo: o UID 1 recebeu `seq=3` do líder 2, assumiu e aceitou `b8c6` no tabuleiro certo. Uma réplica reiniciada também recebeu o tabuleiro
+	- Depois da correção, refizemos todos os cenários. Só o log `reentrada-lider-antes` é da versão antiga
+	- Efeito colateral: subindo todos juntos, o grupo leva 3s para começar a responder
+- Partidas que jogamos para ver as situações de jogo:
+	- Mate do pastor: `Xeque-mate! Brancas venceram`
+	- Mate do tolo: `Xeque-mate! Pretas venceram`
+	- Afogamento: `Empate por afogamento (stalemate)`
+	- Lances especiais: en passant, roque e promoção foram aceitos, e a promoção deu `Xeque! Vez das pretas`
+	- Repetição: o líder anunciou `Fim de jogo: 1/2-1/2`, mas o cliente continuou pedindo lance, porque o FEN não guarda o histórico de repetições
+- O que ainda está em aberto:
+	- O caso da repetição acima, que ainda não corrigimos
+	- Se todos os servidores caírem, a partida se perde, porque nada é salvo em disco
+	- Rodamos cada cenário uma vez, então os logs mostram o comportamento, mas não medem tempo nem desempenho
+	- Não testamos nas máquinas do laboratório
 
 ## Como rodar
 

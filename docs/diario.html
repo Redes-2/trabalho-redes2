@@ -196,40 +196,66 @@
 			</li></ul>
 		</li></ul>
 	</li></ul>
-	<h3 id="dia-5">Dia 5 - Servidor que voltava zerava a partida</h3>
+	<h3 id="dia-5">Dia 5 - Testes em três máquinas</h3>
 	<ul>
-		<li>Erro que apareceu nos testes em três máquinas (desktop, servidor e notebook):
+		<li>Até aqui só tínhamos testado em localhost. Agora rodamos o grupo em três computadores da mesma rede local:
 			<ul>
-				<li>Derrubamos o líder (UID 1) no meio da partida, o 2 assumiu e estava tudo certo</li>
-				<li>Quando o 1 voltou, virou líder de novo por ter o menor UID, só que com o tabuleiro inicial</li>
-				<li>O cliente mandou <code>b8c6</code>, levou <code>Lance inválido</code> e o tabuleiro voltou para o começo. A partida inteira se perdeu</li>
-				<li>O motivo: todo servidor sobe com o tabuleiro zerado, e ninguém mandava o estado atual para quem chegava</li>
+				<li>Desktop com o UID 1, servidor com o UID 2 e notebook com o UID 3</li>
+				<li>Cliente rodando no notebook</li>
+				<li>Logs em <code>logs/</code>, separados por cenário, e partidas em <code>partidas/</code></li>
 			</ul>
 		</li>
-		<li>Primeira ideia: mandar um SYNC quando o líder muda sem o antigo ter morrido
+		<li>Primeiro problema: as máquinas não se enxergavam direito
 			<ul>
-				<li>Só que até esse SYNC chegar o servidor que voltou já se acha líder, então ele ainda podia responder o cliente com o tabuleiro zerado</li>
+				<li>O notebook não recebia ninguém e se elegia líder sozinho, com UID 3</li>
+				<li>O desktop parecia certo, mas só porque tem o menor UID: ele também estava sozinho. Só vimos isso olhando que não aparecia nenhum <code>Recebido de</code> no log dele</li>
+				<li>No desktop o bloqueio era o firewall, e liberar o UDP da rede local resolveu</li>
+				<li>Lição: não dá para olhar só o líder, tem que conferir o <code>[ESTADO] Vivos atuais</code> em cada máquina</li>
 			</ul>
 		</li>
-		<li>O que fizemos: quem sobe pede o estado antes de poder ser líder
+		<li>Cenários que testamos:
+		</li>
+	</ul>
+	<div class="tabela">
+		<table>
+			<thead><tr><th>Cenário</th><th>O que fizemos</th><th>Resultado</th></tr></thead>
+			<tbody>
+				<tr><td>Heartbeat e eleição</td><td>Subimos os três servidores</td><td>Todos receberam os três heartbeats e elegeram o UID 1</td></tr>
+				<tr><td>Lances e replicação</td><td>Jogamos <code>e2e4</code>, <code>e7e5</code> e <code>g1f3</code></td><td>O líder aplicou e as duas réplicas receberam, de seq 1 a 3</td></tr>
+				<tr><td>Lance inválido</td><td>Mandamos <code>e2e5</code> e <code>abc</code></td><td>Os dois recusados, sem mudar o tabuleiro</td></tr>
+				<tr><td>Queda do líder</td><td>Derrubamos o desktop no meio da partida</td><td>O UID 2 assumiu e aceitou <code>g1f3</code> no mesmo tabuleiro</td></tr>
+				<tr><td>Queda de réplica</td><td>Derrubamos o UID 2 e logo mandamos <code>e7e5</code></td><td>O líder avisou <code>Sem ACK de [2]</code> e respondeu OK mesmo assim</td></tr>
+				<tr><td>Líder que volta</td><td>O desktop caiu e voltou no meio da partida</td><td>Primeiro falhou, depois da correção funcionou</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Erro que os testes mostraram: o líder que voltava zerava a partida
 			<ul>
-				<li>Mensagem nova: <code>JOIN|uid</code>, mandada por multicast logo que o servidor sobe e repetida a cada 1s</li>
-				<li>Quem responde é o líder sem contar com quem está entrando (<code>elege_lider(ignorar=uid)</code>), mandando um SYNC normal com o tabuleiro e o <code>seq</code></li>
-				<li>Enquanto não sincroniza, o servidor não responde READ nem MOVE, mesmo com o menor UID</li>
-				<li>Se ninguém responder em 3s (<code>ESPERA_SYNC</code>), é porque não tem partida em andamento, e ele começa com o tabuleiro inicial</li>
-				<li>Como o JOIN sai antes do primeiro heartbeat, o estado costuma chegar antes de os outros saberem que ele voltou</li>
-				<li>Isso resolve também a réplica que reinicia</li>
+				<li>Quando o UID 1 voltou, virou líder de novo por ter o menor UID, só que com o tabuleiro inicial</li>
+				<li>O cliente mandou <code>b8c6</code>, levou <code>Lance inválido</code> e o tabuleiro voltou para o começo</li>
+				<li>A primeira ideia foi mandar um SYNC quando o líder mudasse, mas até ele chegar o servidor já se acharia líder</li>
+				<li>O que fizemos: quem sobe manda <code>JOIN|uid</code> e só pode ser líder depois de receber o tabuleiro. Responde quem é o líder sem contar com ele (<code>elege_lider(ignorar=uid)</code>). Se ninguém responder em 3s, é porque não tem partida em andamento</li>
+				<li>Testamos de novo: o UID 1 recebeu <code>seq=3</code> do líder 2, assumiu e aceitou <code>b8c6</code> no tabuleiro certo. Uma réplica reiniciada também recebeu o tabuleiro</li>
+				<li>Depois da correção, refizemos todos os cenários. Só o log <code>reentrada-lider-antes</code> é da versão antiga</li>
+				<li>Efeito colateral: subindo todos juntos, o grupo leva 3s para começar a responder</li>
 			</ul>
 		</li>
-		<li>O que mudou na prática: subindo todos juntos, o grupo leva 3s para começar a responder
-		</li>
-		<li>Rodamos o teste de novo: o 1 voltou, recebeu <code>seq=3</code> do líder 2, assumiu e aceitou <code>b8c6</code> no tabuleiro certo
-		</li>
-		<li>O que continua sem resolver:
+		<li>Partidas que jogamos para ver as situações de jogo:
 			<ul>
-				<li>Se todos caírem ao mesmo tempo a partida se perde, porque nada é salvo em disco</li>
-				<li>Se os três JOIN se perderem, o servidor começa com o tabuleiro inicial</li>
-				<li>O FEN não guarda o histórico de repetições: o líder avisa do empate por repetição (<code>Fim de jogo: 1/2-1/2</code>), mas o cliente continua pedindo lance, e uma réplica que vira líder perde essa contagem</li>
+				<li>Mate do pastor: <code>Xeque-mate! Brancas venceram</code></li>
+				<li>Mate do tolo: <code>Xeque-mate! Pretas venceram</code></li>
+				<li>Afogamento: <code>Empate por afogamento (stalemate)</code></li>
+				<li>Lances especiais: en passant, roque e promoção foram aceitos, e a promoção deu <code>Xeque! Vez das pretas</code></li>
+				<li>Repetição: o líder anunciou <code>Fim de jogo: 1/2-1/2</code>, mas o cliente continuou pedindo lance, porque o FEN não guarda o histórico de repetições</li>
+			</ul>
+		</li>
+		<li>O que ainda está em aberto:
+			<ul>
+				<li>O caso da repetição acima, que ainda não corrigimos</li>
+				<li>Se todos os servidores caírem, a partida se perde, porque nada é salvo em disco</li>
+				<li>Rodamos cada cenário uma vez, então os logs mostram o comportamento, mas não medem tempo nem desempenho</li>
+				<li>Não testamos nas máquinas do laboratório</li>
 			</ul>
 		</li>
 	</ul>
