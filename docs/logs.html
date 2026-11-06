@@ -30,7 +30,7 @@
 	<noscript><p>Sem JavaScript, é só usar os links para abrir cada arquivo.</p></noscript>
 
 		<p>
-		Rodamos estes cenários em três computadores da mesma rede local: desktop (UID 1), servidor (UID 2) e notebook (UID 3).
+		Primeiro, rodamos estes cenários em três computadores da mesma rede local: desktop (UID 1), servidor (UID 2) e notebook (UID 3).
 		O cliente rodou no notebook. Usamos um roteiro automatizado que disparava os programas por SSH, mandava os lances e enviava o mesmo sinal do Ctrl+C.
 	</p>
 	<p>
@@ -151,6 +151,57 @@
 <li><a href="logs/reentrada-lider-depois/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(274 linhas)</span></li>
 </ul>
 		<!-- GERADO:log-reentrada-lider-depois:FIM -->
+	</section>
+
+	<h2 id="laboratorio">Testes no laboratório</h2>
+	<p>Estes cenários são para as máquinas do laboratório. Os logs aparecem aqui depois dos testes.</p>
+
+	<section>
+		<h3 id="lab-heartbeat-eleicao">Heartbeat e eleição</h3>
+		<p>Três servidores em máquinas diferentes. O log deve mostrar os heartbeats das três máquinas e o UID 1 como líder.</p>
+		<!-- GERADO:log-lab-heartbeat-eleicao:INICIO -->
+<p>Log ainda não disponível.</p>
+		<!-- GERADO:log-lab-heartbeat-eleicao:FIM -->
+	</section>
+
+	<section>
+		<h3 id="lab-xadrez-replicacao">Lances e replicação</h3>
+		<p>O cliente joga <code>e2e4</code>, <code>e7e5</code> e <code>g1f3</code>. O log deve mostrar o líder aplicando os lances e as réplicas recebendo o tabuleiro.</p>
+		<!-- GERADO:log-lab-xadrez-replicacao:INICIO -->
+<p>Log ainda não disponível.</p>
+		<!-- GERADO:log-lab-xadrez-replicacao:FIM -->
+	</section>
+
+	<section>
+		<h3 id="lab-lance-invalido">Lance inválido</h3>
+		<p>O cliente manda <code>e2e5</code>, <code>abc</code> e <code>e2e4</code>. O log deve mostrar os dois primeiros recusados e o terceiro aceito.</p>
+		<!-- GERADO:log-lab-lance-invalido:INICIO -->
+<p>Log ainda não disponível.</p>
+		<!-- GERADO:log-lab-lance-invalido:FIM -->
+	</section>
+
+	<section>
+		<h3 id="lab-falha-lider">Queda do líder</h3>
+		<p>O líder cai no meio da partida. O log deve mostrar a queda detectada e o UID 2 assumindo com o mesmo tabuleiro.</p>
+		<!-- GERADO:log-lab-falha-lider:INICIO -->
+<p>Log ainda não disponível.</p>
+		<!-- GERADO:log-lab-falha-lider:FIM -->
+	</section>
+
+	<section>
+		<h3 id="lab-falha-replica">Queda de uma réplica</h3>
+		<p>Uma réplica cai pouco antes de um lance. O log deve mostrar o aviso de ACK faltando e o OK ao cliente.</p>
+		<!-- GERADO:log-lab-falha-replica:INICIO -->
+<p>Log ainda não disponível.</p>
+		<!-- GERADO:log-lab-falha-replica:FIM -->
+	</section>
+
+	<section>
+		<h3 id="lab-lider-volta">Líder que volta</h3>
+		<p>O líder cai e volta no meio da partida. O log deve mostrar o servidor recebendo o tabuleiro antes de assumir.</p>
+		<!-- GERADO:log-lab-lider-volta:INICIO -->
+<p>Log ainda não disponível.</p>
+		<!-- GERADO:log-lab-lider-volta:FIM -->
 	</section>
 </main>
 <footer>
