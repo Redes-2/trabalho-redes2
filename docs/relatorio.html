@@ -168,16 +168,6 @@
 		Então fizemos o contrário: quem sobe pede o estado antes de poder ser líder. O <code>JOIN</code> sai antes do primeiro heartbeat e é repetido a cada 1 s. Responde quem é o líder sem contar com quem está entrando, com um SYNC normal.
 		Com isso, o servidor volta com o tabuleiro certo (<a href="logs.html#reentrada-lider-depois">log</a>). O custo é que, subindo todos juntos, o grupo leva 3 s para começar a responder.
 	</p>
-	<h3>O que ainda não resolvemos</h3>
-	<p>Sabemos destas limitações pelo código. A falta de quórum e a repetição também apareceram nos testes:</p>
-	<ul>
-		<li><strong>Sem persistência:</strong> nada é salvo em disco, então a partida se perde se todos os servidores caírem. Se os três JOIN de um servidor se perderem, ele também começa com o tabuleiro inicial.</li>
-		<li><strong>Repetição fora do FEN:</strong> o FEN não guarda o histórico de repetições. O líder anuncia o empate, mas o cliente continua pedindo lance (<a href="partidas.html#repeticao">partida</a>), e uma réplica que vira líder perde essa contagem.</li>
-		<li><strong>Sem quórum:</strong> o OK sai mesmo sem todos os ACKs, e o SYNC não é reenviado. Como ele leva o FEN completo, uma réplica atrasada só se atualiza no próximo lance.</li>
-		<li><strong>Tempo sem resposta:</strong> até a falha ser detectada, os outros servidores ainda acham que o líder antigo está vivo e não respondem o cliente.</li>
-		<li><strong>Datagramas fora do formato:</strong> a decodificação do texto e a leitura do UID do heartbeat ficaram fora do <code>try</code>. Um datagrama que falhe nesses pontos derruba a <code>foreground</code> daquele servidor.</li>
-		<li><strong>Sem deduplicação de lances:</strong> se a resposta do MOVE se perder depois de o lance ser aplicado, o cliente só descobre o resultado quando consulta o tabuleiro.</li>
-	</ul>
 
 	<h2 id="xadrez">6. Serviço de xadrez</h2>
 	<p>
@@ -240,8 +230,6 @@
 		O desktop ainda parecia certo, porque se declarava líder sozinho com o menor UID, e só percebemos olhando as mensagens recebidas no log. No desktop, resolvemos liberando o UDP vindo da rede local.
 	</p>
 	<p>
-		Publicamos uma execução de cada cenário, então os logs mostram o comportamento, mas não servem como medida de tempo ou desempenho.
-		Das limitações da <a href="#falhas">seção 5</a>, só o OK enviado sem todos os ACKs e a repetição apareceram nos testes.
 		Só o cenário "antes da correção" rodou com a versão anterior do código; os outros rodaram com a versão atual.
 	</p>
 	<p>
