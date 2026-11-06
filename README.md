@@ -127,11 +127,6 @@ Trabalho de Redes 2 desenvolvido por Antonio da Ressurreição Filho e Nathan En
 	- Afogamento: `Empate por afogamento (stalemate)`
 	- Lances especiais: en passant, roque e promoção foram aceitos, e a promoção deu `Xeque! Vez das pretas`
 	- Repetição: o líder anunciou `Fim de jogo: 1/2-1/2`, mas o cliente continuou pedindo lance, porque o FEN não guarda o histórico de repetições
-- O que ainda está em aberto:
-	- O caso da repetição acima, que ainda não corrigimos
-	- Se todos os servidores caírem, a partida se perde, porque nada é salvo em disco
-	- Rodamos cada cenário uma vez, então os logs mostram o comportamento, mas não medem tempo nem desempenho
-	- Não testamos nas máquinas do laboratório
 
 ## Como rodar
 
