@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logs de Execução</title>
+<meta name="description" content="Logs de execução do trabalho de Redes 2, organizados por cenário.">
+<meta name="author" content="Antonio da Ressurreição Filho e Nathan Endo">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<a class="pular" href="#principal">Pular para o conteúdo</a>
+<header>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html">Visão geral</a></li>
+				<li><a href="relatorio.html">Relatório</a></li>
+				<li><a href="diario.html">Diário</a></li>
+				<li><a href="partidas.html">Partidas</a></li>
+				<li><a href="logs.html" aria-current="page">Logs</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+<main id="principal" class="conteudo">
+	<h1>Logs de execução</h1>
+	<noscript><p>Sem JavaScript, é só usar os links para abrir cada arquivo.</p></noscript>
+
+		<p>
+		Rodamos estes cenários em três computadores da mesma rede local: desktop (UID 1), servidor (UID 2) e notebook (UID 3).
+		O cliente rodou no notebook. Usamos um roteiro automatizado que disparava os programas por SSH, mandava os lances e enviava o mesmo sinal do Ctrl+C.
+	</p>
+	<p>
+		Como os lances não foram digitados, eles não aparecem depois do prompt do cliente. Para vê-los, procure a linha <code>Enviando "MOVE|..."</code>.
+		Os IPs <code>192.168.100.x</code> são da nossa rede local.
+	</p>
+
+	<section>
+		<h2 id="heartbeat-eleicao">Heartbeat e eleição</h2>
+		<p>
+			Três servidores subiram juntos. Cada um recebeu os heartbeats dos três e todos elegeram o UID 1 como líder.
+			Procure por <code>Estou vivo e sou</code>, <code>[ESTADO] Vivos atuais</code> e <code>[ELEIÇÃO] Líder atual do grupo</code>.
+		</p>
+		<!-- GERADO:log-heartbeat-eleicao:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/heartbeat-eleicao/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(171 linhas)</span></li>
+<li><a href="logs/heartbeat-eleicao/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(164 linhas)</span></li>
+<li><a href="logs/heartbeat-eleicao/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(170 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-heartbeat-eleicao:FIM -->
+	</section>
+
+	<section>
+		<h2 id="xadrez-replicacao">Lances e replicação</h2>
+		<p>
+			O cliente jogou <code>e2e4</code>, <code>e7e5</code> e <code>g1f3</code>. O líder aplicou cada lance e as duas réplicas receberam o tabuleiro, de seq 1 a 3.
+			Procure por <code>[MOVE]</code> no líder e <code>[SYNC] Tabuleiro atualizado</code> nas réplicas.
+		</p>
+		<!-- GERADO:log-xadrez-replicacao:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/xadrez-replicacao/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(137 linhas)</span></li>
+<li><a href="logs/xadrez-replicacao/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(51 linhas)</span></li>
+<li><a href="logs/xadrez-replicacao/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(129 linhas)</span></li>
+<li><a href="logs/xadrez-replicacao/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(133 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-xadrez-replicacao:FIM -->
+	</section>
+
+	<section>
+		<h2 id="lance-invalido">Lance inválido</h2>
+		<p>
+			O cliente mandou <code>e2e5</code> (ilegal) e <code>abc</code> (malformado). O líder recusou os dois e o tabuleiro não mudou. Depois, <code>e2e4</code> foi aceito normalmente.
+			Procure por <code>Lance inválido</code> na saída do cliente.
+		</p>
+		<!-- GERADO:log-lance-invalido:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/lance-invalido/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(129 linhas)</span></li>
+<li><a href="logs/lance-invalido/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(53 linhas)</span></li>
+<li><a href="logs/lance-invalido/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(121 linhas)</span></li>
+<li><a href="logs/lance-invalido/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(127 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-lance-invalido:FIM -->
+	</section>
+
+	<section>
+		<h2 id="falha-lider">Queda do líder</h2>
+		<p>
+			Depois de <code>e2e4</code> e <code>e7e5</code>, derrubamos o líder no desktop. O servidor e o notebook detectaram a queda, o UID 2 assumiu, respondeu ao cliente e aceitou <code>g1f3</code> no mesmo tabuleiro.
+			Procure por <code>[ALERTA] Servidor 1 morreu por timeout!</code>, pela mudança em <code>[ELEIÇÃO]</code> e pelo IP de resposta no log do cliente.
+		</p>
+		<!-- GERADO:log-falha-lider:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/falha-lider/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(100 linhas)</span></li>
+<li><a href="logs/falha-lider/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(51 linhas)</span></li>
+<li><a href="logs/falha-lider/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(161 linhas)</span></li>
+<li><a href="logs/falha-lider/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(165 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-falha-lider:FIM -->
+	</section>
+
+	<section>
+		<h2 id="falha-replica">Queda de uma réplica</h2>
+		<p>
+			Depois de <code>e2e4</code>, derrubamos a réplica UID 2 e logo mandamos <code>e7e5</code>. O líder esperou o ACK, registrou o aviso e respondeu OK mesmo assim. Só depois a réplica foi removida por timeout.
+			Procure por <code>[AVISO] Sem ACK de [2]</code> e <code>[ALERTA] Servidor 2 morreu por timeout!</code> no líder.
+		</p>
+		<!-- GERADO:log-falha-replica:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/falha-replica/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(122 linhas)</span></li>
+<li><a href="logs/falha-replica/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(38 linhas)</span></li>
+<li><a href="logs/falha-replica/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(116 linhas)</span></li>
+<li><a href="logs/falha-replica/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(83 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-falha-replica:FIM -->
+	</section>
+
+	<section>
+		<h2 id="reentrada-lider-antes">Líder que volta, antes da correção</h2>
+		<p>
+			Com a versão anterior do código, o desktop caiu, o UID 2 assumiu e aceitou <code>g1f3</code>. Quando o desktop voltou, virou líder com o tabuleiro inicial, recusou <code>b8c6</code> e a partida se perdeu.
+			Procure por <code>Lance inválido: b8c6</code> e pelo último tabuleiro no log do cliente.
+		</p>
+		<!-- GERADO:log-reentrada-lider-antes:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/reentrada-lider-antes/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(90 linhas)</span></li>
+<li><a href="logs/reentrada-lider-antes/desktop_uid1_reinicio.log" data-visualizar>desktop_uid1_reinicio.log</a> <span class="meta">(119 linhas)</span></li>
+<li><a href="logs/reentrada-lider-antes/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(65 linhas)</span></li>
+<li><a href="logs/reentrada-lider-antes/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(189 linhas)</span></li>
+<li><a href="logs/reentrada-lider-antes/notebook_uid3_reinicio.log" data-visualizar>notebook_uid3_reinicio.log</a> <span class="meta">(51 linhas)</span></li>
+<li><a href="logs/reentrada-lider-antes/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(251 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-reentrada-lider-antes:FIM -->
+	</section>
+
+	<section>
+		<h2 id="reentrada-lider-depois">Líder que volta, depois da correção</h2>
+		<p>
+			Mesmo teste com o código atual. Ao voltar, o desktop pediu o estado, recebeu <code>seq=3</code> do UID 2, assumiu e aceitou <code>b8c6</code> no tabuleiro certo. Depois, o notebook reiniciou como réplica e também recebeu o tabuleiro.
+			Procure por <code>[JOIN] Servidor 1 entrou</code> no servidor e por <code>[SYNC]</code> nos arquivos <code>_reinicio</code>.
+		</p>
+		<!-- GERADO:log-reentrada-lider-depois:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/reentrada-lider-depois/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(100 linhas)</span></li>
+<li><a href="logs/reentrada-lider-depois/desktop_uid1_reinicio.log" data-visualizar>desktop_uid1_reinicio.log</a> <span class="meta">(133 linhas)</span></li>
+<li><a href="logs/reentrada-lider-depois/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(64 linhas)</span></li>
+<li><a href="logs/reentrada-lider-depois/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(206 linhas)</span></li>
+<li><a href="logs/reentrada-lider-depois/notebook_uid3_reinicio.log" data-visualizar>notebook_uid3_reinicio.log</a> <span class="meta">(56 linhas)</span></li>
+<li><a href="logs/reentrada-lider-depois/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(274 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-reentrada-lider-depois:FIM -->
+	</section>
+</main>
+<footer>
+	<div class="conteudo">Desenvolvido por Antonio da Ressurreição Filho e Nathan Endo para a disciplina de Redes 2.</div>
+</footer>
+<script src="assets/visualizador.js"></script>
+</body>
+</html>

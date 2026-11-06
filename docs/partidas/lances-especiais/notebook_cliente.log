@@ -1,0 +1,220 @@
+﻿Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+p p p p p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+P P P P P P P P
+R N B Q K B N R
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|e2e4"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+p p p p p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . P . . .
+. . . . . . . .
+P P P P . P P P
+R N B Q K B N R
+Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|a7a6"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p p p p p p
+p . . . . . . .
+. . . . . . . .
+. . . . P . . .
+. . . . . . . .
+P P P P . P P P
+R N B Q K B N R
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|e4e5"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p p p p p p
+p . . . . . . .
+. . . . P . . .
+. . . . . . . .
+. . . . . . . .
+P P P P . P P P
+R N B Q K B N R
+Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|d7d5"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+p . . . . . . .
+. . . p P . . .
+. . . . . . . .
+. . . . . . . .
+P P P P . P P P
+R N B Q K B N R
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|e5d6"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+p . . P . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+P P P P . P P P
+R N B Q K B N R
+Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|a6a5"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+. . . P . . . .
+p . . . . . . .
+. . . . . . . .
+. . . . . . . .
+P P P P . P P P
+R N B Q K B N R
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|g1f3"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+. . . P . . . .
+p . . . . . . .
+. . . . . . . .
+. . . . . N . .
+P P P P . P P P
+R N B Q K B . R
+Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|a5a4"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+. . . P . . . .
+. . . . . . . .
+p . . . . . . .
+. . . . . N . .
+P P P P . P P P
+R N B Q K B . R
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|f1e2"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+. . . P . . . .
+. . . . . . . .
+p . . . . . . .
+. . . . . N . .
+P P P P B P P P
+R N B Q K . . R
+Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|a4a3"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+. . . P . . . .
+. . . . . . . .
+. . . . . . . .
+p . . . . N . .
+P P P P B P P P
+R N B Q K . . R
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|e1g1"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+. . . P . . . .
+. . . . . . . .
+. . . . . . . .
+p . . . . N . .
+P P P P B P P P
+R N B Q . R K .
+Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|a3b2"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p p . p p p p
+. . . P . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . N . .
+P p P P B P P P
+R N B Q . R K .
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|d6c7"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p P . p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . N . .
+P p P P B P P P
+R N B Q . R K .
+Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|b2a1q"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+. p P . p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . N . .
+P . P P B P P P
+q N B Q . R K .
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|c7d8q"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b Q k b n r
+. p . . p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . N . .
+P . P P B P P P
+q N B Q . R K .
+Xeque! Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|e8d8"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b k . b n r
+. p . . p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . N . .
+P . P P B P P P
+q N B Q . R K .
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Fechando socket

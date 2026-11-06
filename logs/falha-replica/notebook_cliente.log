@@ -1,0 +1,38 @@
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+p p p p p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+P P P P P P P P
+R N B Q K B N R
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|e2e4"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+p p p p p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . P . . .
+. . . . . . . .
+P P P P . P P P
+R N B Q K B N R
+Vez das pretas
+Lance (ex: e2e4) ou 'sair': Enviando "MOVE|e7e5"
+Recebido de ('192.168.100.11', 10000)
+Enviando "READ"
+Recebido de ('192.168.100.11', 10000)
+r n b q k b n r
+p p p p . p p p
+. . . . . . . .
+. . . . p . . .
+. . . . P . . .
+. . . . . . . .
+P P P P . P P P
+R N B Q K B N R
+Vez das brancas
+Lance (ex: e2e4) ou 'sair': Fechando socket

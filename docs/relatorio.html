@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatório do Trabalho</title>
+<meta name="description" content="Arquitetura, protocolo, heartbeat, eleição, tratamento de falhas e serviço de xadrez do trabalho de Redes 2.">
+<meta name="author" content="Antonio da Ressurreição Filho e Nathan Endo">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<a class="pular" href="#principal">Pular para o conteúdo</a>
+<header>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html">Visão geral</a></li>
+				<li><a href="relatorio.html" aria-current="page">Relatório</a></li>
+				<li><a href="diario.html">Diário</a></li>
+				<li><a href="partidas.html">Partidas</a></li>
+				<li><a href="logs.html">Logs</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+<main id="principal" class="conteudo">
+	<h1>Relatório</h1>
+	<p>
+		Aqui explicamos o que implementamos em <a href="codigo/servidor.py.txt"><code>servidor.py</code></a>
+		e <a href="codigo/cliente.py.txt"><code>cliente.py</code></a>.
+		Os logs das nossas execuções ficam na <a href="logs.html">página de logs</a>.
+	</p>
+
+	<nav aria-label="Índice do relatório">
+		<ul>
+			<li><a href="#arquitetura">1. Arquitetura</a></li>
+			<li><a href="#protocolo">2. Protocolo</a></li>
+			<li><a href="#heartbeat">3. Heartbeat</a></li>
+			<li><a href="#eleicao">4. Eleição</a></li>
+			<li><a href="#falhas">5. Tratamento de falhas</a></li>
+			<li><a href="#xadrez">6. Serviço de xadrez</a></li>
+			<li><a href="#notas">7. O que mudou desde as nossas notas</a></li>
+			<li><a href="#testes">8. Testes</a></li>
+		</ul>
+	</nav>
+
+	<h2 id="arquitetura">1. Arquitetura</h2>
+	<p>
+		Usamos um único grupo de servidores, todos cuidando da mesma partida. No começo pensamos em dividir em vários grupos,
+		mas decidimos ficar com um só, porque o foco do trabalho é a tolerância a falhas com heartbeat, e não montar um lobby de xadrez.
+	</p>
+	<p>
+		Todo servidor roda o mesmo código e só muda o UID, que passamos como argumento. Ninguém é configurado como líder:
+		cada servidor descobre quem é o líder olhando a sua própria lista de servidores vivos.
+	</p>
+	<p>
+		Todos usam um socket UDP na porta <code>10000</code>, inscrito no grupo multicast <code>224.3.29.71</code>
+		(<code>IP_ADD_MEMBERSHIP</code>). Colocamos <code>SO_REUSEADDR</code> para conseguir rodar vários servidores na mesma máquina.
+	</p>
+	<p>Cada servidor tem estas threads:</p>
+	<ul>
+		<li><code>background</code>: manda o heartbeat, tira quem expirou e recalcula o líder.</li>
+		<li><code>foreground</code>: escuta a rede e trata cada mensagem que chega.</li>
+		<li><code>trata_move</code>: uma thread nova para cada lance que o líder recebe.</li>
+		<li>Thread principal: só mantém o processo rodando até o Ctrl+C.</li>
+	</ul>
+	<p>
+		O lance precisou de uma thread própria porque o líder fica esperando os ACKs, e eles chegam justamente pela
+		<code>foreground</code>. Se ela ficasse parada esperando, os ACKs nunca seriam lidos e o líder travava.
+	</p>
+
+	<h2 id="protocolo">2. Protocolo</h2>
+	<p>
+		As mensagens do xadrez são texto no formato <code>TIPO|campo1|campo2</code>. Usamos <code>|</code> como separador porque o FEN tem espaços.
+		O heartbeat tem um formato próprio e fica fora desses tipos.
+	</p>
+	<div class="tabela">
+		<table>
+			<thead>
+				<tr><th>Mensagem</th><th>Quem → quem</th><th>Transporte</th><th>Formato</th></tr>
+			</thead>
+			<tbody>
+				<tr><td>Heartbeat</td><td>servidor → grupo</td><td>multicast</td><td><code>Estou vivo e sou &lt;UID&gt;</code></td></tr>
+				<tr><td>READ</td><td>cliente → grupo</td><td>multicast</td><td><code>READ</code></td></tr>
+				<tr><td>MOVE</td><td>cliente → grupo</td><td>multicast</td><td><code>MOVE|e2e4</code></td></tr>
+				<tr><td>SYNC</td><td>líder → grupo</td><td>multicast</td><td><code>SYNC|seq|uid_lider|fen</code></td></tr>
+				<tr><td>ACK</td><td>réplica → grupo</td><td>multicast</td><td><code>ACK|seq|uid</code></td></tr>
+				<tr><td>JOIN</td><td>servidor que entrou → grupo</td><td>multicast</td><td><code>JOIN|uid</code></td></tr>
+				<tr><td>STATE</td><td>líder → cliente</td><td>unicast</td><td><code>STATE|fen|situacao</code></td></tr>
+				<tr><td>OK</td><td>líder → cliente</td><td>unicast</td><td><code>OK|fen|situacao</code></td></tr>
+				<tr><td>ERRO</td><td>líder → cliente</td><td>unicast</td><td><code>ERRO|motivo</code></td></tr>
+			</tbody>
+		</table>
+	</div>
+	<p>
+		O cliente manda tudo para o grupo, com TTL 1, sem precisar saber quem é o líder. Só o líder responde READ e MOVE; as outras réplicas
+		ignoram. Os dois programas leem até 1024 bytes por datagrama.
+	</p>
+	<h3>Como fica um lance</h3>
+<pre><code>Cliente             Líder                  Réplicas
+   | MOVE|e2e4        |                       |
+   |----------------->| valida e aplica       |
+   |                  | SYNC|seq|uid|fen      |
+   |                  |---------------------->| aplicam o FEN
+   |                  |     ACK|seq|uid       |
+   |                  |&lt;----------------------|
+   |                  | espera até 1 s        |
+   | OK|fen|situacao  |                       |
+   |&lt;-----------------|                       |
+   | READ             |                       |
+   |----------------->|                       |
+   | STATE|fen|situacao                       |
+   |&lt;-----------------|                       |</code></pre>
+	<p>
+		Deixamos o ACK por multicast porque, em localhost, todos os servidores usam a mesma porta e um unicast
+		podia cair no servidor errado. Essa decisão ainda é provisória: nas máquinas do laboratório, com um servidor por máquina, o unicast funcionaria.
+	</p>
+
+	<h2 id="heartbeat">3. Heartbeat</h2>
+	<p>
+		A cada 1 segundo, a thread <code>background</code> marca o próprio servidor como visto, tira quem expirou,
+		manda <code>Estou vivo e sou &lt;UID&gt;</code> para o grupo e recalcula o líder.
+	</p>
+	<p>
+		O dicionário <code>servidores_vivos</code> guarda a hora do último heartbeat de cada UID. Quem passa mais de 3 segundos
+		sem dar sinal é removido. Como só conferimos isso uma vez por segundo, a detecção leva de 3 a uns 4 segundos.
+		Se o servidor voltar a mandar heartbeat, ele entra na lista de novo.
+	</p>
+
+	<h2 id="eleicao">4. Eleição</h2>
+	<p>
+		O líder é simplesmente o menor UID que está em <code>servidores_vivos</code> (função <code>elege_lider</code>).
+		Não existe mensagem de eleição: cada servidor chega no resultado sozinho, com a lista que tem.
+		O cálculo é refeito a cada ciclo de heartbeat e a cada mensagem de xadrez que chega.
+	</p>
+	<p>Isso tem algumas consequências:</p>
+	<ul>
+		<li>Na inicialização ou durante uma falha, as listas podem estar diferentes e os servidores discordarem por alguns instantes. Um servidor que acabou de subir, por exemplo, pode se achar líder até ouvir os outros.</li>
+		<li>Um servidor de UID menor que volta para o grupo reassume a liderança assim que é visto de novo, mas só depois de receber o tabuleiro (veja a <a href="#falhas">seção 5</a>).</li>
+		<li>Usamos <code>100000</code> como limite na busca, então UIDs a partir desse valor não são eleitos.</li>
+	</ul>
+
+	<h2 id="falhas">5. Tratamento de falhas</h2>
+	<div class="tabela">
+		<table>
+			<thead>
+				<tr><th>Situação</th><th>O que acontece</th></tr>
+			</thead>
+			<tbody>
+				<tr><td>O líder para de responder</td><td>Os outros o removem por timeout e o próximo menor UID assume, com o tabuleiro do último SYNC.</td></tr>
+				<tr><td>Um servidor entra ou volta</td><td>Ele manda <code>JOIN</code> e não responde READ nem MOVE até receber o tabuleiro em um SYNC. Se ninguém responder em 3 s (<code>ESPERA_SYNC</code>), começa com o tabuleiro inicial.</td></tr>
+				<tr><td>Uma réplica não confirma o SYNC</td><td>O líder espera até 1 s (<code>TIMEOUT_ACK</code>), registra <code>[AVISO] Sem ACK</code> e responde OK para o cliente mesmo assim.</td></tr>
+				<tr><td>Ninguém responde o READ</td><td>O cliente espera 2 s, avisa do timeout e pergunta se quer tentar de novo.</td></tr>
+				<tr><td>Ninguém responde o MOVE</td><td>O cliente espera 2 s, avisa do timeout e volta a consultar o tabuleiro. O lance não é reenviado sozinho.</td></tr>
+				<tr><td>Mensagem de xadrez inválida</td><td>O erro é capturado e registrado, e a <code>foreground</code> continua rodando.</td></tr>
+				<tr><td>Lance ilegal ou malformado</td><td>O líder responde <code>ERRO|Lance inválido: ...</code> e não mexe no tabuleiro.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<h3>Quando o líder volta</h3>
+	<p>
+		Nos testes, um líder que voltava virava líder de novo com o tabuleiro inicial, e a partida se perdia (<a href="logs.html#reentrada-lider-antes">log</a>).
+		Pensamos em mandar um SYNC quando o líder mudasse, mas até ele chegar o servidor já se acharia líder e poderia responder com o tabuleiro zerado.
+	</p>
+	<p>
+		Então fizemos o contrário: quem sobe pede o estado antes de poder ser líder. O <code>JOIN</code> sai antes do primeiro heartbeat e é repetido a cada 1 s. Responde quem é o líder sem contar com quem está entrando, com um SYNC normal.
+		Com isso, o servidor volta com o tabuleiro certo (<a href="logs.html#reentrada-lider-depois">log</a>). O custo é que, subindo todos juntos, o grupo leva 3 s para começar a responder.
+	</p>
+
+	<h2 id="xadrez">6. Serviço de xadrez</h2>
+	<p>
+		A partida é um <code>chess.Board</code> da biblioteca python-chess, e cada servidor tem o seu.
+		Na replicação mandamos o tabuleiro inteiro em FEN, em vez de cada lance. O número <code>seq</code> identifica cada escrita, para ligar os ACKs ao SYNC certo.
+	</p>
+	<p>
+		O cliente fica neste ciclo: manda READ, mostra o tabuleiro e a situação, lê um lance e manda MOVE.
+		Ele para quando a partida acaba ou quando o usuário digita <code>sair</code>.
+	</p>
+	<p>
+		O líder valida o lance com <code>chess.Move.from_uci</code> e <code>board.legal_moves</code>. O texto de situação diz de quem é a vez,
+		ou se houve xeque, xeque-mate, afogamento, material insuficiente ou outro fim de jogo.
+	</p>
+	<p>
+		Por enquanto o cliente controla os dois lados. Deixamos a função <code>lance_adversario</code> como ponto para colocar
+		um adversário depois, mas hoje ela retorna <code>None</code>, então a máquina não responde sozinha.
+	</p>
+
+	<h2 id="notas">7. O que mudou desde as nossas notas</h2>
+	<p>Fomos anotando as decisões no README, e algumas mudaram durante a implementação. Vale o que está no código:</p>
+	<div class="tabela">
+		<table>
+			<thead>
+				<tr><th>Tema</th><th>O que anotamos no Dia 2</th><th>Como ficou</th></tr>
+			</thead>
+			<tbody>
+				<tr><td>Heartbeat</td><td><code>ALIVE &lt;UID&gt;</code></td><td><code>Estou vivo e sou &lt;UID&gt;</code></td></tr>
+				<tr><td>Endereço multicast</td><td>Exemplo com <code>224.0.0.1</code></td><td><code>224.3.29.71:10000</code></td></tr>
+				<tr><td>ACK</td><td>Unicast para o líder</td><td>Multicast para o grupo</td></tr>
+				<tr><td>Formato das mensagens</td><td><code>MOVE e2e4</code>, <code>SYNC &lt;FEN&gt;</code></td><td>Campos separados por <code>|</code></td></tr>
+				<tr><td>Resposta da máquina</td><td>Em aberto</td><td>Não fizemos; o cliente joga pelos dois lados</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2 id="testes">8. Testes</h2>
+	<p>
+		Rodamos os testes em três computadores da mesma rede local: um desktop (UID 1), um servidor (UID 2) e um notebook (UID 3), com o cliente no notebook.
+		Usamos um roteiro automatizado que disparava os programas por SSH, mandava os lances e enviava o mesmo sinal do Ctrl+C.
+		O SSH servia só para controlar as máquinas: o tráfego do trabalho passava pela rede local.
+	</p>
+	<div class="tabela">
+		<table>
+			<thead>
+				<tr><th>Cenário</th><th>O que aconteceu</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><a href="logs.html#heartbeat-eleicao">Heartbeat e eleição</a></td><td>Os três servidores se enxergaram e elegeram o UID 1.</td></tr>
+				<tr><td><a href="logs.html#xadrez-replicacao">Lances e replicação</a></td><td>Os três lances foram aplicados pelo líder e chegaram às duas réplicas.</td></tr>
+				<tr><td><a href="logs.html#lance-invalido">Lance inválido</a></td><td>Os dois lances errados foram recusados sem mudar o tabuleiro.</td></tr>
+				<tr><td><a href="logs.html#falha-lider">Queda do líder</a></td><td>O UID 2 assumiu e a partida seguiu com o mesmo tabuleiro.</td></tr>
+				<tr><td><a href="logs.html#falha-replica">Queda de uma réplica</a></td><td>O líder avisou que faltou o ACK da réplica e respondeu OK ao cliente.</td></tr>
+				<tr><td><a href="logs.html#reentrada-lider-depois">Líder que volta</a></td><td>Antes da correção, a partida se perdia. Depois, o servidor recebeu o tabuleiro e assumiu com a partida intacta.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<p>
+		Nos primeiros testes, o firewall atrapalhou: o notebook ficou sem receber as mensagens dos outros e o desktop enviava os heartbeats, mas não recebia nada.
+		O desktop ainda parecia certo, porque se declarava líder sozinho com o menor UID, e só percebemos olhando as mensagens recebidas no log. No desktop, resolvemos liberando o UDP vindo da rede local.
+	</p>
+	<p>
+		Só o cenário "antes da correção" rodou com a versão anterior do código; os outros rodaram com a versão atual.
+	</p>
+	<p>
+		Antes disso, um de nós já tinha testado em uma só máquina (WSL, localhost), com 3 servidores e o cliente, inclusive derrubando o líder no meio da partida. Esse teste não gerou registro no repositório.
+	</p>
+</main>
+<footer>
+	<div class="conteudo">Desenvolvido por Antonio da Ressurreição Filho e Nathan Endo para a disciplina de Redes 2.</div>
+</footer>
+</body>
+</html>

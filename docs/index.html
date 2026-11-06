@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trabalho de Redes 2</title>
+<meta name="description" content="Grupo de servidores com heartbeat multicast UDP, eleição pelo menor UID e serviço de xadrez replicado.">
+<meta name="author" content="Antonio da Ressurreição Filho e Nathan Endo">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<a class="pular" href="#principal">Pular para o conteúdo</a>
+<header>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html" aria-current="page">Visão geral</a></li>
+				<li><a href="relatorio.html">Relatório</a></li>
+				<li><a href="diario.html">Diário</a></li>
+				<li><a href="partidas.html">Partidas</a></li>
+				<li><a href="logs.html">Logs</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+<main id="principal" class="conteudo">
+	<h1>Grupo de servidores tolerante a falhas com serviço de xadrez</h1>
+	<p>
+		Esse é o nosso trabalho de Redes 2, desenvolvido por <strong>Antonio da Ressurreição Filho</strong> e <strong>Nathan Endo</strong>.
+	</p>
+	<p>
+		A ideia é manter uma partida de xadrez no ar mesmo se um servidor cair. Para isso, montamos um grupo de servidores que conversa
+		por UDP e multicast IP. Cada servidor avisa que está vivo com um heartbeat, o de menor UID vira o líder e os outros
+		recebem o tabuleiro a cada lance. Se o líder cair, o próximo menor UID assume. Quando um servidor volta, ele recebe o tabuleiro atual antes de poder ser líder de novo.
+	</p>
+
+	<h2>Seções</h2>
+	<ul>
+		<li><a href="relatorio.html">Relatório</a>: como fizemos a arquitetura, o protocolo, o heartbeat, a eleição, o tratamento de falhas e o xadrez.</li>
+		<li><a href="diario.html">Diário</a>: o nosso diário de desenvolvimento, com as decisões de cada dia.</li>
+		<li><a href="partidas.html">Partidas</a>: saídas de partidas jogadas no sistema, como xeque-mate e afogamento.</li>
+		<li><a href="logs.html">Logs</a>: os logs de execução, separados por cenário.</li>
+		<li><a href="codigo.html">Código</a>: os arquivos do projeto, para ler aqui mesmo ou abrir como <code>.txt</code>.</li>
+	</ul>
+
+	<h2>Arquivos principais</h2>
+	<div class="tabela">
+		<table>
+			<thead>
+				<tr><th>Arquivo</th><th>O que faz</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><a href="codigo/servidor.py.txt"><code>servidor.py</code></a></td><td>O servidor do grupo: heartbeat, detecção de falhas, eleição e xadrez replicado.</td></tr>
+				<tr><td><a href="codigo/cliente.py.txt"><code>cliente.py</code></a></td><td>O cliente: consulta o tabuleiro e manda os lances no formato UCI.</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2>Como rodar</h2>
+	<p>Precisa de Python 3 e da biblioteca de xadrez. Primeiro crie o ambiente virtual e instale a dependência:</p>
+<pre><code>python3 -m venv .venv
+source .venv/bin/activate
+pip install chess</code></pre>
+
+	<p>Depois, em terminais separados e com o ambiente ativado, suba os servidores e o cliente:</p>
+<pre><code>python3 servidor.py 1
+python3 servidor.py 2
+python3 servidor.py 3
+python3 cliente.py</code></pre>
+	<p>
+		O número passado ao servidor é o UID dele. Os lances vão no formato UCI, tipo <code>e2e4</code> ou <code>g1f3</code>,
+		e <code>sair</code> fecha o cliente. Ao subir, cada servidor pede o tabuleiro aos outros e espera até 3 segundos, então o grupo leva esse tempo para começar a responder.
+	</p>
+	<p>
+		Para testar a tolerância a falhas, é só dar Ctrl+C no líder (o servidor de menor UID) no meio da partida e
+		esperar uns 4 segundos até os outros perceberem que ele saiu.
+	</p>
+	<p>
+		Para rodar em computadores diferentes, eles precisam estar na mesma rede local, e o firewall de cada um precisa liberar o UDP vindo dessa rede.
+		Confira se o <code>[ESTADO] Vivos atuais</code> mostra todos os servidores em cada máquina: um servidor isolado ainda pode se declarar líder.
+	</p>
+</main>
+<footer>
+	<div class="conteudo">Desenvolvido por Antonio da Ressurreição Filho e Nathan Endo para a disciplina de Redes 2.</div>
+</footer>
+</body>
+</html>

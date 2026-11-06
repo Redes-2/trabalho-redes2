@@ -1,0 +1,74 @@
+% TODO: conferir a data do encontro
+\phantomsection
+\addcontentsline{toc}{section}{Dia 5 -- 5 de novembro de 2026}
+\section*{Dia 5 -- 5 de novembro de 2026}
+\label{dia:5}
+
+Até aqui, todos os nossos testes tinham sido em \textit{localhost}. Neste quinto encontro, colocamos o grupo para rodar de verdade, em três computadores da mesma rede local: o desktop com o UID 1, o servidor\footnote{O ``servidor'' é um computador do \textit{homelab} do integrante Nathan Endo.} com o UID 2 e o notebook com o UID 3, que também rodou o cliente. Guardamos os logs separados por cenário e as partidas jogadas, e eles estão disponíveis no site do projeto.
+
+% =====================================================
+\subsection*{Primeiro problema: as máquinas não se enxergavam}
+% =====================================================
+Logo de cara, as máquinas não se enxergavam direito. O notebook não recebia mensagem de ninguém e se elegia líder sozinho, com o UID 3. O desktop parecia estar certo, mas só porque tem o menor UID: ele também estava sozinho, se elegendo por conta própria. Só percebemos isso porque não aparecia nenhum \texttt{Recebido de} no log dele.
+
+No desktop, o culpado era o \textit{firewall}, e liberar o UDP da rede local resolveu. A lição que ficou foi que não dá para olhar só para o líder: é preciso conferir o \texttt{[ESTADO] Vivos atuais} em cada uma das máquinas, porque um servidor isolado com o menor UID se comporta exatamente como um líder legítimo.
+
+% =====================================================
+\subsection*{Cenários que testamos}
+% =====================================================
+\begin{center}
+\begin{tabular}{|p{0.2\textwidth}|p{0.33\textwidth}|p{0.36\textwidth}|}
+\hline
+\raggedright \textbf{Cenário} & \raggedright \textbf{O que fizemos} & \raggedright \textbf{Resultado} \tabularnewline
+\hline
+\raggedright Heartbeat e eleição & \raggedright Subimos os três servidores & \raggedright Todos receberam os três heartbeats e elegeram o UID 1 \tabularnewline
+\hline
+\raggedright Lances e replicação & \raggedright Jogamos \texttt{e2e4}, \texttt{e7e5} e \texttt{g1f3} & \raggedright O líder aplicou e as duas réplicas receberam, de \texttt{seq} 1 a 3 \tabularnewline
+\hline
+\raggedright Lance inválido & \raggedright Mandamos \texttt{e2e5} e \texttt{abc} & \raggedright Os dois foram recusados, sem mudar o tabuleiro \tabularnewline
+\hline
+\raggedright Queda do líder & \raggedright Derrubamos o desktop no meio da partida & \raggedright O UID 2 assumiu e aceitou \texttt{g1f3} no mesmo tabuleiro \tabularnewline
+\hline
+\raggedright Queda de réplica & \raggedright Derrubamos o UID 2 e logo mandamos \texttt{e7e5} & \raggedright O líder avisou \texttt{Sem ACK de [2]} e respondeu \texttt{OK} mesmo assim \tabularnewline
+\hline
+\raggedright Líder que volta & \raggedright O desktop caiu e voltou no meio da partida & \raggedright Primeiro falhou; depois da correção, funcionou \tabularnewline
+\hline
+\end{tabular}
+\end{center}
+
+% =====================================================
+\subsection*{O erro que os testes mostraram: o líder que voltava zerava a partida}
+% =====================================================
+O cenário do líder que volta revelou justamente a pendência que tínhamos deixado anotada no \hyperref[dia:4]{Dia~4}. Quando o UID 1 voltou, ele virou líder de novo por ter o menor UID, só que com o tabuleiro inicial. O cliente mandou \texttt{b8c6}, levou um ``Lance inválido'' e o tabuleiro voltou para o começo.
+
+Nossa primeira ideia foi mandar um \texttt{SYNC} sempre que o líder mudasse. O problema é que, até esse \texttt{SYNC} chegar, o servidor que acabou de subir já se acharia líder e poderia responder com o tabuleiro errado.
+
+A solução que adotamos foi outra: quem sobe manda um \texttt{JOIN|uid} e só pode ser líder depois de receber o tabuleiro. Quem responde é o líder calculado sem contar com o servidor que está entrando (\texttt{elege\_lider(ignorar=uid)}). Se ninguém responder em 3 segundos, é porque não há partida em andamento, e o servidor segue com o tabuleiro inicial.
+
+Testamos de novo: o UID 1 recebeu o \texttt{seq=3} do líder 2, assumiu a liderança e aceitou o \texttt{b8c6} no tabuleiro certo. Uma réplica reiniciada também recebeu o tabuleiro corretamente. Depois da correção, refizemos todos os cenários; só o log \texttt{reentrada-lider-antes} é da versão antiga, e o guardamos justamente para mostrar o erro.
+
+O efeito colateral é que, quando todos os servidores sobem juntos, o grupo leva 3 segundos para começar a responder, que é o tempo de espera pelo \texttt{JOIN}.
+
+% =====================================================
+\subsection*{Partidas para ver as situações de jogo}
+% =====================================================
+Além dos cenários de falha, jogamos algumas partidas para conferir os textinhos de situação que o líder manda:
+\begin{itemize}
+    \item \textbf{Mate do pastor:} ``Xeque-mate! Brancas venceram''.
+    \item \textbf{Mate do tolo:} ``Xeque-mate! Pretas venceram''.
+    \item \textbf{Afogamento:} ``Empate por afogamento (stalemate)''.
+    \item \textbf{Lances especiais:} \textit{en passant}, roque e promoção foram aceitos, e a promoção deu ``Xeque! Vez das pretas''.
+    \item \textbf{Repetição:} o líder anunciou ``Fim de jogo: 1/2-1/2'', mas o cliente continuou pedindo lance. Isso acontece porque o FEN não guarda o histórico de repetições: o líder sabe que houve repetição, mas o cliente, que só enxerga o FEN, não.
+\end{itemize}
+
+% Sugestão de imagens (descomentar quando tiver os prints):
+% \vspace{0.8cm}
+% \includegraphics[width=0.9\textwidth]{queda-lider.png}\par
+% \vspace{0.8cm}
+% \includegraphics[width=0.9\textwidth]{partida-mate.png}\par
+
+Todo o código do dia, os logs e as partidas foram versionados no repositório e também estão disponíveis no site de apresentação do projeto.
+
+    \vspace{0.8cm}
+    \includegraphics[width=0.9\textwidth]{commit-dia5.png}\par
+    \vspace{0.8cm}

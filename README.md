@@ -1,5 +1,7 @@
 # trabalho-redes2
 
+Trabalho de Redes 2 desenvolvido por Antonio da Ressurreição Filho e Nathan Endo: um grupo de servidores com heartbeat por multicast UDP, eleição pelo menor UID e um serviço de xadrez replicado.
+
 ## Dia 1
 
 - Usar o serviço de chess do python: pythonchess
@@ -88,6 +90,43 @@
 		- Deixei o ACK indo por multicast para conseguir testar em localhost: na mesma máquina todos os servidores usam (IP, 10000), então um unicast podia cair no servidor errado
 		- Nas máquinas do lab (um servidor por máquina) o unicast funciona. A diferença é só tráfego: no multicast todo servidor recebe todos os ACKs, no unicast só o líder recebe
 		- Toninho, se quiser trocar para unicast: no `foreground` passar `address` para `trata_sync(campos, address)` e no fim do `trata_sync` mandar o ACK para `address` em vez de `MULTICAST_ADDRESS` (o `address` do SYNC já é o IP do líder)
+
+## Dia 5 - Testes em três máquinas
+
+- Até aqui só tínhamos testado em localhost. Agora rodamos o grupo em três computadores da mesma rede local:
+	- Desktop com o UID 1, servidor com o UID 2 e notebook com o UID 3
+	- Cliente rodando no notebook
+	- Logs em `logs/`, separados por cenário, e partidas em `partidas/`
+- Primeiro problema: as máquinas não se enxergavam direito
+	- O notebook não recebia ninguém e se elegia líder sozinho, com UID 3
+	- O desktop parecia certo, mas só porque tem o menor UID: ele também estava sozinho. Só vimos isso olhando que não aparecia nenhum `Recebido de` no log dele
+	- No desktop o bloqueio era o firewall, e liberar o UDP da rede local resolveu
+	- Lição: não dá para olhar só o líder, tem que conferir o `[ESTADO] Vivos atuais` em cada máquina
+- Cenários que testamos:
+
+| Cenário | O que fizemos | Resultado |
+|---|---|---|
+| Heartbeat e eleição | Subimos os três servidores | Todos receberam os três heartbeats e elegeram o UID 1 |
+| Lances e replicação | Jogamos `e2e4`, `e7e5` e `g1f3` | O líder aplicou e as duas réplicas receberam, de seq 1 a 3 |
+| Lance inválido | Mandamos `e2e5` e `abc` | Os dois recusados, sem mudar o tabuleiro |
+| Queda do líder | Derrubamos o desktop no meio da partida | O UID 2 assumiu e aceitou `g1f3` no mesmo tabuleiro |
+| Queda de réplica | Derrubamos o UID 2 e logo mandamos `e7e5` | O líder avisou `Sem ACK de [2]` e respondeu OK mesmo assim |
+| Líder que volta | O desktop caiu e voltou no meio da partida | Primeiro falhou, depois da correção funcionou |
+
+- Erro que os testes mostraram: o líder que voltava zerava a partida
+	- Quando o UID 1 voltou, virou líder de novo por ter o menor UID, só que com o tabuleiro inicial
+	- O cliente mandou `b8c6`, levou `Lance inválido` e o tabuleiro voltou para o começo
+	- A primeira ideia foi mandar um SYNC quando o líder mudasse, mas até ele chegar o servidor já se acharia líder
+	- O que fizemos: quem sobe manda `JOIN|uid` e só pode ser líder depois de receber o tabuleiro. Responde quem é o líder sem contar com ele (`elege_lider(ignorar=uid)`). Se ninguém responder em 3s, é porque não tem partida em andamento
+	- Testamos de novo: o UID 1 recebeu `seq=3` do líder 2, assumiu e aceitou `b8c6` no tabuleiro certo. Uma réplica reiniciada também recebeu o tabuleiro
+	- Depois da correção, refizemos todos os cenários. Só o log `reentrada-lider-antes` é da versão antiga
+	- Efeito colateral: subindo todos juntos, o grupo leva 3s para começar a responder
+- Partidas que jogamos para ver as situações de jogo:
+	- Mate do pastor: `Xeque-mate! Brancas venceram`
+	- Mate do tolo: `Xeque-mate! Pretas venceram`
+	- Afogamento: `Empate por afogamento (stalemate)`
+	- Lances especiais: en passant, roque e promoção foram aceitos, e a promoção deu `Xeque! Vez das pretas`
+	- Repetição: o líder anunciou `Fim de jogo: 1/2-1/2`, mas o cliente continuou pedindo lance, porque o FEN não guarda o histórico de repetições
 
 ## Como rodar
 

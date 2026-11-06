@@ -1,0 +1,171 @@
+Servidor UID 1 iniciado e aguardando...
+Recebido de ('192.168.100.11', 10000): JOIN|1
+Recebido de ('192.168.100.201', 10000): JOIN|2
+Recebido de ('192.168.100.61', 10000): JOIN|3
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921545.1172945}
+Recebido de ('192.168.100.11', 10000): JOIN|1
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921545.1172945, 2: 1793921545.3367362}
+Recebido de ('192.168.100.201', 10000): JOIN|2
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921545.1172945, 2: 1793921545.3367362, 3: 1793921545.6437287}
+Recebido de ('192.168.100.61', 10000): JOIN|3
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921546.117973, 2: 1793921545.3367362, 3: 1793921545.6437287}
+Recebido de ('192.168.100.11', 10000): JOIN|1
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921546.117973, 2: 1793921546.3373227, 3: 1793921545.6437287}
+Recebido de ('192.168.100.201', 10000): JOIN|2
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921546.117973, 2: 1793921546.3373227, 3: 1793921546.6444166}
+Recebido de ('192.168.100.61', 10000): JOIN|3
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[JOIN] Ninguém respondeu, começando com o tabuleiro inicial
+[ESTADO] Vivos atuais: {1: 1793921547.1184719, 2: 1793921546.3373227, 3: 1793921546.6444166}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921547.1184719, 2: 1793921547.3376706, 3: 1793921546.6444166}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921547.1184719, 2: 1793921547.3376706, 3: 1793921547.6450176}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921548.119058, 2: 1793921547.3376706, 3: 1793921547.6450176}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921548.119058, 2: 1793921548.3380282, 3: 1793921547.6450176}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921548.119058, 2: 1793921548.3380282, 3: 1793921548.6457074}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921549.119592, 2: 1793921548.3380282, 3: 1793921548.6457074}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921549.119592, 2: 1793921549.3384547, 3: 1793921548.6457074}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921549.119592, 2: 1793921549.3384547, 3: 1793921549.64613}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921550.120341, 2: 1793921549.3384547, 3: 1793921549.64613}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921550.120341, 2: 1793921550.3387296, 3: 1793921549.64613}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921550.120341, 2: 1793921550.3387296, 3: 1793921550.6464913}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921551.1208136, 2: 1793921550.3387296, 3: 1793921550.6464913}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921551.1208136, 2: 1793921551.3391192, 3: 1793921550.6464913}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921551.1208136, 2: 1793921551.3391192, 3: 1793921551.646963}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921552.1214144, 2: 1793921551.3391192, 3: 1793921551.646963}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921552.1214144, 2: 1793921552.3397417, 3: 1793921551.646963}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921552.1214144, 2: 1793921552.3397417, 3: 1793921552.6473691}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921553.121711, 2: 1793921552.3397417, 3: 1793921552.6473691}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921553.121711, 2: 1793921553.3403523, 3: 1793921552.6473691}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921553.121711, 2: 1793921553.3403523, 3: 1793921553.6480181}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921554.1222699, 2: 1793921553.3403523, 3: 1793921553.6480181}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921554.1222699, 2: 1793921554.3406956, 3: 1793921553.6480181}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921554.1222699, 2: 1793921554.3406956, 3: 1793921554.6484349}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921555.1226478, 2: 1793921554.3406956, 3: 1793921554.6484349}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921555.1226478, 2: 1793921555.3410254, 3: 1793921554.6484349}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921555.1226478, 2: 1793921555.3410254, 3: 1793921555.6489205}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921556.1232827, 2: 1793921555.3410254, 3: 1793921555.6489205}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921556.1232827, 2: 1793921556.341651, 3: 1793921555.6489205}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921556.1232827, 2: 1793921556.341651, 3: 1793921556.6491866}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921557.1235921, 2: 1793921556.341651, 3: 1793921556.6491866}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921557.1235921, 2: 1793921557.342007, 3: 1793921556.6491866}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921557.1235921, 2: 1793921557.342007, 3: 1793921557.6495636}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921558.1240835, 2: 1793921557.342007, 3: 1793921557.6495636}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921558.1240835, 2: 1793921558.342489, 3: 1793921557.6495636}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921558.1240835, 2: 1793921558.342489, 3: 1793921558.6500034}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921559.124506, 2: 1793921558.342489, 3: 1793921558.6500034}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921559.124506, 2: 1793921559.3430908, 3: 1793921558.6500034}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921559.124506, 2: 1793921559.3430908, 3: 1793921559.650408}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921560.1250105, 2: 1793921559.3430908, 3: 1793921559.650408}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921560.1250105, 2: 1793921560.3434231, 3: 1793921559.650408}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921560.1250105, 2: 1793921560.3434231, 3: 1793921560.6509082}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921561.1254663, 2: 1793921560.3434231, 3: 1793921560.6509082}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921561.1254663, 2: 1793921561.3437037, 3: 1793921560.6509082}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921561.1254663, 2: 1793921561.3437037, 3: 1793921561.651344}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921562.1258302, 2: 1793921561.3437037, 3: 1793921561.651344}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921562.1258302, 2: 1793921562.3440416, 3: 1793921561.651344}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921562.1258302, 2: 1793921562.3440416, 3: 1793921562.6518254}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921563.1263564, 2: 1793921562.3440416, 3: 1793921562.6518254}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921563.1263564, 2: 1793921563.3443358, 3: 1793921562.6518254}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921563.1263564, 2: 1793921563.3443358, 3: 1793921563.652201}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921564.1267247, 2: 1793921563.3443358, 3: 1793921563.652201}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921564.1267247, 2: 1793921564.3446162, 3: 1793921563.652201}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921564.1267247, 2: 1793921564.3446162, 3: 1793921564.6526337}
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ELEIÇÃO] Líder atual do grupo: 1
+[ESTADO] Vivos atuais: {1: 1793921565.1270025, 2: 1793921564.3446162, 3: 1793921564.6526337}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921565.1270025, 2: 1793921565.345035, 3: 1793921564.6526337}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921565.1270025, 2: 1793921565.345035, 3: 1793921565.6530824}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921566.1275764, 2: 1793921565.345035, 3: 1793921565.6530824}
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921566.1275764, 2: 1793921566.3454459, 3: 1793921565.6530824}
+Recebido de ('192.168.100.61', 10000): Estou vivo e sou 3
+[ESTADO] Vivos atuais: {1: 1793921566.1275764, 2: 1793921566.3454459, 3: 1793921566.6532347}
+Recebido de ('192.168.100.11', 10000): Estou vivo e sou 1
+[ESTADO] Vivos atuais: {1: 1793921567.1279283, 2: 1793921566.3454459, 3: 1793921566.6532347}
+[ELEIÇÃO] Líder atual do grupo: 1
+Recebido de ('192.168.100.201', 10000): Estou vivo e sou 2
+[ESTADO] Vivos atuais: {1: 1793921567.1279283, 2: 1793921567.345538, 3: 1793921566.6532347}
+Encerrando servidor...

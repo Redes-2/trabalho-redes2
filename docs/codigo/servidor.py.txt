@@ -1,0 +1,284 @@
+﻿import  socket
+import  struct
+import  sys
+import time
+import threading
+
+from enum import Enum
+import chess
+
+
+#VARIÁVEIS GLOBAIS:
+MULTICAST_IP = '224.3.29.71'
+MULTICAST_PORT = 10000
+MULTICAST_ADDRESS = (MULTICAST_IP, MULTICAST_PORT)
+servidores_vivos = {}
+
+# Estados do xadrez:
+board = chess.Board()
+seq = 0
+acks = set()
+cond = threading.Condition()
+escrita = threading.Lock()
+TIMEOUT_ACK = 1.0
+
+#Estado de quem entra no grupo: só pode agir como líder depois de pedir o tabuleiro aos outros
+sincronizado = threading.Event()
+ESPERA_SYNC = 3.0
+
+#lgc para pegar o uid do servidor passado no argumento:
+if len(sys.argv) < 2:
+    print(f"Uso correto: python3 {sys.argv[0]} <MEU_ID>", file=sys.stderr)
+    sys.exit(1)
+MEU_ID = int(sys.argv[1])
+
+#----------------------------------------------------------------------------------------------------------#
+#FUNÇÃO DE ELEGE O LÍDER:
+#(ignorar: tira um uid da conta, usado para saber quem era o líder sem contar quem está entrando)
+def elege_lider(ignorar=None):
+	menor = 100000
+	for uid, ultimo_tempo in list(servidores_vivos.items()):
+		if (uid != ignorar and uid < menor):
+			menor = uid
+
+	if menor==100000:
+		return -1
+
+	return menor
+
+
+#----------------------------------------------------------------------------------------------------------#
+#FUNÇÕES DO DICIONÁRIO:
+#atualiza dicionário com o momento exato que o ID deu um pulso:
+def atualiza_visto(uid):
+	servidores_vivos[uid] = time.time()
+
+#varre dicionário e remove quem estourou o tempo:
+def confere_timeouts(limite=3.0):
+	tempo_atual = time.time()
+
+	for uid, ultimo_tempo in list(servidores_vivos.items()):
+		if tempo_atual - ultimo_tempo > limite:
+			print(f"[ALERTA] Servidor {uid} morreu por timeout!", file=sys.stderr)
+			del servidores_vivos[uid] #remove da lista
+
+
+#----------------------------------------------------------------------------------------------------------#
+#thread responsável pelo heartbeat:
+def background():
+	inicio = time.time()
+	while True:
+		#enquanto não sincronizou, pede o tabuleiro; se ninguém responder, é porque não tem partida em andamento
+		if not sincronizado.is_set():
+			if time.time() - inicio >= ESPERA_SYNC:
+				print("[JOIN] Ninguém respondeu, começando com o tabuleiro inicial", file=sys.stderr)
+				sincronizado.set()
+			else:
+				sock.sendto(monta(Msg.JOIN, MEU_ID), MULTICAST_ADDRESS)
+
+		time.sleep(1) #envia a cada 1 segundo
+
+		atualiza_visto(MEU_ID)
+
+		mensagem = f'Estou vivo e sou {MEU_ID}'.encode()
+		confere_timeouts()
+		sock.sendto(mensagem, MULTICAST_ADDRESS)
+
+		lider_atual = elege_lider()
+		print(f"[ELEIÇÃO] Líder atual do grupo: {lider_atual}", file=sys.stderr)
+
+#----------------------------------------------------------------------------------------------------------#
+#thread responsável por escutar a rede continuamente:
+def foreground():
+	while True:
+		data, address = sock.recvfrom(1024)
+		mensagem = data.decode()
+		print(f'Recebido de {address}: {mensagem}', file=sys.stderr)
+
+		#tratando mensagens de heartbeat:
+		if "Estou vivo e sou" in mensagem:
+			uid_remetente = int(mensagem.split()[-1])
+
+			atualiza_visto(uid_remetente)
+
+			print(f"[ESTADO] Vivos atuais: {servidores_vivos}", file=sys.stderr)
+
+				#mensagens do xadrez:
+		else:
+			try:
+				partes = mensagem.split("|")
+				tipo, campos = Msg(partes[0]), partes[1:]   #Msg(...) dá ValueError se o tipo não existir
+				sou_lider = elege_lider() == MEU_ID and sincronizado.is_set()
+
+				if tipo == Msg.READ and sou_lider:
+					trata_read(address)
+				elif tipo == Msg.MOVE and sou_lider:
+					threading.Thread(target=trata_move, args=(campos[0], address), daemon=True).start()
+				elif tipo == Msg.SYNC:
+					trata_sync(campos)
+				elif tipo == Msg.ACK:
+					trata_ack(campos)
+				elif tipo == Msg.JOIN:
+					trata_join(campos)
+			except Exception as e:
+				#mensagem ruim não pode matar a thread que escuta a rede
+				print(f"[ERRO] Mensagem inválida de {address}: {mensagem!r} ({e})", file=sys.stderr)
+
+#----------------------------------------------------------------------------------------------------------#
+#PROTOCOLO DO XADREZ: mensagens no formato TIPO|campo1|campo2...
+#(usa "|" como separador porque o FEN tem espaços)
+class Msg(str, Enum):
+	READ  = "READ"    #cliente -> grupo:   READ
+	MOVE  = "MOVE"    #cliente -> grupo:   MOVE|e2e4
+	SYNC  = "SYNC"    #líder   -> grupo:   SYNC|seq|uid_lider|fen
+	ACK   = "ACK"     #réplica -> grupo:   ACK|seq|uid
+	STATE = "STATE"   #líder   -> cliente: STATE|fen|situacao
+	OK    = "OK"      #líder   -> cliente: OK|fen|situacao
+	ERRO  = "ERRO"    #líder   -> cliente: ERRO|motivo
+	JOIN  = "JOIN"    #servidor que entrou -> grupo: JOIN|uid
+
+#transforma um tipo de mensagem e seus campos nos bytes que vão pela rede
+def monta(tipo, *campos):
+	return "|".join([tipo.value, *map(str, campos)]).encode()
+
+#textinho da situação do jogo:
+def situacao(b):
+	if b.is_checkmate():
+		vencedor = "Pretas" if b.turn == chess.WHITE else "Brancas"
+		return f"Xeque-mate! {vencedor} venceram"
+	if b.is_stalemate():
+		return "Empate por afogamento (stalemate)"
+	if b.is_insufficient_material():
+		return "Empate por material insuficiente"
+	if b.is_game_over():
+		return f"Fim de jogo: {b.result()}"
+	vez = "brancas" if b.turn == chess.WHITE else "pretas"
+	if b.is_check():
+		return f"Xeque! Vez das {vez}"
+	return f"Vez das {vez}"
+
+#por enquanto o cliente controla os dois lados; depois é aqui que entra o Stockfish ou o movimento válido aleatório
+def lance_adversario(b):
+	return None
+
+#líder responde tabuleiro atual direto ao cliente
+def trata_read(address):
+	with cond:
+		resposta = monta(Msg.STATE, board.fen(), situacao(board))
+	sock.sendto(resposta, address)
+
+#roda numa thread própria: os ACKs chegam pela thread foreground,
+#então se ela ficasse esperando aqui nunca receberia os ACKs (deadlock)
+def trata_move(lance_uci, address):
+	global seq
+	with escrita:
+		with cond:
+			try:
+				move = chess.Move.from_uci(lance_uci)
+			except ValueError:
+				move = None
+			if move is None or move not in board.legal_moves:
+				sock.sendto(monta(Msg.ERRO, f"Lance inválido: {lance_uci}"),address)
+				return
+			board.push(move)
+			resposta = lance_adversario(board)
+			if resposta is not None:
+				board.push(resposta)
+			seq += 1
+			meu_seq, fen = seq,board.fen()
+			replicas =set(servidores_vivos) - {MEU_ID}
+			acks.clear()
+		
+		print(f"[MOVE] {lance_uci} aplicado, seq={meu_seq}, esperando ACK de {sorted(replicas)}", file=sys.stderr)
+		sock.sendto(monta(Msg.SYNC, meu_seq, MEU_ID,fen), MULTICAST_ADDRESS)
+
+		#espera todas as réplicas confirmarem, com timeout (réplica pode morrer no meio)
+		limite = time.time() + TIMEOUT_ACK
+		with cond:
+			while not replicas <= acks:
+				restante = limite - time.time()
+				if restante <= 0:
+					break
+				cond.wait(restante)
+			faltaram = replicas - acks
+			txt = situacao(board)
+
+		if faltaram:
+			print(f"[AVISO] Sem ACK de {sorted(faltaram)} no seq {meu_seq}", file=sys.stderr)
+		sock.sendto(monta(Msg.OK, fen, txt), address)
+
+#réplica aplica o tabuleiro que veio do líder e confirma:
+def trata_sync(campos):
+	global seq
+	s, uid_lider, fen = int(campos[0]), int(campos[1]), campos[2]
+	if uid_lider == MEU_ID:     #é o meu próprio SYNC voltando pelo loopback
+		return
+	with cond:
+		board.set_fen(fen)
+		seq = s
+	sincronizado.set()
+	print(f"[SYNC] Tabuleiro atualizado pelo líder {uid_lider}, seq={s}", file=sys.stderr)
+	#ACK vai por multicast: em localhost todos os servidores usam a porta 10000,
+	#então um unicast para (ip, 10000) poderia cair no servidor errado
+	sock.sendto(monta(Msg.ACK, s, MEU_ID), MULTICAST_ADDRESS)
+
+#quem entrou pediu o tabuleiro: responde quem é o líder sem contar com ele
+#(SYNC por multicast pelo mesmo motivo do ACK: em localhost todos usam a porta 10000)
+def trata_join(campos):
+	uid = int(campos[0])
+	if uid == MEU_ID or not sincronizado.is_set() or elege_lider(ignorar=uid) != MEU_ID:
+		return
+	with cond:
+		resposta = monta(Msg.SYNC, seq, MEU_ID, board.fen())
+		meu_seq = seq
+	print(f"[JOIN] Servidor {uid} entrou, enviando tabuleiro seq={meu_seq}", file=sys.stderr)
+	sock.sendto(resposta, MULTICAST_ADDRESS)
+
+#líder anota quem confirmou o SYNC atual:
+def trata_ack(campos):
+	s, uid = int(campos[0]), int(campos[1])
+	with cond:
+		if s == seq:
+			acks.add(uid)
+			cond.notify_all()
+
+
+
+#----------------------------------------------------------------------------------------------------------#
+#MAIN:
+#cria o socket udp:
+sock  =  socket.socket (socket.AF_INET,socket.SOCK_DGRAM)
+
+#IMPORTANTE DEMAIS: permite rodar múltiplos servidores na mesma máquina
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+#vincula socket ao end e porta de escuta
+sock.bind(('', MULTICAST_PORT))
+
+#informa ao SO que queremos entrar no grupo multicast
+grupo = socket.inet_aton(MULTICAST_IP)
+mreq = struct.pack('4sL', grupo, socket.INADDR_ANY)
+sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+
+print(f'Servidor UID {MEU_ID} iniciado e aguardando...', file=sys.stderr)
+
+#dispara threads:
+b = threading.Thread(name='background_heartbeat', target=background, daemon=True)
+f = threading.Thread(name='foreground_listener', target=foreground, daemon=True)
+
+b.start()
+f.start()
+
+#mantém a thread principal viva para o programa n encerrar:
+try:
+	while True:
+		time.sleep(0.5)
+except KeyboardInterrupt:
+	print('Encerrando servidor...', file=sys.stderr)
+	sock.close()
+
+
+
+
+
+

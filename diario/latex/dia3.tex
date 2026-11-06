@@ -1,0 +1,36 @@
+\phantomsection
+\section*{Dia 3 -- 01 de novembro de 2026}
+\addcontentsline{toc}{section}{Dia 3 -- 01 de novembro de 2026}
+\label{dia:3}
+
+Chegamos no primeiro dia de implementação, depois de todo o planejamento que tivemos nos outros encontros. Nossa ideia inicial no dia de hoje foi construir a comunicação cliente-servidor, estabelecer o heartbeat entre os servidores, a fim de que saibam quem ainda está no grupo e quem morreu, e por fim estabelecer a eleição do líder do grupo, o que foi estabelecido junto com o professor que será o servidor com o menor índice de UID.
+
+\subsection*{\textbf{Esqueleto da comunicação Multicast}}
+
+
+Primeiramente, tivemos que aprender a como fazer o esqueleto básico da comunicação multicast do socket cliente-servidor na linguagem Python. Pesquisamos na internet as melhores formas de estabelecer essa comunicação e achamos um site que explicava perfeitamente e nos dava um molde de esqueleto bem simples para começarmos: 
+
+\subsection*{\href{https://pymotw-com.translate.goog/2/socket/multicast.html?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc}{PyMOTW}}
+
+    \vspace{0.8cm}
+    \includegraphics[width=0.9\textwidth]{pymotw.png}\par
+    \vspace{0.8cm}
+
+A partir desse esqueleto e com as funções do Python para comunicação multicast com socket já estabelecidas, conseguimos fazer uma transmissão de dados entre cliente e servidores na própria máquina com êxito.
+
+\subsection*{\textbf{Heartbeat}}
+
+Na segunda parte do dia fizemos uma comunicação heartbeat entre os servidores da rede a fim de todos terem a consciência de quais servidores ainda estão conectados na rede a cada 1 segundo, período de tempo estabelecido por nós. Tivemos que importar uma biblioteca específica do Python (\textbf{threading}) para ter duas ou mais funções executando ao mesmo tempo, isso é, tanto a comunicação entre cliente e servidores quanto o heartbeat dos servidores rodando juntos.
+
+Para essa parte do projeto foram necessárias algumas funções e estrutura de dados extras. Em primeiro lugar, cada servidor deve ter uma tabela consigo guardando a informação de quem ainda está ativo na rede e quem não está mais. A estrutura de dados que escolhemos para isso foi um dicionário, em que funciona basicamente como uma estrutura de dados 'chave-valor'. Ademais, precisou-se de funções adicionais para guardar o valor dos UIDs de cada servidor nesse dicionários locais. Finalmente, implementamos uma última função extra para consultar o tempo do último heartbeat mandado pelo servidor e o tempo atual, com o intuito de remover da tabela local os servidores mortos.
+
+Portanto, a lógica final do heartbeat foi chamar essas funções de pegar o UID, atualizar a tabela e conferir o tempo atual com o último sinal enviado em uma das threads rodando, chamada de background em nosso código.
+
+
+
+
+
+
+
+
+

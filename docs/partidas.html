@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saídas de Partidas</title>
+<meta name="description" content="Partidas jogadas no sistema: xeque-mate, afogamento, repetição e lances especiais.">
+<meta name="author" content="Antonio da Ressurreição Filho e Nathan Endo">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<a class="pular" href="#principal">Pular para o conteúdo</a>
+<header>
+	<div class="conteudo">
+		<p class="titulo-site"><a href="index.html">Trabalho de Redes 2</a></p>
+		<nav aria-label="Seções">
+			<ul>
+				<li><a href="index.html">Visão geral</a></li>
+				<li><a href="relatorio.html">Relatório</a></li>
+				<li><a href="diario.html">Diário</a></li>
+				<li><a href="partidas.html" aria-current="page">Partidas</a></li>
+				<li><a href="logs.html">Logs</a></li>
+				<li><a href="codigo.html">Código</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+<main id="principal" class="conteudo">
+	<h1>Saídas de partidas</h1>
+	<p>
+		Algumas partidas jogadas no sistema, para mostrar as situações que ele reconhece. Elas rodaram com os três servidores em computadores diferentes e o cliente no notebook, e os tabuleiros abaixo são a saída real do cliente.
+		Em cada uma também estão os logs completos dos servidores.
+	</p>
+	<noscript><p>Sem JavaScript, é só usar os links para abrir cada arquivo.</p></noscript>
+
+	<section>
+		<h2 id="mate-do-pastor">Mate do pastor</h2>
+		<p>Brancas vencem em 4 lances, atacando f7 com a dama e o bispo.</p>
+		<p><strong>Lances:</strong> <code>e2e4 e7e5 f1c4 b8c6 d1h5 g8f6 h5f7</code></p>
+		<p><strong>Situação final:</strong> <code>Xeque-mate! Brancas venceram</code></p>
+<pre><code>r . b q k b . r
+p p p p . Q p p
+. . n . . n . .
+. . . . p . . .
+. . B . P . . .
+. . . . . . . .
+P P P P . P P P
+R N B . K . N R</code></pre>
+		<!-- GERADO:partida-mate-do-pastor:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="partidas/mate-do-pastor/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(189 linhas)</span></li>
+<li><a href="partidas/mate-do-pastor/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(103 linhas)</span></li>
+<li><a href="partidas/mate-do-pastor/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(179 linhas)</span></li>
+<li><a href="partidas/mate-do-pastor/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(185 linhas)</span></li>
+</ul>
+		<!-- GERADO:partida-mate-do-pastor:FIM -->
+	</section>
+
+	<section>
+		<h2 id="mate-do-tolo">Mate do tolo</h2>
+		<p>O mate mais rápido possível: pretas vencem em 2 lances.</p>
+		<p><strong>Lances:</strong> <code>f2f3 e7e5 g2g4 d8h4</code></p>
+		<p><strong>Situação final:</strong> <code>Xeque-mate! Pretas venceram</code></p>
+<pre><code>r n b . k b n r
+p p p p . p p p
+. . . . . . . .
+. . . . p . . .
+. . . . . . P q
+. . . . . P . .
+P P P P P . . P
+R N B Q K B N R</code></pre>
+		<!-- GERADO:partida-mate-do-tolo:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="partidas/mate-do-tolo/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(147 linhas)</span></li>
+<li><a href="partidas/mate-do-tolo/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(64 linhas)</span></li>
+<li><a href="partidas/mate-do-tolo/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(140 linhas)</span></li>
+<li><a href="partidas/mate-do-tolo/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(146 linhas)</span></li>
+</ul>
+		<!-- GERADO:partida-mate-do-tolo:FIM -->
+	</section>
+
+	<section>
+		<h2 id="afogamento">Empate por afogamento</h2>
+		<p>Sequência curta conhecida de afogamento, em 10 lances: as pretas não estão em xeque, mas não têm lance legal.</p>
+		<p><strong>Lances:</strong> <code>e2e3 a7a5 d1h5 a8a6 h5a5 h7h5 h2h4 a6h6 a5c7 f7f6 c7d7 e8f7 d7b7 d8d3 b7b8 d3h7 b8c8 f7g6 c8e6</code></p>
+		<p><strong>Situação final:</strong> <code>Empate por afogamento (stalemate)</code></p>
+<pre><code>. . . . . b n r
+. . . . p . p q
+. . . . Q p k r
+. . . . . . . p
+. . . . . . . P
+. . . . P . . .
+P P P P . P P .
+R N B . K B N R</code></pre>
+		<!-- GERADO:partida-afogamento:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="partidas/afogamento/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(342 linhas)</span></li>
+<li><a href="partidas/afogamento/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(259 linhas)</span></li>
+<li><a href="partidas/afogamento/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(335 linhas)</span></li>
+<li><a href="partidas/afogamento/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(341 linhas)</span></li>
+</ul>
+		<!-- GERADO:partida-afogamento:FIM -->
+	</section>
+
+	<section>
+		<h2 id="repeticao">Empate por repetição</h2>
+		<p>Os cavalos vão e voltam até a posição inicial se repetir 5 vezes. O líder anuncia o fim, mas o cliente continua pedindo lance, porque o FEN não guarda o histórico de repetições. Encerramos com <code>sair</code>.</p>
+		<p><strong>Lances:</strong> <code>g1f3 g8f6 f3g1 f6g8 g1f3 g8f6 f3g1 f6g8 g1f3 g8f6 f3g1 f6g8 g1f3 g8f6 f3g1 f6g8</code></p>
+		<p><strong>Situação final:</strong> <code>Fim de jogo: 1/2-1/2</code></p>
+<pre><code>r n b q k b n r
+p p p p p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+P P P P P P P P
+R N B Q K B N R</code></pre>
+		<!-- GERADO:partida-repeticao:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="partidas/repeticao/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(296 linhas)</span></li>
+<li><a href="partidas/repeticao/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(220 linhas)</span></li>
+<li><a href="partidas/repeticao/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(289 linhas)</span></li>
+<li><a href="partidas/repeticao/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(295 linhas)</span></li>
+</ul>
+		<!-- GERADO:partida-repeticao:FIM -->
+	</section>
+
+	<section>
+		<h2 id="lances-especiais">Lances especiais</h2>
+		<p>Uma partida para mostrar en passant (<code>e5d6</code>), roque (<code>e1g1</code>) e promoção (<code>b2a1q</code> e <code>c7d8q</code>), que dá xeque com <code>Xeque! Vez das pretas</code>. Não é uma partida até o fim: encerramos com <code>sair</code>.</p>
+		<p><strong>Lances:</strong> <code>e2e4 a7a6 e4e5 d7d5 e5d6 a6a5 g1f3 a5a4 f1e2 a4a3 e1g1 a3b2 d6c7 b2a1q c7d8q e8d8</code></p>
+		<p><strong>Situação final:</strong> <code>Vez das brancas</code></p>
+<pre><code>r n b k . b n r
+. p . . p p p p
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . N . .
+P . P P B P P P
+q N B Q . R K .</code></pre>
+		<!-- GERADO:partida-lances-especiais:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="partidas/lances-especiais/desktop_uid1.log" data-visualizar>desktop_uid1.log</a> <span class="meta">(296 linhas)</span></li>
+<li><a href="partidas/lances-especiais/notebook_cliente.log" data-visualizar>notebook_cliente.log</a> <span class="meta">(220 linhas)</span></li>
+<li><a href="partidas/lances-especiais/notebook_uid3.log" data-visualizar>notebook_uid3.log</a> <span class="meta">(289 linhas)</span></li>
+<li><a href="partidas/lances-especiais/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(295 linhas)</span></li>
+</ul>
+		<!-- GERADO:partida-lances-especiais:FIM -->
+	</section>
+</main>
+<footer>
+	<div class="conteudo">Desenvolvido por Antonio da Ressurreição Filho e Nathan Endo para a disciplina de Redes 2.</div>
+</footer>
+<script src="assets/visualizador.js"></script>
+</body>
+</html>
