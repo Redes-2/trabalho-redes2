@@ -128,6 +128,25 @@ Trabalho de Redes 2 desenvolvido por Antonio da Ressurreição Filho e Nathan En
 	- Lances especiais: en passant, roque e promoção foram aceitos, e a promoção deu `Xeque! Vez das pretas`
 	- Repetição: o líder anunciou `Fim de jogo: 1/2-1/2`, mas o cliente continuou pedindo lance, porque o FEN não guarda o histórico de repetições
 
+## Dia 6 - Testes no laboratório
+
+- Sexta à noite no laboratório 3 do DINF, com 10 máquinas: 9 servidores e 1 cliente
+- Em cada máquina: uma conta do DINF, o repositório clonado, um venv e o `chess` instalado
+- Antes dos testes, mudamos as mensagens do log do `servidor.py`:
+	- `[HEARTBEAT]` e `[TABULEIRO]` separados, para achar as mensagens de xadrez no meio dos heartbeats
+	- O `[ESTADO]` agora diz qual servidor está falando: `Eu sou o servidor N e meus vivos atuais são...`
+- Teste 1, servidores subindo em ordem crescente:
+	- Os UIDs 1 a 9 entraram um por um. Cada um mandou `JOIN`, e o líder 1 respondeu com o tabuleiro
+	- Seis lances (seq 1 a 6), sempre esperando o ACK das 8 réplicas, sem nenhum `Sem ACK`
+	- O log era do servidor 1, então parou quando ele foi encerrado
+- Teste 2, entradas fora de ordem e duas quedas:
+	- Ordem de entrada: 5, 3, 1 e 7. A liderança foi de 5 para 3 e depois para 1, porque cada um que entrava tinha UID menor
+	- Derrubamos o 1 e o 3 assumiu. Depois derrubamos o 3 e o 5 assumiu
+	- A partida não se perdeu: o seq foi de 1 a 4 com o líder 1, 5 e 6 com o 3, e 7 e 8 com o 5
+	- Desta vez o log foi gravado no servidor 5, que ficou até o fim
+- Os dois testes levaram mais de duas horas
+- Logs em `logs/lab-entrada-1-a-9/` e `logs/lab-entrada-5-3-1-7/`
+
 ## Como rodar
 
 

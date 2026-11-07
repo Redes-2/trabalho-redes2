@@ -1,0 +1,46 @@
+% TODO: conferir a data do encontro
+\phantomsection
+\addcontentsline{toc}{section}{Dia 6 -- 6 de novembro de 2026}
+\section*{Dia 6 -- 6 de novembro de 2026}
+\label{dia:6}
+
+Para finalizarmos de vez o nosso trabalho, escolhemos a sexta-feira de noite para rodarmos em \textbf{VÁRIAS MÁQUINAS} simultâneas no DINF. O cenário foi o seguinte:
+
+\begin{enumerate}
+        \item fizemos 10 contas diferentes no DINF.
+        \item Conectamos cada uma delas em um computador diferente do laboratório 3.
+        \item Entramos no ambiente VENV em cada uma delas.
+        \item Clonamos nosso repositório do github em cada uma das máquinas.
+        \item Baixamos a biblioteca do serviço de xadrez em cada uma delas.
+        \item Uma delas serviu como cliente e todas as outras como servidores, totalizando 1 cliente e 9 servidores.
+\end{enumerate}
+
+\subsection*{Cenário:}
+
+    \vspace{0.8cm}
+    \includegraphics[width=0.9\textwidth]{cenario-lab4.jpeg.jpeg}\par
+    \vspace{0.8cm}
+
+\subsection*{Testes:}
+
+Executamos 2 testes diferentes do nosso programa para testá-lo com precisão:
+
+O primeiro teste consistiu em inicializar os servidores em ordem crescente de 1 a 10 e, logo em seguida, iniciar o cliente. Após realizar alguns lances no tabuleiro, encerramos os servidores também em ordem crescente, com o objetivo de observar o comportamento do sistema diante da indisponibilidade de cada servidor. É importante destacar que nesse primeiro teste todos os registros estavam armazenados no servidor 1. Dessa forma, observamos que os logs deixaram de ser registrados logo após o encerramento desse servidor, limitação essa que foi considerada e explorada de maneira diferente no segundo teste.
+
+O segundo teste foi mais abrangente. Inicialmente, os servidores foram inicializados na seguinte ordem: 5, 3, 1 e 7. Dessa vez, todos os registros foram armazenados no servidor 5. Após realizar alguns lances, encerramos o servidor 1 e observamos que a liderança foi transferida para o servidor 3. Em seguida, realizamos novos lances e encerramos o servidor 3, constatando que a liderança foi novamente transferida, agora para o servidor 5. Após realizar mais alguns lances, encerramos por fim os servidores 5 e 7.
+
+Em ambos os testes, foi possível observar o comportamento do sistema em diferentes cenários de execução, especialmente em situações de indisponibilidade dos servidores e transferência de liderança. Não seria viável testar todas as combinações e possibilidades existentes, considerando que apenas esses dois testes "simples" demandaram mais de duas horas de execução. Ainda assim, os resultados permitiram verificar o bom funcionamento e a capacidade de adaptação dos servidores e do cliente diante das situações testadas.
+
+\subsection*{Logs dos testes 1 e 2:}
+
+\textbf{TESTE 1 (servidores de 1 a 10):} LINK.
+
+\textbf{TESTE 2 (servidores 5, 3, 1, 7):} LINK.
+
+\subsection*{Vídeo de servidores rodando:} LINK.
+
+
+
+
+
+

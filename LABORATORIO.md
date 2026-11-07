@@ -124,10 +124,10 @@ Depois abra `http://localhost:8000/logs.html`.
 Escreva só o que aconteceu de verdade nos testes. Nestes arquivos:
 
 - **`README.md`:** adicione `## Dia 6` antes de `## Como rodar`.
-- **`docs/diario.html`:** repita o texto nas notas, depois do Dia 5.
+- **`docs/relatorio.html`** (página Relatório): repita o texto nas notas, depois do Dia 5.
 - **`docs/logs.html`:** troque os textos da seção "Testes no laboratório" pelo que aconteceu.
-- **`docs/relatorio.html`:** em "8. Testes", inclua as máquinas usadas e os resultados.
-- **LaTeX:** adicione `dia6.tex`, inclua `\input{dia6}` no `main.tex`, compile e troque `diario/diario.pdf` e `diario/latex.zip`. Rode `scripts/gerar_site.sh` de novo.
+- **`docs/secao-tecnica.html`** (página Seção técnica): em "8. Testes", inclua as máquinas usadas e os resultados.
+- **LaTeX:** adicione `dia6.tex`, inclua `\input{dia6}` no `main.tex`, compile e troque `diario/relatorio.pdf` e `diario/latex.zip`. Rode `scripts/gerar_site.sh` de novo.
 
 Para ajudar, responda estas perguntas no texto:
 
