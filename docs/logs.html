@@ -17,10 +17,11 @@
 			<ul>
 				<li><a href="index.html">Visão geral</a></li>
 				<li><a href="relatorio.html">Relatório</a></li>
-				<li><a href="diario.html">Diário</a></li>
+				<li><a href="secao-tecnica.html">Seção técnica</a></li>
 				<li><a href="partidas.html">Partidas</a></li>
 				<li><a href="logs.html" aria-current="page">Logs</a></li>
 				<li><a href="codigo.html">Código</a></li>
+				<li><a href="https://github.com/Redes-2/trabalho-redes2">GitHub</a></li>
 			</ul>
 		</nav>
 	</div>
@@ -30,11 +31,11 @@
 	<noscript><p>Sem JavaScript, é só usar os links para abrir cada arquivo.</p></noscript>
 
 		<p>
-		Rodamos estes cenários em três computadores da mesma rede local: desktop (UID 1), servidor (UID 2) e notebook (UID 3).
-		O cliente rodou no notebook. Usamos um roteiro automatizado que disparava os programas por SSH, mandava os lances e enviava o mesmo sinal do Ctrl+C.
+		Primeiro, rodamos estes cenários em três computadores da mesma rede local: desktop (UID 1), servidor (UID 2) e notebook (UID 3).
+		O cliente rodou no notebook, e controlamos as máquinas por SSH a partir do desktop.
 	</p>
 	<p>
-		Como os lances não foram digitados, eles não aparecem depois do prompt do cliente. Para vê-los, procure a linha <code>Enviando "MOVE|..."</code>.
+		Os lances não aparecem depois do prompt do cliente. Para vê-los, procure a linha <code>Enviando "MOVE|..."</code>.
 		Os IPs <code>192.168.100.x</code> são da nossa rede local.
 	</p>
 
@@ -151,6 +152,64 @@
 <li><a href="logs/reentrada-lider-depois/servidor_uid2.log" data-visualizar>servidor_uid2.log</a> <span class="meta">(274 linhas)</span></li>
 </ul>
 		<!-- GERADO:log-reentrada-lider-depois:FIM -->
+	</section>
+
+	<h2 id="laboratorio">Testes no laboratório</h2>
+	<p>
+		No laboratório, rodamos dois testes com 9 servidores, um por máquina, e o cliente em outra máquina. Os IPs <code>10.254.224.x</code> são da rede do laboratório.
+		Nesses testes, o servidor já usava o formato novo dos logs, com <code>[HEARTBEAT]</code>, <code>[TABULEIRO]</code> e o estado como <code>Eu sou o servidor N e meus vivos atuais são</code>.
+		Guardamos o log de um servidor em cada teste.
+	</p>
+
+	<section>
+		<h3 id="lab-entrada-1-a-9">Nove servidores entrando um por um</h3>
+		<p>
+			Log do servidor 1, que foi o líder o tempo todo. Os UIDs 2 a 9 entraram um de cada vez. Cada um mandou <code>JOIN</code>, e o líder respondeu com o tabuleiro (<code>[JOIN] Servidor N entrou, enviando tabuleiro</code>).
+			No fim, o líder via os 9 servidores e aplicou seis lances (seq 1 a 6), esperando o ACK das 8 réplicas em cada um, sem nenhum aviso de ACK faltando. O log termina quando o servidor 1 foi encerrado.
+		</p>
+		<!-- GERADO:log-lab-entrada-1-a-9:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/lab-entrada-1-a-9/servidor_uid1.txt" data-visualizar>servidor_uid1.txt</a> <span class="meta">(2102 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-lab-entrada-1-a-9:FIM -->
+	</section>
+
+	<section>
+		<h3 id="lab-entrada-5-3-1-7">Entradas fora de ordem e duas quedas</h3>
+		<p>
+			Log do servidor 5. Os servidores entraram na ordem 5, 3, 1 e 7, e a liderança passou de 5 para 3 e depois para 1, porque cada novo servidor tinha um UID menor.
+			Os SYNC de resposta aos JOIN aparecem no log. O líder 1 aplicou os lances de seq 1 a 4. Depois, derrubamos o 1, e o 3 assumiu com os seq 5 e 6.
+			Por fim, derrubamos o 3, e o 5 assumiu e continuou a partida com seq 7 e 8.
+			Procure por <code>[ALERTA]</code> e pela sequência de <code>Líder atual do grupo</code>.
+		</p>
+		<!-- GERADO:log-lab-entrada-5-3-1-7:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/lab-entrada-5-3-1-7/servidor_uid5.txt" data-visualizar>servidor_uid5.txt</a> <span class="meta">(492 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-lab-entrada-5-3-1-7:FIM -->
+	</section>
+
+	<section>
+		<h3 id="lab-videos">Vídeos</h3>
+		<p>Gravamos estes vídeos no laboratório, com os servidores rodando.</p>
+		<figure class="video">
+			<video controls preload="metadata" playsinline src="videos/laboratorio-1.mp4">
+				<a href="videos/laboratorio-1.mp4">Abrir o vídeo 1</a>
+			</video>
+			<figcaption>Vídeo 1 (27 s): Passando pelas máquinas, com os servidores rodando. <a href="videos/laboratorio-1.mp4">Abrir em outra aba</a></figcaption>
+		</figure>
+		<figure class="video">
+			<video controls preload="metadata" playsinline src="videos/laboratorio-2.mp4">
+				<a href="videos/laboratorio-2.mp4">Abrir o vídeo 2</a>
+			</video>
+			<figcaption>Vídeo 2 (17 s): Visão da sala e do cliente, no terminal verde. <a href="videos/laboratorio-2.mp4">Abrir em outra aba</a></figcaption>
+		</figure>
+		<figure class="video">
+			<video controls preload="metadata" playsinline src="videos/laboratorio-3.mp4">
+				<a href="videos/laboratorio-3.mp4">Abrir o vídeo 3</a>
+			</video>
+			<figcaption>Vídeo 3 (5 s): A sala com o cliente em primeiro plano. <a href="videos/laboratorio-3.mp4">Abrir em outra aba</a></figcaption>
+		</figure>
 	</section>
 </main>
 <footer>

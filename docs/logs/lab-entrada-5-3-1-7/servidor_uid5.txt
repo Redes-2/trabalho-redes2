@@ -1,0 +1,492 @@
+﻿Servidor UID 5 iniciado e aguardando...
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): JOIN|5
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009200.4097855}
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): JOIN|5
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009201.4104023}
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): JOIN|5
+[ELEIÇÃO] Líder atual do grupo: 5
+[JOIN] Ninguém respondeu, começando com o tabuleiro inicial
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009202.4110026}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009203.4114437}
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): JOIN|3
+[JOIN] Servidor 3 entrou, enviando tabuleiro seq=0
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): SYNC|0|5|rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): ACK|0|3
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009204.4119143}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009204.4119143, 3: 1794009204.578441}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009205.4124134, 3: 1794009204.578441}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009205.4124134, 3: 1794009205.578874}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009206.4128988, 3: 1794009205.578874}
+[TABULEIRO] Recebido de ('10.254.224.59', 10000): JOIN|1
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): SYNC|0|3|rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+[SYNC] Tabuleiro atualizado pelo líder 3, seq=0
+[TABULEIRO] Recebido de ('10.254.224.59', 10000): ACK|0|1
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): ACK|0|5
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009206.4128988, 3: 1794009206.579356}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009207.4133856, 3: 1794009206.579356}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009207.4133856, 3: 1794009206.579356, 1: 1794009207.4893727}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009207.4133856, 3: 1794009207.579844, 1: 1794009207.4893727}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009208.413995, 3: 1794009207.579844, 1: 1794009207.4893727}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009208.413995, 3: 1794009207.579844, 1: 1794009208.489971}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009208.413995, 3: 1794009208.5803092, 1: 1794009208.489971}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009209.4145823, 3: 1794009208.5803092, 1: 1794009208.489971}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009209.4145823, 3: 1794009208.5803092, 1: 1794009209.4905477}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009209.4145823, 3: 1794009209.5807881, 1: 1794009209.4905477}
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): JOIN|7
+[TABULEIRO] Recebido de ('10.254.224.59', 10000): SYNC|0|1|rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+[SYNC] Tabuleiro atualizado pelo líder 1, seq=0
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): ACK|0|3
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|0|7
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): ACK|0|5
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009210.4151747, 3: 1794009209.5807881, 1: 1794009209.4905477}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009210.4151747, 3: 1794009209.5807881, 1: 1794009210.4908204}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009210.4151747, 3: 1794009210.5812795, 1: 1794009210.4908204}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009210.4151747, 3: 1794009210.5812795, 1: 1794009210.4908204, 7: 1794009211.2974288}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009211.4156551, 3: 1794009210.5812795, 1: 1794009210.4908204, 7: 1794009211.2974288}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009211.4156551, 3: 1794009210.5812795, 1: 1794009211.4914968, 7: 1794009211.2974288}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009211.4156551, 3: 1794009211.5818408, 1: 1794009211.4914968, 7: 1794009211.2974288}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009211.4156551, 3: 1794009211.5818408, 1: 1794009211.4914968, 7: 1794009212.2978423}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009212.4162579, 3: 1794009211.5818408, 1: 1794009211.4914968, 7: 1794009212.2978423}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009212.4162579, 3: 1794009211.5818408, 1: 1794009212.4918165, 7: 1794009212.2978423}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009212.4162579, 3: 1794009212.5824025, 1: 1794009212.4918165, 7: 1794009212.2978423}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009212.4162579, 3: 1794009212.5824025, 1: 1794009212.4918165, 7: 1794009213.2981677}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009213.416895, 3: 1794009212.5824025, 1: 1794009212.4918165, 7: 1794009213.2981677}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009213.416895, 3: 1794009212.5824025, 1: 1794009213.4926257, 7: 1794009213.2981677}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009213.416895, 3: 1794009213.5828638, 1: 1794009213.4926257, 7: 1794009213.2981677}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009213.416895, 3: 1794009213.5828638, 1: 1794009213.4926257, 7: 1794009214.2986267}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009214.4175184, 3: 1794009213.5828638, 1: 1794009213.4926257, 7: 1794009214.2986267}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009214.4175184, 3: 1794009213.5828638, 1: 1794009214.4930663, 7: 1794009214.2986267}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009214.4175184, 3: 1794009214.5833008, 1: 1794009214.4930663, 7: 1794009214.2986267}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009214.4175184, 3: 1794009214.5833008, 1: 1794009214.4930663, 7: 1794009215.299071}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009215.418021, 3: 1794009214.5833008, 1: 1794009214.4930663, 7: 1794009215.299071}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009215.418021, 3: 1794009214.5833008, 1: 1794009215.4935236, 7: 1794009215.299071}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009215.418021, 3: 1794009215.5837853, 1: 1794009215.4935236, 7: 1794009215.299071}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009215.418021, 3: 1794009215.5837853, 1: 1794009215.4935236, 7: 1794009216.2995656}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009216.4185853, 3: 1794009215.5837853, 1: 1794009215.4935236, 7: 1794009216.2995656}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009216.4185853, 3: 1794009215.5837853, 1: 1794009216.4940083, 7: 1794009216.2995656}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009216.4185853, 3: 1794009216.584333, 1: 1794009216.4940083, 7: 1794009216.2995656}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009216.4185853, 3: 1794009216.584333, 1: 1794009216.4940083, 7: 1794009217.300115}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009217.4190853, 3: 1794009216.584333, 1: 1794009216.4940083, 7: 1794009217.300115}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009217.4190853, 3: 1794009216.584333, 1: 1794009217.4946754, 7: 1794009217.300115}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009217.4190853, 3: 1794009217.5848155, 1: 1794009217.4946754, 7: 1794009217.300115}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009217.4190853, 3: 1794009217.5848155, 1: 1794009217.4946754, 7: 1794009218.300581}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009218.4196792, 3: 1794009217.5848155, 1: 1794009217.4946754, 7: 1794009218.300581}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009218.4196792, 3: 1794009217.5848155, 1: 1794009218.4951525, 7: 1794009218.300581}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009218.4196792, 3: 1794009218.585285, 1: 1794009218.4951525, 7: 1794009218.300581}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009218.4196792, 3: 1794009218.585285, 1: 1794009218.4951525, 7: 1794009219.3010948}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009219.4203217, 3: 1794009218.585285, 1: 1794009218.4951525, 7: 1794009219.3010948}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009219.4203217, 3: 1794009218.585285, 1: 1794009219.495694, 7: 1794009219.3010948}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009219.4203217, 3: 1794009219.5858262, 1: 1794009219.495694, 7: 1794009219.3010948}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009219.4203217, 3: 1794009219.5858262, 1: 1794009219.495694, 7: 1794009220.3015811}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): MOVE|e2e4
+[TABULEIRO] Recebido de ('10.254.224.59', 10000): SYNC|1|1|rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1
+[SYNC] Tabuleiro atualizado pelo líder 1, seq=1
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): ACK|1|3
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): ACK|1|5
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|1|7
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009220.4207916, 3: 1794009219.5858262, 1: 1794009219.495694, 7: 1794009220.3015811}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009220.4207916, 3: 1794009219.5858262, 1: 1794009220.496182, 7: 1794009220.3015811}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009220.4207916, 3: 1794009220.5862586, 1: 1794009220.496182, 7: 1794009220.3015811}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009220.4207916, 3: 1794009220.5862586, 1: 1794009220.496182, 7: 1794009221.3021}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009221.4214041, 3: 1794009220.5862586, 1: 1794009220.496182, 7: 1794009221.3021}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009221.4214041, 3: 1794009220.5862586, 1: 1794009221.4966893, 7: 1794009221.3021}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009221.4214041, 3: 1794009221.586785, 1: 1794009221.4966893, 7: 1794009221.3021}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009221.4214041, 3: 1794009221.586785, 1: 1794009221.4966893, 7: 1794009222.3025787}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009222.421899, 3: 1794009221.586785, 1: 1794009221.4966893, 7: 1794009222.3025787}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009222.421899, 3: 1794009221.586785, 1: 1794009222.49722, 7: 1794009222.3025787}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009222.421899, 3: 1794009222.5872257, 1: 1794009222.49722, 7: 1794009222.3025787}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): MOVE|e7e6
+[TABULEIRO] Recebido de ('10.254.224.59', 10000): SYNC|2|1|rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2
+[SYNC] Tabuleiro atualizado pelo líder 1, seq=2
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|2|7
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): ACK|2|3
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): ACK|2|5
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009222.421899, 3: 1794009222.5872257, 1: 1794009222.49722, 7: 1794009223.3030152}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009223.4223819, 3: 1794009222.5872257, 1: 1794009222.49722, 7: 1794009223.3030152}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009223.4223819, 3: 1794009222.5872257, 1: 1794009223.4975853, 7: 1794009223.3030152}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009223.4223819, 3: 1794009223.5876899, 1: 1794009223.4975853, 7: 1794009223.3030152}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009223.4223819, 3: 1794009223.5876899, 1: 1794009223.4975853, 7: 1794009224.3035915}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009224.4227517, 3: 1794009223.5876899, 1: 1794009223.4975853, 7: 1794009224.3035915}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009224.4227517, 3: 1794009223.5876899, 1: 1794009224.498093, 7: 1794009224.3035915}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009224.4227517, 3: 1794009224.588183, 1: 1794009224.498093, 7: 1794009224.3035915}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009224.4227517, 3: 1794009224.588183, 1: 1794009224.498093, 7: 1794009225.3041363}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009225.4232583, 3: 1794009224.588183, 1: 1794009224.498093, 7: 1794009225.3041363}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009225.4232583, 3: 1794009224.588183, 1: 1794009225.4985101, 7: 1794009225.3041363}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009225.4232583, 3: 1794009225.5887096, 1: 1794009225.4985101, 7: 1794009225.3041363}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): MOVE|a2a4
+[TABULEIRO] Recebido de ('10.254.224.59', 10000): SYNC|3|1|rnbqkbnr/pppp1ppp/4p3/8/P3P3/8/1PPP1PPP/RNBQKBNR b KQkq - 0 2
+[SYNC] Tabuleiro atualizado pelo líder 1, seq=3
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|3|7
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): ACK|3|3
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): ACK|3|5
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009225.4232583, 3: 1794009225.5887096, 1: 1794009225.4985101, 7: 1794009226.3046458}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009226.4237456, 3: 1794009225.5887096, 1: 1794009225.4985101, 7: 1794009226.3046458}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009226.4237456, 3: 1794009225.5887096, 1: 1794009226.4990766, 7: 1794009226.3046458}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009226.4237456, 3: 1794009226.589181, 1: 1794009226.4990766, 7: 1794009226.3046458}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009226.4237456, 3: 1794009226.589181, 1: 1794009226.4990766, 7: 1794009227.3051476}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009227.4243882, 3: 1794009226.589181, 1: 1794009226.4990766, 7: 1794009227.3051476}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009227.4243882, 3: 1794009226.589181, 1: 1794009227.4996355, 7: 1794009227.3051476}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009227.4243882, 3: 1794009227.589652, 1: 1794009227.4996355, 7: 1794009227.3051476}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009227.4243882, 3: 1794009227.589652, 1: 1794009227.4996355, 7: 1794009228.305643}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009228.4248955, 3: 1794009227.589652, 1: 1794009227.4996355, 7: 1794009228.305643}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009228.4248955, 3: 1794009227.589652, 1: 1794009228.5001023, 7: 1794009228.305643}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009228.4248955, 3: 1794009228.5901775, 1: 1794009228.5001023, 7: 1794009228.305643}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): MOVE|a7a6
+[TABULEIRO] Recebido de ('10.254.224.59', 10000): SYNC|4|1|rnbqkbnr/1ppp1ppp/p3p3/8/P3P3/8/1PPP1PPP/RNBQKBNR w KQkq - 0 3
+[SYNC] Tabuleiro atualizado pelo líder 1, seq=4
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|4|7
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): ACK|4|3
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): ACK|4|5
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009228.4248955, 3: 1794009228.5901775, 1: 1794009228.5001023, 7: 1794009229.306165}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009229.4255052, 3: 1794009228.5901775, 1: 1794009228.5001023, 7: 1794009229.306165}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009229.4255052, 3: 1794009228.5901775, 1: 1794009229.5005603, 7: 1794009229.306165}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009229.4255052, 3: 1794009229.5906296, 1: 1794009229.5005603, 7: 1794009229.306165}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009229.4255052, 3: 1794009229.5906296, 1: 1794009229.5005603, 7: 1794009230.3066626}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009230.4261167, 3: 1794009229.5906296, 1: 1794009229.5005603, 7: 1794009230.3066626}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009230.4261167, 3: 1794009229.5906296, 1: 1794009230.5010784, 7: 1794009230.3066626}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009230.4261167, 3: 1794009230.5911262, 1: 1794009230.5010784, 7: 1794009230.3066626}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009230.4261167, 3: 1794009230.5911262, 1: 1794009230.5010784, 7: 1794009231.3071275}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009231.4265914, 3: 1794009230.5911262, 1: 1794009230.5010784, 7: 1794009231.3071275}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009231.4265914, 3: 1794009230.5911262, 1: 1794009231.5016382, 7: 1794009231.3071275}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009231.4265914, 3: 1794009231.591621, 1: 1794009231.5016382, 7: 1794009231.3071275}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009231.4265914, 3: 1794009231.591621, 1: 1794009231.5016382, 7: 1794009232.3076367}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009232.427208, 3: 1794009231.591621, 1: 1794009231.5016382, 7: 1794009232.3076367}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009232.427208, 3: 1794009231.591621, 1: 1794009232.502203, 7: 1794009232.3076367}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009232.427208, 3: 1794009232.5920448, 1: 1794009232.502203, 7: 1794009232.3076367}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009232.427208, 3: 1794009232.5920448, 1: 1794009232.502203, 7: 1794009233.3081572}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009233.4278746, 3: 1794009232.5920448, 1: 1794009232.502203, 7: 1794009233.3081572}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009233.4278746, 3: 1794009232.5920448, 1: 1794009233.5026586, 7: 1794009233.3081572}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009233.4278746, 3: 1794009233.5925345, 1: 1794009233.5026586, 7: 1794009233.3081572}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009233.4278746, 3: 1794009233.5925345, 1: 1794009233.5026586, 7: 1794009234.3086212}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009234.4284124, 3: 1794009233.5925345, 1: 1794009233.5026586, 7: 1794009234.3086212}
+[HEARTBEAT] Recebido de ('10.254.224.59', 10000): Estou vivo e sou 1
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009234.4284124, 3: 1794009233.5925345, 1: 1794009234.5032473, 7: 1794009234.3086212}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009234.4284124, 3: 1794009234.5930426, 1: 1794009234.5032473, 7: 1794009234.3086212}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009234.4284124, 3: 1794009234.5930426, 1: 1794009234.5032473, 7: 1794009235.3091886}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009235.428964, 3: 1794009234.5930426, 1: 1794009234.5032473, 7: 1794009235.3091886}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009235.428964, 3: 1794009235.5935247, 1: 1794009234.5032473, 7: 1794009235.3091886}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009235.428964, 3: 1794009235.5935247, 1: 1794009234.5032473, 7: 1794009236.3096957}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009236.4293985, 3: 1794009235.5935247, 1: 1794009234.5032473, 7: 1794009236.3096957}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009236.4293985, 3: 1794009236.5940313, 1: 1794009234.5032473, 7: 1794009236.3096957}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009236.4293985, 3: 1794009236.5940313, 1: 1794009234.5032473, 7: 1794009237.3102224}
+[ELEIÇÃO] Líder atual do grupo: 1
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009237.4299917, 3: 1794009236.5940313, 1: 1794009234.5032473, 7: 1794009237.3102224}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009237.4299917, 3: 1794009237.5944824, 1: 1794009234.5032473, 7: 1794009237.3102224}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009237.4299917, 3: 1794009237.5944824, 1: 1794009234.5032473, 7: 1794009238.310851}
+[ALERTA] Servidor 1 morreu por timeout!
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009238.4305236, 3: 1794009237.5944824, 7: 1794009238.310851}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009238.4305236, 3: 1794009238.5949504, 7: 1794009238.310851}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009238.4305236, 3: 1794009238.5949504, 7: 1794009239.311405}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009239.4309533, 3: 1794009238.5949504, 7: 1794009239.311405}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009239.4309533, 3: 1794009239.5957286, 7: 1794009239.311405}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): MOVE|b2b4
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): SYNC|5|3|rnbqkbnr/1ppp1ppp/p3p3/8/PP2P3/8/2PP1PPP/RNBQKBNR b KQkq - 0 3
+[SYNC] Tabuleiro atualizado pelo líder 3, seq=5
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|5|7
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): ACK|5|5
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009239.4309533, 3: 1794009239.5957286, 7: 1794009240.3119452}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009240.4315119, 3: 1794009239.5957286, 7: 1794009240.3119452}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009240.4315119, 3: 1794009240.5961583, 7: 1794009240.3119452}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009240.4315119, 3: 1794009240.5961583, 7: 1794009241.312233}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009241.4320216, 3: 1794009240.5961583, 7: 1794009241.312233}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009241.4320216, 3: 1794009241.5966525, 7: 1794009241.312233}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): MOVE|b7b6
+[TABULEIRO] Recebido de ('10.254.224.54', 10000): SYNC|6|3|rnbqkbnr/2pp1ppp/pp2p3/8/PP2P3/8/2PP1PPP/RNBQKBNR w KQkq - 0 4
+[SYNC] Tabuleiro atualizado pelo líder 3, seq=6
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|6|7
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): ACK|6|5
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009241.4320216, 3: 1794009241.5966525, 7: 1794009242.3127458}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009242.4325175, 3: 1794009241.5966525, 7: 1794009242.3127458}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009242.4325175, 3: 1794009242.5971508, 7: 1794009242.3127458}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009242.4325175, 3: 1794009242.5971508, 7: 1794009243.3132613}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009243.4330082, 3: 1794009242.5971508, 7: 1794009243.3132613}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009243.4330082, 3: 1794009243.5976577, 7: 1794009243.3132613}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009243.4330082, 3: 1794009243.5976577, 7: 1794009244.3135614}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009244.4334784, 3: 1794009243.5976577, 7: 1794009244.3135614}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009244.4334784, 3: 1794009244.59819, 7: 1794009244.3135614}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009244.4334784, 3: 1794009244.59819, 7: 1794009245.314048}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009245.4339764, 3: 1794009244.59819, 7: 1794009245.314048}
+[HEARTBEAT] Recebido de ('10.254.224.54', 10000): Estou vivo e sou 3
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009245.4339764, 3: 1794009245.5986001, 7: 1794009245.314048}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009245.4339764, 3: 1794009245.5986001, 7: 1794009246.314691}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009246.4344661, 3: 1794009245.5986001, 7: 1794009246.314691}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009246.4344661, 3: 1794009245.5986001, 7: 1794009247.3151848}
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009247.4350576, 3: 1794009245.5986001, 7: 1794009247.3151848}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009247.4350576, 3: 1794009245.5986001, 7: 1794009248.3156247}
+[ELEIÇÃO] Líder atual do grupo: 3
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009248.435709, 3: 1794009245.5986001, 7: 1794009248.3156247}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009248.435709, 3: 1794009245.5986001, 7: 1794009249.316247}
+[ALERTA] Servidor 3 morreu por timeout!
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009249.43629, 7: 1794009249.316247}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009249.43629, 7: 1794009250.3167257}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009250.4367778, 7: 1794009250.3167257}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009250.4367778, 7: 1794009251.3171725}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009251.4374228, 7: 1794009251.3171725}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): MOVE|c2c4
+[MOVE] c2c4 aplicado, seq=7, esperando ACK de [7]
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): SYNC|7|5|rnbqkbnr/2pp1ppp/pp2p3/8/PPP1P3/8/3P1PPP/RNBQKBNR b KQkq - 0 4
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|7|7
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009251.4374228, 7: 1794009252.3176634}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009252.4379065, 7: 1794009252.3176634}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009252.4379065, 7: 1794009253.3182037}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009253.438402, 7: 1794009253.3182037}
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): MOVE|c7c6
+[MOVE] c7c6 aplicado, seq=8, esperando ACK de [7]
+[TABULEIRO] Recebido de ('10.254.224.50', 10000): SYNC|8|5|rnbqkbnr/3p1ppp/ppp1p3/8/PPP1P3/8/3P1PPP/RNBQKBNR w KQkq - 0 5
+[TABULEIRO] Recebido de ('10.254.224.51', 10000): ACK|8|7
+[TABULEIRO] Recebido de ('10.254.224.58', 50569): READ
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009253.438402, 7: 1794009254.3186362}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009254.4389036, 7: 1794009254.3186362}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009254.4389036, 7: 1794009255.3191342}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009255.4395256, 7: 1794009255.3191342}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009255.4395256, 7: 1794009256.3196871}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009256.4400089, 7: 1794009256.3196871}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009256.4400089, 7: 1794009257.3201773}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009257.4405057, 7: 1794009257.3201773}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009257.4405057, 7: 1794009258.320667}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009258.4409757, 7: 1794009258.320667}
+[HEARTBEAT] Recebido de ('10.254.224.51', 10000): Estou vivo e sou 7
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009258.4409757, 7: 1794009259.3209062}
+[ELEIÇÃO] Líder atual do grupo: 5
+[HEARTBEAT] Recebido de ('10.254.224.50', 10000): Estou vivo e sou 5
+[ESTADO] Eu sou o servidor 5 e meus vivos atuais são (servidor, tempo): {5: 1794009259.4414835, 7: 1794009259.3209062}
+Encerrando servidor...

@@ -3,7 +3,7 @@
 #   - docs/codigo/  cópia .txt do código-fonte (*.py e requirements*.txt)
 #   - docs/logs/    cópia dos logs de logs/<cenario>/ (*.log e *.txt)
 #   - docs/partidas/  cópia das saídas de partidas/<partida>/ (*.log e *.txt)
-#   - docs/diario/  cópia do diário de diario/ (*.pdf, *.zip e *.tex como .tex.txt)
+#   - docs/diario/  cópia do relatório de diario/ (*.pdf, *.zip e *.tex como .tex.txt)
 #   - listas das páginas HTML, entre os marcadores <!-- GERADO:nome:INICIO/FIM -->
 #
 # As duas pastas são recriadas do zero a cada execução. Os cenários são os
@@ -15,7 +15,7 @@ export LC_ALL=C
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$RAIZ"
 
-PAGINAS=(docs/index.html docs/relatorio.html docs/diario.html docs/partidas.html docs/logs.html docs/codigo.html)
+PAGINAS=(docs/index.html docs/relatorio.html docs/secao-tecnica.html docs/partidas.html docs/logs.html docs/codigo.html)
 for pagina in "${PAGINAS[@]}"; do
 	[ -f "$pagina" ] || { echo "Erro: $pagina não encontrada" >&2; exit 1; }
 done
@@ -156,31 +156,32 @@ processa_itens docs/logs.html log logs "Log ainda não disponível."
 processa_itens docs/partidas.html partida partidas "Saída ainda não disponível."
 
 #----------------------------------------------------------------------------------------------------------#
-# Diário: só o PDF, o zip e o fonte LaTeX; os arquivos auxiliares da compilação ficam de fora
+# Relatório: só o PDF, o zip e o fonte LaTeX; os arquivos auxiliares da compilação ficam de fora
 lista_diario="$TMP/lista-diario"
 : > "$lista_diario"
+: > "$lista_diario.pdf"
 total_diario=0
 
 if [ -d diario ]; then
 	while IFS= read -r -d '' caminho; do
 		arquivo="${caminho#diario/}"
 		if ! nome_seguro "$arquivo"; then
-			aviso "diário ignorado (nome com caracteres não aceitos): $caminho"
+			aviso "relatório ignorado (nome com caracteres não aceitos): $caminho"
 			continue
 		fi
 		case "$arquivo" in
 			*.pdf)
 				if [ "$(head -c 4 "$caminho")" != "%PDF" ]; then
-					aviso "diário ignorado (não é um PDF válido): $caminho"
+					aviso "relatório ignorado (não é um PDF válido): $caminho"
 					continue
 				fi
 				mkdir -p "docs/diario/$(dirname "$arquivo")"
 				cp "$caminho" "docs/diario/$arquivo"
-				printf '<li><a href="diario/%s">%s</a></li>\n' "$arquivo" "$arquivo" >> "$lista_diario"
+				printf '<li><a href="diario/%s">%s</a></li>\n' "$arquivo" "$arquivo" >> "$lista_diario.pdf"
 				;;
 			*.zip)
 				if [ "$(head -c 2 "$caminho")" != "PK" ]; then
-					aviso "diário ignorado (não é um zip válido): $caminho"
+					aviso "relatório ignorado (não é um zip válido): $caminho"
 					continue
 				fi
 				mkdir -p "docs/diario/$(dirname "$arquivo")"
@@ -189,7 +190,7 @@ if [ -d diario ]; then
 				;;
 			*.tex)
 				if ! eh_texto "$caminho"; then
-					aviso "diário ignorado (vazio ou binário): $caminho"
+					aviso "relatório ignorado (vazio ou binário): $caminho"
 					continue
 				fi
 				mkdir -p "docs/diario/$(dirname "$arquivo")"
@@ -202,16 +203,20 @@ if [ -d diario ]; then
 	done < <(find diario -type f \( -name '*.pdf' -o -name '*.zip' -o -name '*.tex' \) -print0 | sort -z)
 fi
 
-if [ -f docs/diario/diario.pdf ]; then
+if [ -f docs/diario/relatorio.pdf ]; then
 	cat > "$TMP/diario-render" <<'HTML'
-<p><a href="diario/diario.pdf">Abrir o diário em outra aba</a></p>
-<object class="pdf" data="diario/diario.pdf#navpanes=0&view=FitH" type="application/pdf" aria-label="Diário de desenvolvimento em PDF">
-<p>Este navegador não mostra o PDF na página. <a href="diario/diario.pdf">Abra o diário por este link.</a></p>
+<p><a href="diario/relatorio.pdf">Abrir o relatório em outra aba</a></p>
+<object class="pdf" data="diario/relatorio.pdf#navpanes=0&view=FitH" type="application/pdf" aria-label="Relatório em PDF">
+<p>Este navegador não mostra o PDF na página. <a href="diario/relatorio.pdf">Abra o relatório por este link.</a></p>
 </object>
 HTML
 else
-	printf '<!-- diario/diario.pdf ainda não existe -->\n' > "$TMP/diario-render"
+	printf '<!-- diario/relatorio.pdf ainda não existe -->\n' > "$TMP/diario-render"
 fi
+
+# O PDF vem primeiro na lista, antes do zip e do LaTeX
+cat "$lista_diario" >> "$lista_diario.pdf"
+mv "$lista_diario.pdf" "$lista_diario"
 
 if [ -s "$lista_diario" ]; then
 	{
@@ -220,7 +225,7 @@ if [ -s "$lista_diario" ]; then
 		printf '</ul>\n'
 	} > "$TMP/diario-arquivos"
 else
-	printf '<p>O PDF e o LaTeX do diário ainda não foram adicionados.</p>\n' > "$TMP/diario-arquivos"
+	printf '<p>O PDF e o LaTeX do relatório ainda não foram adicionados.</p>\n' > "$TMP/diario-arquivos"
 fi
 
 #----------------------------------------------------------------------------------------------------------#
@@ -259,5 +264,5 @@ done
 
 echo "Código: $total_codigo arquivo(s) em docs/codigo/"
 echo "Logs e partidas: $((total_itens - faltando)) de $total_itens com arquivos em docs/logs/ e docs/partidas/"
-echo "Diário: $total_diario arquivo(s) em docs/diario/"
+echo "Relatório: $total_diario arquivo(s) em docs/diario/"
 [ "$avisos" -eq 0 ] || echo "Avisos: $avisos" >&2
