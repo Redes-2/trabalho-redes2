@@ -233,6 +233,12 @@
 		Só o cenário "antes da correção" rodou com a versão anterior do código; os outros rodaram com a versão atual.
 	</p>
 	<p>
+		Depois, rodamos dois testes no laboratório com 9 servidores, um por máquina (<a href="logs.html#laboratorio">logs</a>).
+		No primeiro, os UIDs 1 a 9 entraram um por um, o líder mandou o tabuleiro para cada um que entrava e aplicou seis lances esperando o ACK das 8 réplicas.
+		No segundo, os servidores entraram na ordem 5, 3, 1 e 7. A liderança foi passando para o menor UID, e a partida continuou depois das quedas do 1 e do 3, com o seq seguindo de 1 a 8.
+		Nesses testes, só a mensagem dos logs mudou: o <code>servidor.py</code> passou a separar <code>[HEARTBEAT]</code> de <code>[TABULEIRO]</code>.
+	</p>
+	<p>
 		Antes disso, um de nós já tinha testado em uma só máquina (WSL, localhost), com 3 servidores e o cliente, inclusive derrubando o líder no meio da partida. Esse teste não gerou registro no repositório.
 	</p>
 </main>

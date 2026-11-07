@@ -32,7 +32,7 @@ scripts/lab.sh servidor heartbeat-eleicao 2   # máquina 2
 scripts/lab.sh servidor heartbeat-eleicao 3   # máquina 3
 ```
 
-Depois de uns 5 segundos, **as três máquinas** precisam mostrar `[ESTADO] Vivos atuais` com os UIDs 1, 2 e 3, e `Líder atual do grupo: 1`.
+Depois de uns 5 segundos, **as três máquinas** precisam mostrar a linha `[ESTADO]` (`Eu sou o servidor N e meus vivos atuais são...`) com os UIDs 1, 2 e 3, e `Líder atual do grupo: 1`.
 
 Olhar só o líder engana: um servidor sozinho com o UID 1 também se declara líder. Se alguma máquina mostrar só o próprio UID, o multicast está bloqueado. Nesse caso, veja com o professor ou com quem cuida do laboratório.
 

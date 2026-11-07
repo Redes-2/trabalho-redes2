@@ -7,7 +7,6 @@ import threading
 from enum import Enum
 import chess
 
-
 #VARIÁVEIS GLOBAIS:
 MULTICAST_IP = '224.3.29.71'
 MULTICAST_PORT = 10000
@@ -93,7 +92,11 @@ def foreground():
 	while True:
 		data, address = sock.recvfrom(1024)
 		mensagem = data.decode()
-		print(f'Recebido de {address}: {mensagem}', file=sys.stderr)
+
+		if "Estou vivo e sou" in mensagem:
+			print(f'[HEARTBEAT] Recebido de {address}: {mensagem}', file=sys.stderr)
+		else:
+			print(f'[TABULEIRO] Recebido de {address}: {mensagem}', file=sys.stderr)
 
 		#tratando mensagens de heartbeat:
 		if "Estou vivo e sou" in mensagem:
@@ -101,9 +104,9 @@ def foreground():
 
 			atualiza_visto(uid_remetente)
 
-			print(f"[ESTADO] Vivos atuais: {servidores_vivos}", file=sys.stderr)
+			print(f"[ESTADO] Eu sou o servidor {MEU_ID} e meus vivos atuais são (servidor, tempo): {servidores_vivos}", file=sys.stderr)
 
-				#mensagens do xadrez:
+		#mensagens do xadrez:
 		else:
 			try:
 				partes = mensagem.split("|")

@@ -154,54 +154,38 @@
 	</section>
 
 	<h2 id="laboratorio">Testes no laboratório</h2>
-	<p>Estes cenários são para as máquinas do laboratório. Os logs aparecem aqui depois dos testes.</p>
+	<p>
+		No laboratório, rodamos dois testes com 9 servidores, um por máquina, e o cliente em outra máquina. Os IPs <code>10.254.224.x</code> são da rede do laboratório.
+		Nesses testes, o servidor já usava o formato novo dos logs, com <code>[HEARTBEAT]</code>, <code>[TABULEIRO]</code> e o estado como <code>Eu sou o servidor N e meus vivos atuais são</code>.
+		Guardamos o log de um servidor em cada teste.
+	</p>
 
 	<section>
-		<h3 id="lab-heartbeat-eleicao">Heartbeat e eleição</h3>
-		<p>Três servidores em máquinas diferentes. O log deve mostrar os heartbeats das três máquinas e o UID 1 como líder.</p>
-		<!-- GERADO:log-lab-heartbeat-eleicao:INICIO -->
-<p>Log ainda não disponível.</p>
-		<!-- GERADO:log-lab-heartbeat-eleicao:FIM -->
+		<h3 id="lab-entrada-1-a-9">Nove servidores entrando um por um</h3>
+		<p>
+			Log do servidor 1, que foi o líder o tempo todo. Os UIDs 2 a 9 entraram um de cada vez. Cada um mandou <code>JOIN</code>, e o líder respondeu com o tabuleiro (<code>[JOIN] Servidor N entrou, enviando tabuleiro</code>).
+			No fim, o líder via os 9 servidores e aplicou seis lances (seq 1 a 6), esperando o ACK das 8 réplicas em cada um, sem nenhum aviso de ACK faltando.
+		</p>
+		<!-- GERADO:log-lab-entrada-1-a-9:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/lab-entrada-1-a-9/servidor_uid1.txt" data-visualizar>servidor_uid1.txt</a> <span class="meta">(2102 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-lab-entrada-1-a-9:FIM -->
 	</section>
 
 	<section>
-		<h3 id="lab-xadrez-replicacao">Lances e replicação</h3>
-		<p>O cliente joga <code>e2e4</code>, <code>e7e5</code> e <code>g1f3</code>. O log deve mostrar o líder aplicando os lances e as réplicas recebendo o tabuleiro.</p>
-		<!-- GERADO:log-lab-xadrez-replicacao:INICIO -->
-<p>Log ainda não disponível.</p>
-		<!-- GERADO:log-lab-xadrez-replicacao:FIM -->
-	</section>
-
-	<section>
-		<h3 id="lab-lance-invalido">Lance inválido</h3>
-		<p>O cliente manda <code>e2e5</code>, <code>abc</code> e <code>e2e4</code>. O log deve mostrar os dois primeiros recusados e o terceiro aceito.</p>
-		<!-- GERADO:log-lab-lance-invalido:INICIO -->
-<p>Log ainda não disponível.</p>
-		<!-- GERADO:log-lab-lance-invalido:FIM -->
-	</section>
-
-	<section>
-		<h3 id="lab-falha-lider">Queda do líder</h3>
-		<p>O líder cai no meio da partida. O log deve mostrar a queda detectada e o UID 2 assumindo com o mesmo tabuleiro.</p>
-		<!-- GERADO:log-lab-falha-lider:INICIO -->
-<p>Log ainda não disponível.</p>
-		<!-- GERADO:log-lab-falha-lider:FIM -->
-	</section>
-
-	<section>
-		<h3 id="lab-falha-replica">Queda de uma réplica</h3>
-		<p>Uma réplica cai pouco antes de um lance. O log deve mostrar o aviso de ACK faltando e o OK ao cliente.</p>
-		<!-- GERADO:log-lab-falha-replica:INICIO -->
-<p>Log ainda não disponível.</p>
-		<!-- GERADO:log-lab-falha-replica:FIM -->
-	</section>
-
-	<section>
-		<h3 id="lab-lider-volta">Líder que volta</h3>
-		<p>O líder cai e volta no meio da partida. O log deve mostrar o servidor recebendo o tabuleiro antes de assumir.</p>
-		<!-- GERADO:log-lab-lider-volta:INICIO -->
-<p>Log ainda não disponível.</p>
-		<!-- GERADO:log-lab-lider-volta:FIM -->
+		<h3 id="lab-entrada-5-3-1-7">Entradas fora de ordem e duas quedas</h3>
+		<p>
+			Log do servidor 5. Os servidores entraram na ordem 5, 3, 1 e 7, e a liderança passou de 5 para 3 e depois para 1, porque cada novo servidor tinha um UID menor.
+			Os SYNC de resposta aos JOIN aparecem no log. O líder 1 aplicou os lances de seq 1 a 4. Depois, derrubamos o 1, e o 3 assumiu com os seq 5 e 6.
+			Por fim, derrubamos o 3, e o 5 assumiu e continuou a partida com seq 7 e 8.
+			Procure por <code>[ALERTA]</code> e pela sequência de <code>Líder atual do grupo</code>.
+		</p>
+		<!-- GERADO:log-lab-entrada-5-3-1-7:INICIO -->
+<ul class="arquivos" data-visualizador>
+<li><a href="logs/lab-entrada-5-3-1-7/servidor_uid5.txt" data-visualizar>servidor_uid5.txt</a> <span class="meta">(492 linhas)</span></li>
+</ul>
+		<!-- GERADO:log-lab-entrada-5-3-1-7:FIM -->
 	</section>
 </main>
 <footer>

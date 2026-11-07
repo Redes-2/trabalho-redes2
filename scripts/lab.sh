@@ -121,7 +121,7 @@ todos_viram_todos() { # pasta
 	for f in "$1"/*_uid*.log; do
 		[ -e "$f" ] || { echo 1; return; }
 		case "$f" in *_reinicio.log) continue ;; esac
-		grep -F 'Vivos atuais' "$f" | grep -E '[{ ]1: ' | grep -E '[{ ]2: ' | grep -qE '[{ ]3: ' || { echo 1; return; }
+		grep -iF 'vivos atuais' "$f" | grep -E '[{ ]1: ' | grep -E '[{ ]2: ' | grep -qE '[{ ]3: ' || { echo 1; return; }
 		achou=0
 	done
 	echo "$achou"
